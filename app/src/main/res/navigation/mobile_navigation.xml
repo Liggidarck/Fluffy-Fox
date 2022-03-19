@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_note">
+
+    <fragment
+        android:id="@+id/navigation_note"
+        android:name="com.george.android.tasker.ui.notes.NoteFragment"
+        android:label="@string/title_notes"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_task"
+        android:name="com.george.android.tasker.ui.tasks.TasksFragment"
+        android:label="@string/title_tasks"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/navigation_password"
+        android:name="com.george.android.tasker.ui.passwords.PasswordsFragment"
+        android:label="@string/title_passwords"
+        tools:layout="@layout/fragment_notifications" />
+</navigation>
