@@ -23,6 +23,14 @@ public class AddEditNoteActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         binding.addEditNoteToolbar.setNavigationOnClickListener(v -> saveNote());
+
+        Intent intent = getIntent();
+        if(intent.hasExtra(EXTRA_ID)){
+            binding.editTextNoteTitle.setText(intent.getStringExtra(EXTRA_TITLE));
+            binding.editTextNoteDescription.setText(intent.getStringExtra(EXTRA_DESCRIPTION));
+        } else {
+            Toast.makeText(AddEditNoteActivity.this, "ADD NOTE", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void saveNote() {
