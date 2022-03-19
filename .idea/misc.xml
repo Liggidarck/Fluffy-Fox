@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Temp/AndroidStudioProjects/Tasker/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1875" />
+        <entry key="..\:/Users/Temp/AndroidStudioProjects/Tasker/app/src/main/res/drawable/background_splash.xml" value="0.1815" />
         <entry key="..\:/Users/Temp/AndroidStudioProjects/Tasker/app/src/main/res/drawable/ic_add_task_black_24dp.xml" value="0.1875" />
         <entry key="..\:/Users/Temp/AndroidStudioProjects/Tasker/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.1875" />
         <entry key="..\:/Users/Temp/AndroidStudioProjects/Tasker/app/src/main/res/drawable/ic_bookmark_add_black_24dp.xml" value="0.1875" />
@@ -14,6 +15,7 @@
         <entry key="..\:/Users/Temp/AndroidStudioProjects/Tasker/app/src/main/res/layout/fragment_dashboard.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Temp/AndroidStudioProjects/Tasker/app/src/main/res/layout/fragment_home.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Temp/AndroidStudioProjects/Tasker/app/src/main/res/layout/note_item.xml" value="0.264" />
+        <entry key="..\:/Users/Temp/AndroidStudioProjects/Tasker/app/src/main/res/menu/add_note_menu.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Temp/AndroidStudioProjects/Tasker/app/src/main/res/menu/bottom_nav_menu.xml" value="0.264" />
       </map>
     </option>

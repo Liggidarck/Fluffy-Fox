@@ -1,9 +1,14 @@
 package com.george.android.tasker.ui.notes;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -15,7 +20,9 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.george.android.tasker.MainActivity;
 import com.george.android.tasker.data.notes.NoteAdapter;
@@ -44,11 +51,25 @@ public class NoteFragment extends Fragment {
 
         noteViewModel.getAllNotes().observe(NoteFragment.this.requireActivity(), noteAdapter::setNotes);
 
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                noteViewModel.delete(noteAdapter.getNoteAt(viewHolder.getAdapterPosition()));
+                Toast.makeText(NoteFragment.this.getActivity(), "Note deleted", Toast.LENGTH_SHORT).show();
+            }
+        }).attachToRecyclerView(binding.recyclerViewNotes);
+
         noteAdapter.setOnClickItemListener(note -> {
             Intent intent = new Intent(NoteFragment.this.getActivity(), AddEditNoteActivity.class);
             intent.putExtra(AddEditNoteActivity.EXTRA_ID, note.getId());
             intent.putExtra(AddEditNoteActivity.EXTRA_TITLE, note.getTitle());
             intent.putExtra(AddEditNoteActivity.EXTRA_DESCRIPTION, note.getDescription());
+            intent.putExtra(AddEditNoteActivity.EXTRA_DATE_CREATE, note.getDateCreate());
             editNoteResultLauncher.launch(intent);
         });
 
@@ -58,13 +79,14 @@ public class NoteFragment extends Fragment {
     ActivityResultLauncher<Intent> addNoteResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if(result.getResultCode() == Activity.RESULT_OK ) {
+                if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent intent = result.getData();
                     assert intent != null;
                     String title = intent.getStringExtra(AddEditNoteActivity.EXTRA_TITLE);
                     String description = intent.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION);
+                    String dateCreate = intent.getStringExtra(AddEditNoteActivity.EXTRA_DATE_CREATE);
 
-                    Note note = new Note(title, description);
+                    Note note = new Note(title, description, dateCreate);
                     noteViewModel.insert(note);
                 }
             }
@@ -75,7 +97,7 @@ public class NoteFragment extends Fragment {
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
-                    if(result.getResultCode() == Activity.RESULT_OK) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent intent = result.getData();
                         assert intent != null;
                         int id = intent.getIntExtra(AddEditNoteActivity.EXTRA_ID, -1);
@@ -86,8 +108,9 @@ public class NoteFragment extends Fragment {
 
                         String title = intent.getStringExtra(AddEditNoteActivity.EXTRA_TITLE);
                         String description = intent.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION);
+                        String dateCreate = intent.getStringExtra(AddEditNoteActivity.EXTRA_DATE_CREATE);
 
-                        Note note = new Note(title, description);
+                        Note note = new Note(title, description, dateCreate);
                         note.setId(id);
                         noteViewModel.update(note);
                     }

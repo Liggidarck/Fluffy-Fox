@@ -1,5 +1,6 @@
 package com.george.android.tasker.data.notes;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         return notes.size();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setNotes(List<Note> notes) {
         this.notes = notes;
         notifyDataSetChanged();
