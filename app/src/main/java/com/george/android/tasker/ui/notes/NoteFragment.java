@@ -1,14 +1,10 @@
 package com.george.android.tasker.ui.notes;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.ActionMode;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -20,16 +16,20 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.george.android.tasker.MainActivity;
+import com.george.android.tasker.R;
 import com.george.android.tasker.data.notes.NoteAdapter;
 import com.george.android.tasker.data.notes.room.Note;
 import com.george.android.tasker.databinding.FragmentHomeBinding;
 
 public class NoteFragment extends Fragment {
+    public static final String TAG = "NoteFragment";
     private FragmentHomeBinding binding;
     private NoteViewModel noteViewModel;
 
@@ -37,12 +37,27 @@ public class NoteFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        binding.toolbarNotes.inflateMenu(R.menu.note_menu);
+
         noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
         NoteAdapter noteAdapter = new NoteAdapter();
 
         binding.buttonAddNote.setOnClickListener(v -> {
             Intent intent = new Intent(NoteFragment.this.getContext(), AddEditNoteActivity.class);
             addNoteResultLauncher.launch(intent);
+        });
+
+        binding.toolbarNotes.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.search_note_item:
+                    Log.d(TAG, "onCreateView: search");
+                    NavController navController = Navigation.findNavController(NoteFragment.this.requireActivity(), R.id.nav_host_fragment_activity_main);
+                    navController.navigate(R.id.action_navigation_note_to_navigation_note_search);
+                    return true;
+                default:
+                    return false;
+            }
+
         });
 
         binding.recyclerViewNotes.setLayoutManager(new LinearLayoutManager(NoteFragment.this.getActivity()));
@@ -117,7 +132,6 @@ public class NoteFragment extends Fragment {
                 }
             }
     );
-
 
     @Override
     public void onDestroyView() {

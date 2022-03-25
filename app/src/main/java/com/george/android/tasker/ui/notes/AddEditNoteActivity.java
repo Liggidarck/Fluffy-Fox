@@ -38,6 +38,7 @@ public class AddEditNoteActivity extends AppCompatActivity {
         binding = ActivityAddEditNoteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        binding.addEditNoteToolbar.setTitle("");
         setSupportActionBar(binding.addEditNoteToolbar);
         binding.addEditNoteToolbar.setNavigationOnClickListener(v -> saveNote());
 

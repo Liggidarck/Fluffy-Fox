@@ -14,9 +14,12 @@
         <entry key="..\:/Users/Temp/AndroidStudioProjects/Tasker/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Temp/AndroidStudioProjects/Tasker/app/src/main/res/layout/fragment_dashboard.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Temp/AndroidStudioProjects/Tasker/app/src/main/res/layout/fragment_home.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Temp/AndroidStudioProjects/Tasker/app/src/main/res/layout/fragment_note_search.xml" value="0.264" />
         <entry key="..\:/Users/Temp/AndroidStudioProjects/Tasker/app/src/main/res/layout/note_item.xml" value="0.264" />
         <entry key="..\:/Users/Temp/AndroidStudioProjects/Tasker/app/src/main/res/menu/add_note_menu.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Temp/AndroidStudioProjects/Tasker/app/src/main/res/menu/bottom_nav_menu.xml" value="0.264" />
+        <entry key="..\:/Users/Temp/AndroidStudioProjects/Tasker/app/src/main/res/menu/note_menu.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Temp/AndroidStudioProjects/Tasker/app/src/main/res/menu/search_note_menu.xml" value="0.25416666666666665" />
       </map>
     </option>
   </component>

@@ -9,7 +9,17 @@
         android:id="@+id/navigation_note"
         android:name="com.george.android.tasker.ui.notes.NoteFragment"
         android:label="@string/title_notes"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_note_to_navigation_note_search"
+            app:destination="@id/navigation_note_search" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_note_search"
+        android:name="com.george.android.tasker.ui.notes.SearchNoteFragment"
+        android:label="Поиск"
+        tools:layout="@layout/fragment_note_search"/>
 
     <fragment
         android:id="@+id/navigation_task"

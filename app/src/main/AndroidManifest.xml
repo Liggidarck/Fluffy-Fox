@@ -11,7 +11,8 @@
         android:theme="@style/Theme.Tasker">
         <activity
             android:name=".ui.notes.AddEditNoteActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Tasker"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
