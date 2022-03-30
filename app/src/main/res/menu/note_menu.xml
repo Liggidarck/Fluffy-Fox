@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/search_note_item"
         android:title="Поиск"
         android:icon="@drawable/ic_outline_search_24"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/delete_all_note_item"
+        android:title="Удлаить все заметки" />
+
 </menu>

@@ -59,16 +59,6 @@ public class SearchNoteFragment extends Fragment {
         binding.recyclerViewSearchNotes.setAdapter(noteAdapter);
 
         binding.searchNoteToolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
-        binding.searchNoteToolbar.inflateMenu(R.menu.search_note_menu);
-        binding.searchNoteToolbar.setOnMenuItemClickListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.calendar_item:
-                    Log.d(TAG, "onCreateView: Calendar click");
-                    return true;
-                default:
-                    return false;
-            }
-        });
 
         Objects.requireNonNull(binding.textInputNoteSearch.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override
@@ -92,12 +82,12 @@ public class SearchNoteFragment extends Fragment {
             }
         });
 
-        noteAdapter.setOnClickItemListener(note -> {
+        noteAdapter.setOnClickItemListener((note, position) -> {
             Intent intent = new Intent(SearchNoteFragment.this.getActivity(), AddEditNoteActivity.class);
             intent.putExtra(AddEditNoteActivity.EXTRA_ID, note.getId());
             intent.putExtra(AddEditNoteActivity.EXTRA_TITLE, note.getTitle());
             intent.putExtra(AddEditNoteActivity.EXTRA_DESCRIPTION, note.getDescription());
-            intent.putExtra(AddEditNoteActivity.EXTRA_DATE_CREATE, note.getDateCreate());
+            intent.putExtra(AddEditNoteActivity.EXTRA_ADAPTER_POSITION, position);
             editNoteResultLauncher.launch(intent);
         });
 
@@ -120,9 +110,8 @@ public class SearchNoteFragment extends Fragment {
 
                         String title = intent.getStringExtra(AddEditNoteActivity.EXTRA_TITLE);
                         String description = intent.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION);
-                        String dateCreate = intent.getStringExtra(AddEditNoteActivity.EXTRA_DATE_CREATE);
 
-                        Note note = new Note(title, description, dateCreate);
+                        Note note = new Note(title, description);
                         note.setId(id);
                         noteViewModel.update(note);
                     }

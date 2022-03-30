@@ -1,5 +1,6 @@
 package com.george.android.tasker.ui.notes;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,8 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -22,19 +21,20 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.george.android.tasker.MainActivity;
 import com.george.android.tasker.R;
 import com.george.android.tasker.data.notes.NoteAdapter;
 import com.george.android.tasker.data.notes.room.Note;
-import com.george.android.tasker.databinding.FragmentHomeBinding;
+import com.george.android.tasker.databinding.FragmentNoteBinding;
 
 public class NoteFragment extends Fragment {
+
     public static final String TAG = "NoteFragment";
-    private FragmentHomeBinding binding;
+    private FragmentNoteBinding binding;
     private NoteViewModel noteViewModel;
 
+    @SuppressLint("NonConstantResourceId")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        binding = FragmentNoteBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         binding.toolbarNotes.inflateMenu(R.menu.note_menu);
@@ -45,19 +45,6 @@ public class NoteFragment extends Fragment {
         binding.buttonAddNote.setOnClickListener(v -> {
             Intent intent = new Intent(NoteFragment.this.getContext(), AddEditNoteActivity.class);
             addNoteResultLauncher.launch(intent);
-        });
-
-        binding.toolbarNotes.setOnMenuItemClickListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.search_note_item:
-                    Log.d(TAG, "onCreateView: search");
-                    NavController navController = Navigation.findNavController(NoteFragment.this.requireActivity(), R.id.nav_host_fragment_activity_main);
-                    navController.navigate(R.id.action_navigation_note_to_navigation_note_search);
-                    return true;
-                default:
-                    return false;
-            }
-
         });
 
         binding.recyclerViewNotes.setLayoutManager(new LinearLayoutManager(NoteFragment.this.getActivity()));
@@ -79,15 +66,30 @@ public class NoteFragment extends Fragment {
             }
         }).attachToRecyclerView(binding.recyclerViewNotes);
 
-        noteAdapter.setOnClickItemListener(note -> {
+        noteAdapter.setOnClickItemListener((note, position) -> {
             Intent intent = new Intent(NoteFragment.this.getActivity(), AddEditNoteActivity.class);
             intent.putExtra(AddEditNoteActivity.EXTRA_ID, note.getId());
             intent.putExtra(AddEditNoteActivity.EXTRA_TITLE, note.getTitle());
             intent.putExtra(AddEditNoteActivity.EXTRA_DESCRIPTION, note.getDescription());
-            intent.putExtra(AddEditNoteActivity.EXTRA_DATE_CREATE, note.getDateCreate());
+            intent.putExtra(AddEditNoteActivity.EXTRA_ADAPTER_POSITION, position);
             editNoteResultLauncher.launch(intent);
         });
 
+        binding.toolbarNotes.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.search_note_item:
+                    Log.d(TAG, "onCreateView: search");
+                    NavController navController = Navigation.findNavController(NoteFragment.this.requireActivity(), R.id.nav_host_fragment_activity_main);
+                    navController.navigate(R.id.action_navigation_note_to_navigation_note_search);
+                    return true;
+                case R.id.delete_all_note_item:
+                    Log.d(TAG, "onCreateView: delete all notes");
+                    noteViewModel.deleteAllNote();
+                default:
+                    return false;
+            }
+
+        });
         return root;
     }
 
@@ -99,9 +101,8 @@ public class NoteFragment extends Fragment {
                     assert intent != null;
                     String title = intent.getStringExtra(AddEditNoteActivity.EXTRA_TITLE);
                     String description = intent.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION);
-                    String dateCreate = intent.getStringExtra(AddEditNoteActivity.EXTRA_DATE_CREATE);
 
-                    Note note = new Note(title, description, dateCreate);
+                    Note note = new Note(title, description);
                     noteViewModel.insert(note);
                 }
             }
@@ -109,26 +110,22 @@ public class NoteFragment extends Fragment {
 
     ActivityResultLauncher<Intent> editNoteResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent intent = result.getData();
-                        assert intent != null;
-                        int id = intent.getIntExtra(AddEditNoteActivity.EXTRA_ID, -1);
-                        if (id == -1) {
-                            Toast.makeText(NoteFragment.this.getActivity(), "Note can't be updated", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        String title = intent.getStringExtra(AddEditNoteActivity.EXTRA_TITLE);
-                        String description = intent.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION);
-                        String dateCreate = intent.getStringExtra(AddEditNoteActivity.EXTRA_DATE_CREATE);
-
-                        Note note = new Note(title, description, dateCreate);
-                        note.setId(id);
-                        noteViewModel.update(note);
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent intent = result.getData();
+                    assert intent != null;
+                    int id = intent.getIntExtra(AddEditNoteActivity.EXTRA_ID, -1);
+                    if (id == -1) {
+                        Toast.makeText(NoteFragment.this.getActivity(), "Note can't be updated", Toast.LENGTH_SHORT).show();
+                        return;
                     }
+
+                    String title = intent.getStringExtra(AddEditNoteActivity.EXTRA_TITLE);
+                    String description = intent.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION);
+
+                    Note note = new Note(title, description);
+                    note.setId(id);
+                    noteViewModel.update(note);
                 }
             }
     );

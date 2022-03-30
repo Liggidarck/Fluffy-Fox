@@ -11,12 +11,10 @@ public class Note {
 
     private String title;
     private String description;
-    private String dateCreate;
 
-    public Note(String title, String description, String dateCreate) {
+    public Note(String title, String description) {
         this.title = title;
         this.description = description;
-        this.dateCreate = dateCreate;
     }
 
     public void setId(int id) {
@@ -35,7 +33,4 @@ public class Note {
         return description;
     }
 
-    public String getDateCreate() {
-        return dateCreate;
-    }
 }
