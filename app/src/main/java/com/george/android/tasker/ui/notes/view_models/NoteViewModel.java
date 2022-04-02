@@ -1,4 +1,4 @@
-package com.george.android.tasker.ui.notes;
+package com.george.android.tasker.ui.notes.view_models;
 
 import android.app.Application;
 
@@ -6,8 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.george.android.tasker.data.notes.NoteRepository;
-import com.george.android.tasker.data.notes.room.Note;
+import com.george.android.tasker.data.notes.main_notes.NoteRepository;
+import com.george.android.tasker.data.notes.main_notes.Note;
 
 import java.util.List;
 

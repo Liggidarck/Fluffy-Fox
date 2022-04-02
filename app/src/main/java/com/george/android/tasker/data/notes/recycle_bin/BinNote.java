@@ -1,10 +1,10 @@
-package com.george.android.tasker.data.notes.room;
+package com.george.android.tasker.data.notes.recycle_bin;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "note_table")
-public class Note {
+@Entity(tableName = "note_bin")
+public class BinNote {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -12,7 +12,7 @@ public class Note {
     private String title;
     private String description;
 
-    public Note(String title, String description) {
+    public BinNote(String title, String description) {
         this.title = title;
         this.description = description;
     }
@@ -32,5 +32,4 @@ public class Note {
     public String getDescription() {
         return description;
     }
-
 }

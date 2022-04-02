@@ -26,6 +26,7 @@
         android:hint="Заметка" >
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/text_input_edit_note_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"/>

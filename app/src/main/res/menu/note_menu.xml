@@ -12,4 +12,8 @@
         android:id="@+id/delete_all_note_item"
         android:title="Удлаить все заметки" />
 
+    <item
+        android:id="@+id/recycle_bin_note"
+        android:title="Корзина" />
+
 </menu>

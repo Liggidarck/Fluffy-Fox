@@ -1,13 +1,9 @@
-package com.george.android.tasker.data.notes;
+package com.george.android.tasker.data.notes.main_notes;
 
 import android.app.Application;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
-
-import com.george.android.tasker.data.notes.room.Note;
-import com.george.android.tasker.data.notes.room.NoteDao;
-import com.george.android.tasker.data.notes.room.NoteDatabase;
 
 import java.util.List;
 

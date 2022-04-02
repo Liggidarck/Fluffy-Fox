@@ -13,13 +13,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.george.android.tasker.R;
-import com.george.android.tasker.data.notes.NoteAdapter;
+import com.george.android.tasker.data.notes.main_notes.NoteAdapter;
+import com.george.android.tasker.data.notes.recycle_bin.BinNote;
 import com.george.android.tasker.databinding.ActivityAddEditNoteBinding;
-import com.google.android.material.snackbar.Snackbar;
+import com.george.android.tasker.ui.notes.view_models.NoteBinViewModel;
+import com.george.android.tasker.ui.notes.view_models.NoteViewModel;
 
 public class AddEditNoteActivity extends AppCompatActivity {
 
@@ -30,6 +31,8 @@ public class AddEditNoteActivity extends AppCompatActivity {
 
     ActivityAddEditNoteBinding binding;
     NoteAdapter noteAdapter = new NoteAdapter();
+
+    NoteBinViewModel binViewModel;
     NoteViewModel noteViewModel;
 
     int adapterPosition = -1;
@@ -42,6 +45,8 @@ public class AddEditNoteActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
+        binViewModel = new ViewModelProvider(this).get(NoteBinViewModel.class);
+
         noteViewModel.getAllNotes().observe(AddEditNoteActivity.this, noteAdapter::setNotes);
 
         binding.addEditNoteToolbar.setTitle("");
@@ -104,6 +109,7 @@ public class AddEditNoteActivity extends AppCompatActivity {
             case R.id.delete_note_item:
                 if (adapterPosition != -1) {
                     Toast.makeText(AddEditNoteActivity.this, "Note deleted", Toast.LENGTH_SHORT).show();
+                    binViewModel.insert(new BinNote(title, description));
                     noteViewModel.delete(noteAdapter.getNoteAt(adapterPosition));
                     finish();
                 } else {

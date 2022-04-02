@@ -2,6 +2,8 @@ package com.george.android.tasker.ui.notes;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,15 +24,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.george.android.tasker.R;
-import com.george.android.tasker.data.notes.NoteAdapter;
-import com.george.android.tasker.data.notes.room.Note;
+import com.george.android.tasker.data.notes.main_notes.NoteAdapter;
+import com.george.android.tasker.data.notes.main_notes.Note;
+import com.george.android.tasker.data.notes.recycle_bin.BinNote;
 import com.george.android.tasker.databinding.FragmentNoteBinding;
+import com.george.android.tasker.ui.notes.view_models.NoteBinViewModel;
+import com.george.android.tasker.ui.notes.view_models.NoteViewModel;
 
 public class NoteFragment extends Fragment {
 
     public static final String TAG = "NoteFragment";
     private FragmentNoteBinding binding;
+
     private NoteViewModel noteViewModel;
+    private NoteBinViewModel binViewModel;
+
+    NoteAdapter noteAdapter = new NoteAdapter();
 
     @SuppressLint("NonConstantResourceId")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,7 +49,7 @@ public class NoteFragment extends Fragment {
         binding.toolbarNotes.inflateMenu(R.menu.note_menu);
 
         noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
-        NoteAdapter noteAdapter = new NoteAdapter();
+        binViewModel = new ViewModelProvider(this).get(NoteBinViewModel.class);
 
         binding.buttonAddNote.setOnClickListener(v -> {
             Intent intent = new Intent(NoteFragment.this.getContext(), AddEditNoteActivity.class);
@@ -61,8 +70,13 @@ public class NoteFragment extends Fragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                Note note = noteAdapter.getNoteAt(viewHolder.getAdapterPosition());
+                String title = note.getTitle();
+                String description = note.getDescription();
+                BinNote binNote = new BinNote(title, description);
+
+                binViewModel.insert(binNote);
                 noteViewModel.delete(noteAdapter.getNoteAt(viewHolder.getAdapterPosition()));
-                Toast.makeText(NoteFragment.this.getActivity(), "Note deleted", Toast.LENGTH_SHORT).show();
             }
         }).attachToRecyclerView(binding.recyclerViewNotes);
 
@@ -79,17 +93,35 @@ public class NoteFragment extends Fragment {
             switch (item.getItemId()) {
                 case R.id.search_note_item:
                     Log.d(TAG, "onCreateView: search");
-                    NavController navController = Navigation.findNavController(NoteFragment.this.requireActivity(), R.id.nav_host_fragment_activity_main);
-                    navController.navigate(R.id.action_navigation_note_to_navigation_note_search);
+                    NavController SearchController =
+                            Navigation.findNavController(NoteFragment.this.requireActivity(),
+                                    R.id.nav_host_fragment_activity_main);
+                    SearchController.navigate(R.id.action_navigation_note_to_navigation_note_search);
                     return true;
                 case R.id.delete_all_note_item:
                     Log.d(TAG, "onCreateView: delete all notes");
-                    noteViewModel.deleteAllNote();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(NoteFragment.this.requireActivity());
+                    builder.setTitle("Внимание!")
+                            .setMessage("Вы уверены что хотите удалить все заметки?")
+                            .setPositiveButton("ок", (dialog, id) -> {
+                                dialog.cancel();
+                                noteViewModel.deleteAllNote();
+                            })
+                            .setNegativeButton("Отмена", (dialog, id) -> dialog.dismiss());
+                    builder.create().show();
+                    return true;
+                case R.id.recycle_bin_note:
+                    Log.d(TAG, "onCreateView: bin open");
+                    NavController BinController =
+                            Navigation.findNavController(NoteFragment.this.requireActivity(),
+                                    R.id.nav_host_fragment_activity_main);
+                    BinController.navigate(R.id.action_navigation_note_to_navigation_note_bin);
                 default:
                     return false;
             }
 
         });
+
         return root;
     }
 

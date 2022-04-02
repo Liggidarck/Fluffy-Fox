@@ -7,12 +7,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -21,19 +17,16 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.george.android.tasker.R;
-import com.george.android.tasker.data.notes.NoteAdapter;
-import com.george.android.tasker.data.notes.room.Note;
-import com.george.android.tasker.data.notes.room.NoteDatabase;
+import com.george.android.tasker.data.notes.main_notes.NoteAdapter;
+import com.george.android.tasker.data.notes.main_notes.Note;
+import com.george.android.tasker.data.notes.main_notes.NoteDatabase;
 import com.george.android.tasker.databinding.FragmentNoteSearchBinding;
+import com.george.android.tasker.ui.notes.view_models.NoteViewModel;
 
 import java.util.List;
 import java.util.Objects;

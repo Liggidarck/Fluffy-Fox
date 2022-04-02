@@ -1,4 +1,4 @@
-package com.george.android.tasker.data.notes;
+package com.george.android.tasker.data.notes.main_notes;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.george.android.tasker.R;
-import com.george.android.tasker.data.notes.room.Note;
 
 import java.util.ArrayList;
 import java.util.List;
