@@ -37,7 +37,7 @@
         android:id="@+id/navigation_password"
         android:name="com.george.android.tasker.ui.passwords.PasswordsFragment"
         android:label="@string/title_passwords"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_passwords" />
 
     <fragment
         android:id="@+id/navigation_note_bin"

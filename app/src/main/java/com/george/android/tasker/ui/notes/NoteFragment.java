@@ -3,7 +3,6 @@ package com.george.android.tasker.ui.notes;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,8 +23,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.george.android.tasker.R;
-import com.george.android.tasker.data.notes.main_notes.NoteAdapter;
 import com.george.android.tasker.data.notes.main_notes.Note;
+import com.george.android.tasker.data.notes.main_notes.NoteAdapter;
 import com.george.android.tasker.data.notes.recycle_bin.BinNote;
 import com.george.android.tasker.databinding.FragmentNoteBinding;
 import com.george.android.tasker.ui.notes.view_models.NoteBinViewModel;
