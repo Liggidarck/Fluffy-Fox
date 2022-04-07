@@ -1,6 +1,7 @@
 package com.george.android.tasker.data.passwords;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHolder> {
 
+    public static final String TAG = "PasswordAdapter";
+
     private List<Password> passwords = new ArrayList<>();
     private onItemClickListener listener;
     private onItemClickListener copyListener;
@@ -34,7 +37,20 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Password password = passwords.get(position);
-        holder.textViewUrl.setText(password.getUrl());
+        String url = password.getUrl();
+
+        if(url.contains("//")) {
+            Log.d(TAG, "onBindViewHolder: url: " + url.contains("http"));
+            int index = url.indexOf("//");
+            url = url.substring(index + 2);
+        }
+
+        if(url.contains("www")) {
+            int index = url.indexOf("www");
+            url = url.substring(index + 4);
+        }
+
+        holder.textViewUrl.setText(url);
         holder.textViewEmail.setText(password.getEmail());
     }
 

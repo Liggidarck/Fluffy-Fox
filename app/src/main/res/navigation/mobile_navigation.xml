@@ -31,7 +31,7 @@
         android:id="@+id/navigation_task"
         android:name="com.george.android.tasker.ui.tasks.TasksFragment"
         android:label="@string/title_tasks"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_tasks" />
 
     <fragment
         android:id="@+id/navigation_password"
