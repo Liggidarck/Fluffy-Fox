@@ -1,5 +1,6 @@
 package com.george.android.tasker.ui.passwords;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -9,7 +10,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -18,6 +21,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -25,6 +29,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.george.android.tasker.R;
+import com.george.android.tasker.SettingsActivity;
 import com.george.android.tasker.data.passwords.PasswordAdapter;
 import com.george.android.tasker.data.passwords.room.Password;
 import com.george.android.tasker.databinding.FragmentPasswordsBinding;
@@ -38,6 +43,7 @@ public class PasswordsFragment extends Fragment {
 
     PasswordAdapter passwordAdapter = new PasswordAdapter();
 
+    @SuppressLint("NonConstantResourceId")
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentPasswordsBinding.inflate(inflater, container, false);
@@ -88,13 +94,24 @@ public class PasswordsFragment extends Fragment {
             passwordController.navigate(R.id.action_navigation_password_to_navigation_generator_password);
         });
 
+        binding.toolbarPasswords.inflateMenu(R.menu.password_menu);
+        binding.toolbarPasswords.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.password_settings:
+                    startActivity(new Intent(PasswordsFragment.this.requireActivity(), SettingsActivity.class));
+                    return true;
+                default:
+                    return false;
+            }
+        });
+
         return root;
     }
 
     ActivityResultLauncher<Intent> addPasswordResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if(result.getResultCode() == Activity.RESULT_OK) {
+                if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent intent = result.getData();
                     assert intent != null;
 
@@ -111,12 +128,12 @@ public class PasswordsFragment extends Fragment {
     ActivityResultLauncher<Intent> editPasswordResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if(result.getResultCode() == Activity.RESULT_OK) {
+                if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent intent = result.getData();
                     assert intent != null;
 
                     int id = intent.getIntExtra(AddEditPasswordActivity.EXTRA_ID, -1);
-                    if(id == -1) {
+                    if (id == -1) {
                         Toast.makeText(PasswordsFragment.this.requireActivity(), "Password can't update", Toast.LENGTH_SHORT).show();
                         return;
                     }

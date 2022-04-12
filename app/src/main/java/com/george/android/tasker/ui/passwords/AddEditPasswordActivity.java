@@ -3,7 +3,9 @@ package com.george.android.tasker.ui.passwords;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 
 import com.george.android.tasker.R;
 import com.george.android.tasker.data.passwords.PasswordAdapter;
@@ -41,6 +44,9 @@ public class AddEditPasswordActivity extends AppCompatActivity {
         binding = ActivityAddEditPasswordBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String defaultEmail = sharedPreferences.getString("user_email", "Не указано");
+
         passwordsViewModel = new ViewModelProvider(this).get(PasswordsViewModel.class);
         passwordsViewModel.getAllPasswords().observe(AddEditPasswordActivity.this, passwords -> passwordAdapter.setPasswords(passwords));
 
@@ -57,6 +63,9 @@ public class AddEditPasswordActivity extends AppCompatActivity {
             Objects.requireNonNull(binding.textInputUrl.getEditText()).setText(url);
             Objects.requireNonNull(binding.textInputLogin.getEditText()).setText(email);
             Objects.requireNonNull(binding.textInputPassword.getEditText()).setText(password);
+        } else {
+            if(!defaultEmail.equals("Не указано"))
+                Objects.requireNonNull(binding.textInputLogin.getEditText()).setText(defaultEmail);
         }
 
     }

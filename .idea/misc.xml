@@ -36,11 +36,14 @@
         <entry key="app/src/main/res/layout/fragment_passwords.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/note_item.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/password_item.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/settings_activity.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/menu/add_note_menu.xml" value="0.1" />
         <entry key="app/src/main/res/menu/add_password_menu.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/menu/note_bin_menu.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/menu/note_menu.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/menu/password_menu.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/xml/root_preferences.xml" value="0.35104166666666664" />
       </map>
     </option>
   </component>
