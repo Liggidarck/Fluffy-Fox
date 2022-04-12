@@ -20,11 +20,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.george.android.tasker.R;
 import com.george.android.tasker.data.passwords.PasswordAdapter;
 import com.george.android.tasker.data.passwords.room.Password;
 import com.george.android.tasker.databinding.FragmentPasswordsBinding;
+import com.george.android.tasker.ui.notes.NoteFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 public class PasswordsFragment extends Fragment {
@@ -75,6 +79,13 @@ public class PasswordsFragment extends Fragment {
             clipboard.setPrimaryClip(clip);
 
             Snackbar.make(binding.coordinatorPassword, "Логин и пароль скопированны", Snackbar.LENGTH_SHORT).show();
+        });
+
+        binding.buttonGeneratePassword.setOnClickListener(v -> {
+            NavController passwordController =
+                    Navigation.findNavController(PasswordsFragment.this.requireActivity(),
+                            R.id.nav_host_fragment_activity_main);
+            passwordController.navigate(R.id.action_navigation_password_to_navigation_generator_password);
         });
 
         return root;
