@@ -13,8 +13,8 @@ import java.util.List;
 
 public class PasswordRepository {
 
-    private PasswordDao passwordDao;
-    private LiveData<List<Password>> allPasswords;
+    private final PasswordDao passwordDao;
+    private final LiveData<List<Password>> allPasswords;
 
     public PasswordRepository(Application application) {
         PasswordDatabase database = PasswordDatabase.getInstance(application);
@@ -40,7 +40,7 @@ public class PasswordRepository {
 
     private static class InsertPasswordAsyncTask extends AsyncTask<Password, Void, Void> {
 
-        private PasswordDao passwordDao;
+        private final PasswordDao passwordDao;
         private InsertPasswordAsyncTask(PasswordDao passwordDao) {
             this.passwordDao = passwordDao;
         }
@@ -54,7 +54,7 @@ public class PasswordRepository {
 
     private static class UpdatePasswordAsyncTask extends AsyncTask<Password, Void, Void> {
 
-        private PasswordDao passwordDao;
+        private final PasswordDao passwordDao;
         private UpdatePasswordAsyncTask(PasswordDao passwordDao) {
             this.passwordDao = passwordDao;
         }
@@ -69,7 +69,7 @@ public class PasswordRepository {
 
     private static class DeletePasswordAsyncTask extends AsyncTask<Password, Void, Void> {
 
-        private PasswordDao passwordDao;
+        private final PasswordDao passwordDao;
         private DeletePasswordAsyncTask(PasswordDao passwordDao) {
             this.passwordDao = passwordDao;
         }

@@ -1,7 +1,6 @@
 package com.george.android.tasker.data.passwords;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +15,11 @@ import com.george.android.tasker.data.passwords.room.Password;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHolder> {
-
-    public static final String TAG = "PasswordAdapter";
 
     private List<Password> passwords = new ArrayList<>();
     private onItemClickListener listener;
@@ -40,7 +38,6 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
         String url = password.getUrl();
 
         if(url.contains("//")) {
-            Log.d(TAG, "onBindViewHolder: url: " + url.contains("http"));
             int index = url.indexOf("//");
             url = url.substring(index + 2);
         }
@@ -50,6 +47,9 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
             url = url.substring(index + 4);
         }
 
+        String charLogo = Character.toString(url.charAt(0));
+        charLogo = charLogo.toUpperCase(Locale.ROOT);
+        holder.passwordLogoTextView.setText(charLogo);
         holder.textViewUrl.setText(url);
         holder.textViewEmail.setText(password.getEmail());
     }
@@ -72,14 +72,16 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView textViewUrl;
         TextView textViewEmail;
-        CircleImageView imageLogoPassword;
+        TextView passwordLogoTextView;
+        CircleImageView circlePassword;
         ImageView imageViewCopyPassword;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewUrl = itemView.findViewById(R.id.view_url_title);
             textViewEmail = itemView.findViewById(R.id.view_email);
-            imageLogoPassword = itemView.findViewById(R.id.view_logo_password);
+            circlePassword = itemView.findViewById(R.id.password_circle);
+            passwordLogoTextView = itemView.findViewById(R.id.password_logo_text_view);
             imageViewCopyPassword = itemView.findViewById(R.id.view_copy);
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();

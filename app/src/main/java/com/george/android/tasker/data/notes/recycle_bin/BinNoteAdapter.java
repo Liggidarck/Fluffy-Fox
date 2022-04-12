@@ -1,5 +1,6 @@
 package com.george.android.tasker.data.notes.recycle_bin;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,7 @@ public class BinNoteAdapter extends RecyclerView.Adapter<BinNoteAdapter.BinNoteH
         return binNotes.get(position);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setBinNotes(List<BinNote> binNotes) {
         this.binNotes = binNotes;
         notifyDataSetChanged();

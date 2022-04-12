@@ -43,12 +43,6 @@ public abstract class BinNoteDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            noteBinDao.insert(new BinNote("Bin 1", "Description 1"));
-            noteBinDao.insert(new BinNote("Bin 1", "Description 1"));
-            noteBinDao.insert(new BinNote("Bin 1", "Description 1"));
-            noteBinDao.insert(new BinNote("Bin 1", "Description 1"));
-            noteBinDao.insert(new BinNote("Bin 1", "Description 1"));
-            noteBinDao.insert(new BinNote("Bin 1", "Description 1"));
             return null;
         }
     }

@@ -1,6 +1,7 @@
 package com.george.android.tasker.ui.passwords;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -96,16 +97,25 @@ public class AddEditPasswordActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.delete_password_item:
-                if (adapterPosition != -1) {
-                    Toast.makeText(AddEditPasswordActivity.this, "Пароль удален", Toast.LENGTH_SHORT).show();
-                    passwordsViewModel.delete(passwordAdapter.getPasswordAt(adapterPosition));
-                    finish();
-                } else {
-                    Toast.makeText(this, "Пустой пароль удалить невозможно", Toast.LENGTH_SHORT).show();
-                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(AddEditPasswordActivity.this);
+                builder.setTitle("Внимание!")
+                        .setMessage("Вы уверены что хотите удалить пароль?")
+                        .setPositiveButton("ок", (dialog, id) -> deletePassword())
+                        .setNegativeButton("Отмена", (dialog, id) -> dialog.dismiss());
+                builder.create().show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    void deletePassword() {
+        if (adapterPosition != -1) {
+            Toast.makeText(AddEditPasswordActivity.this, "Пароль удален", Toast.LENGTH_SHORT).show();
+            passwordsViewModel.delete(passwordAdapter.getPasswordAt(adapterPosition));
+            finish();
+        } else {
+            Toast.makeText(this, "Пустой пароль удалить невозможно", Toast.LENGTH_SHORT).show();
         }
     }
 }
