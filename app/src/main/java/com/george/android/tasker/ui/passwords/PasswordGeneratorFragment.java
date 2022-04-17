@@ -3,13 +3,17 @@ package com.george.android.tasker.ui.passwords;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.george.android.tasker.databinding.FragmentPasswordGeneratorBinding;
@@ -22,40 +26,34 @@ public class PasswordGeneratorFragment extends Fragment {
 
     FragmentPasswordGeneratorBinding generatorBinding;
 
-    int password_length = 16;
-
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         generatorBinding = FragmentPasswordGeneratorBinding.inflate(inflater, container, false);
         View root = generatorBinding.getRoot();
-
         generatorBinding.toolbarGenerator.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
 
+        generatorBinding.passwordText.setText(randomPassword(16, true, true));
+
         generatorBinding.generatePassword.setOnClickListener(v -> {
-            String checkPasswordLength = Objects.requireNonNull(generatorBinding.lengthPassword.getText()).toString();
-            if(generatorBinding.checkBoxSymbols.isChecked()) {
-                if(checkPasswordLength.isEmpty()) {
-                    generatorBinding.lengthPassword.setError("Это поле не может быть пустым");
-                }
-                else if(Integer.parseInt(generatorBinding.lengthPassword.getText().toString()) > 128 ) {
-                    generatorBinding.lengthPassword.setError("Неверное значение. Максимум 128");
-                } else {
-                    password_length = Integer.parseInt(generatorBinding.lengthPassword.getText().toString());
-                    generatorBinding.passwordText.setText(getRandomPasswordSymbols(password_length));
-                    generatorBinding.lengthPassword.setError(null);
-                }
+            int length = (int) generatorBinding.lengthPasswordSlider.getValue();
+            boolean isSymbols = generatorBinding.checkBoxSymbols.isChecked();
+            boolean isNumbers = generatorBinding.checkBoxNumbers.isChecked();
+            generatorBinding.passwordText.setText(randomPassword((int) length, isSymbols, isNumbers));
+        });
+
+        generatorBinding.lengthPasswordSlider.addOnChangeListener((slider, value, fromUser) -> {
+            boolean isSymbols = generatorBinding.checkBoxSymbols.isChecked();
+            boolean isNumbers = generatorBinding.checkBoxNumbers.isChecked();
+
+            generatorBinding.passwordText.setText(randomPassword((int) value, isSymbols, isNumbers));
+
+            Vibrator vibrator = (Vibrator) requireActivity().getSystemService(Context.VIBRATOR_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(VibrationEffect.createOneShot(10, VibrationEffect.EFFECT_TICK));
             } else {
-                if(checkPasswordLength.isEmpty()) {
-                    generatorBinding.lengthPassword.setError("Это поле не может быть пустым");
-                }
-                else if(Integer.parseInt(generatorBinding.lengthPassword.getText().toString()) > 128) {
-                    generatorBinding.lengthPassword.setError("Неверное значение. Максимум 128");
-                } else {
-                    password_length = Integer.parseInt(generatorBinding.lengthPassword.getText().toString());
-                    generatorBinding.passwordText.setText(getRandomPassword(password_length));
-                    generatorBinding.lengthPassword.setError(null);
-                }
+                vibrator.vibrate(100);
             }
         });
 
@@ -64,35 +62,34 @@ public class PasswordGeneratorFragment extends Fragment {
         return root;
     }
 
-    //Генератор паролей с символами
-    @SuppressWarnings("SpellCheckingInspection")
-    public static String getRandomPasswordSymbols(int passwordLength) {
-        final String charsPassword ="1234567890qwertyuiopasdfghjklzxcvbnm%*)?@#$~QWERTYUIOPASDFGHJKLZXCVBNM%*)?@#$~1234567890";
-        StringBuilder result = new StringBuilder();
-        while(passwordLength > 0) {
-            Random rand = new Random();
-            result.append(charsPassword.charAt(rand.nextInt(charsPassword.length())));
-            passwordLength--;
-        }
-        return result.toString();
-    }
+    public String randomPassword(int length, boolean isSymbols, boolean isNumbers) {
+        String chars = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+        String numbers = "1234567890";
+        String symbols = "%*)?@#$~";
+        String password;
 
-    //Генератор паролей без символов
-    @SuppressWarnings("SpellCheckingInspection")
-    public static String getRandomPassword(int passwordLength) {
-        final String noSymbolsCharsPassword ="1234567980qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM";
+        if(isSymbols & isNumbers)
+            password =  numbers + chars + symbols;
+        else if(!isSymbols & isNumbers)
+            password = numbers + chars + numbers;
+        else if(isSymbols)
+            password = symbols + chars + symbols;
+        else
+            password = chars;
+
         StringBuilder result = new StringBuilder();
-        while(passwordLength > 0) {
+        while (length > 0) {
             Random rand = new Random();
-            result.append(noSymbolsCharsPassword.charAt(rand.nextInt(noSymbolsCharsPassword.length())));
-            passwordLength--;
+            result.append(password.charAt(rand.nextInt(password.length())));
+            length--;
         }
+
         return result.toString();
     }
 
 
     public void onCopyBtnClick(View view) {
-        if(Objects.requireNonNull(generatorBinding.passwordText.getText()).toString().equals("Сгенерируй меня!")) {
+        if (Objects.requireNonNull(generatorBinding.passwordText.getText()).toString().equals("Сгенерируй меня!")) {
             Snackbar.make(view, "Сгенерируй пароль что бы его скопировать", Snackbar.LENGTH_SHORT).setAction("error", null).show();
         } else {
             ClipboardManager clipboard = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
@@ -103,4 +100,9 @@ public class PasswordGeneratorFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        generatorBinding = null;
+    }
 }

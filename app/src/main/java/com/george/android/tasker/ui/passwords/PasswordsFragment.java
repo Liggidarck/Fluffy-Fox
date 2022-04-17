@@ -10,9 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -21,7 +19,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -33,7 +30,6 @@ import com.george.android.tasker.SettingsActivity;
 import com.george.android.tasker.data.passwords.PasswordAdapter;
 import com.george.android.tasker.data.passwords.room.Password;
 import com.george.android.tasker.databinding.FragmentPasswordsBinding;
-import com.george.android.tasker.ui.notes.NoteFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 public class PasswordsFragment extends Fragment {

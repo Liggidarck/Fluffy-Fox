@@ -17,7 +17,7 @@
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/edit_text_note_title"
+                android:id="@+id/editTextNoteTitle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="15dp"
@@ -29,7 +29,7 @@
                 android:autofillHints="no" />
 
             <EditText
-                android:id="@+id/edit_text_note_description"
+                android:id="@+id/editTextNoteDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -52,7 +52,7 @@
         app:liftOnScroll="true">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/add_edit_note_toolbar"
+            android:id="@+id/addEditNoteToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/white"

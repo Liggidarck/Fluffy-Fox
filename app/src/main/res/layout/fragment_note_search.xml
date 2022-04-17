@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/search_note_toolbar"
+        android:id="@+id/searchNoteToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/Widget.MaterialComponents.Toolbar.Primary"
@@ -14,11 +14,11 @@
         app:navigationIcon="@drawable/ic_baseline_arrow_back_24" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_input_note_search"
+        android:id="@+id/textInputNoteSearch"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/search_note_toolbar"
+        android:layout_below="@id/searchNoteToolbar"
         app:endIconMode="clear_text"
         android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
@@ -26,7 +26,7 @@
         android:hint="Заметка" >
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/text_input_edit_note_search"
+            android:id="@+id/textInputEditNoteSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"/>
@@ -37,7 +37,7 @@
         android:id="@+id/recycler_view_search_notes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/text_input_note_search"
+        android:layout_below="@id/textInputNoteSearch"
         tools:listitem="@layout/note_item" />
 
 </RelativeLayout>
