@@ -1,5 +1,7 @@
 package com.george.android.tasker.ui.passwords;
 
+import static com.george.android.tasker.ui.passwords.PasswordsViewModel.randomPassword;
+
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -20,7 +22,6 @@ import com.george.android.tasker.databinding.FragmentPasswordGeneratorBinding;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
-import java.util.Random;
 
 public class PasswordGeneratorFragment extends Fragment {
 
@@ -34,13 +35,18 @@ public class PasswordGeneratorFragment extends Fragment {
         View root = generatorBinding.getRoot();
         generatorBinding.toolbarGenerator.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
 
+        generatorBinding.lengthPasswordSlider.setStepSize(1);
+        generatorBinding.lengthPasswordSlider.setValueFrom(1);
+        generatorBinding.lengthPasswordSlider.setValueTo(32);
+        generatorBinding.lengthPasswordSlider.setValue(16);
+
         generatorBinding.passwordText.setText(randomPassword(16, true, true));
 
         generatorBinding.generatePassword.setOnClickListener(v -> {
             int length = (int) generatorBinding.lengthPasswordSlider.getValue();
             boolean isSymbols = generatorBinding.checkBoxSymbols.isChecked();
             boolean isNumbers = generatorBinding.checkBoxNumbers.isChecked();
-            generatorBinding.passwordText.setText(randomPassword((int) length, isSymbols, isNumbers));
+            generatorBinding.passwordText.setText(randomPassword(length, isSymbols, isNumbers));
         });
 
         generatorBinding.lengthPasswordSlider.addOnChangeListener((slider, value, fromUser) -> {
@@ -61,32 +67,6 @@ public class PasswordGeneratorFragment extends Fragment {
 
         return root;
     }
-
-    public String randomPassword(int length, boolean isSymbols, boolean isNumbers) {
-        String chars = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
-        String numbers = "1234567890";
-        String symbols = "%*)?@#$~";
-        String password;
-
-        if(isSymbols & isNumbers)
-            password =  numbers + chars + symbols;
-        else if(!isSymbols & isNumbers)
-            password = numbers + chars + numbers;
-        else if(isSymbols)
-            password = symbols + chars + symbols;
-        else
-            password = chars;
-
-        StringBuilder result = new StringBuilder();
-        while (length > 0) {
-            Random rand = new Random();
-            result.append(password.charAt(rand.nextInt(password.length())));
-            length--;
-        }
-
-        return result.toString();
-    }
-
 
     public void onCopyBtnClick(View view) {
         if (Objects.requireNonNull(generatorBinding.passwordText.getText()).toString().equals("Сгенерируй меня!")) {

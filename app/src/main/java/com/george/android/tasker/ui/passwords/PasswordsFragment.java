@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,6 +89,18 @@ public class PasswordsFragment extends Fragment {
                     Navigation.findNavController(PasswordsFragment.this.requireActivity(),
                             R.id.nav_host_fragment_activity_main);
             passwordController.navigate(R.id.action_navigation_password_to_navigation_generator_password);
+        });
+
+        binding.buttonGeneratePassword.setOnLongClickListener(view -> {
+            String password = PasswordsViewModel.randomPassword(16, true, true);
+
+            ClipboardManager clipboard = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("", password);
+            assert clipboard != null;
+            clipboard.setPrimaryClip(clip);
+            Snackbar.make(view, "Пароль сгенерирован и скопирован", Snackbar.LENGTH_SHORT).setAction("done", null).show();
+
+            return true;
         });
 
         binding.toolbarPasswords.inflateMenu(R.menu.password_menu);
