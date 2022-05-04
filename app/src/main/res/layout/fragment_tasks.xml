@@ -13,6 +13,12 @@
         style="@style/Widget.MaterialComponents.Toolbar.Primary"
         app:title="@string/title_tasks" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_tasks"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbarTasks"
+        tools:listitem="@layout/task_item" />
 
 
 </RelativeLayout>

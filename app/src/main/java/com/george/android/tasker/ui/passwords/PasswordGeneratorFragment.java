@@ -27,7 +27,6 @@ public class PasswordGeneratorFragment extends Fragment {
 
     FragmentPasswordGeneratorBinding generatorBinding;
 
-    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,10 +56,11 @@ public class PasswordGeneratorFragment extends Fragment {
 
             Vibrator vibrator = (Vibrator) requireActivity().getSystemService(Context.VIBRATOR_SERVICE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                vibrator.vibrate(VibrationEffect.createOneShot(10, VibrationEffect.EFFECT_TICK));
+                vibrator.vibrate(VibrationEffect.createOneShot(10, VibrationEffect.DEFAULT_AMPLITUDE));
             } else {
                 vibrator.vibrate(100);
             }
+
         });
 
         generatorBinding.copyPassword.setOnClickListener(this::onCopyBtnClick);
