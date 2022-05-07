@@ -38,6 +38,4 @@ public class TasksViewModel extends AndroidViewModel {
         return allTasks;
     }
 
-
-
 }

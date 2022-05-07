@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,7 +18,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.preference.PreferenceManager;
 
 import com.george.android.tasker.R;
 import com.george.android.tasker.data.passwords.PasswordAdapter;
@@ -83,7 +83,7 @@ public class AddEditPasswordActivity extends AppCompatActivity {
 
         binding.textInputLogin.setEndIconOnClickListener(v -> {
             String login = Objects.requireNonNull(binding.textInputLogin.getEditText()).getText().toString();
-            if(!login.trim().isEmpty()) {
+            if (!login.trim().isEmpty()) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("", login);
                 assert clipboard != null;
@@ -128,7 +128,7 @@ public class AddEditPasswordActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.add_password_menu, menu);
+        menuInflater.inflate(R.menu.delete_menu, menu);
         return true;
     }
 
@@ -136,17 +136,18 @@ public class AddEditPasswordActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.delete_password_item:
+            case R.id.delete_item:
                 if (adapterPosition != -1) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(AddEditPasswordActivity.this);
                     builder.setTitle("Внимание!")
                             .setMessage("Вы уверены что хотите удалить пароль?")
-                            .setPositiveButton("ок", (dialog, id) -> passwordsViewModel.delete(passwordAdapter.getPasswordAt(adapterPosition)))
+                            .setPositiveButton("ок", (dialog, id) -> {
+                                passwordsViewModel.delete(passwordAdapter.getPasswordAt(adapterPosition));
+                                Toast.makeText(AddEditPasswordActivity.this, "Пароль удален", Toast.LENGTH_SHORT).show();
+                                finish();
+                            })
                             .setNegativeButton("Отмена", (dialog, id) -> dialog.dismiss());
                     builder.create().show();
-
-                    Toast.makeText(AddEditPasswordActivity.this, "Пароль удален", Toast.LENGTH_SHORT).show();
-                    finish();
                 } else {
                     Toast.makeText(this, "Такой пароль удалить невозможно", Toast.LENGTH_SHORT).show();
                 }

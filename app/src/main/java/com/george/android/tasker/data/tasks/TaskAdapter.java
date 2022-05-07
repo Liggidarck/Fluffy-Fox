@@ -1,5 +1,6 @@
 package com.george.android.tasker.data.tasks;
 
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     private List<Task> tasks = new ArrayList<>();
     private onItemClickListener listener;
+    private onItemClickListener stateListener;
 
     @NonNull
     @Override
@@ -32,6 +34,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         Task task = tasks.get(position);
         holder.taskTextView.setText(task.getTitle());
         holder.statusCheckBox.setChecked(task.isStatus());
+
+        if(task.isStatus()) {
+            holder.taskTextView.setPaintFlags(holder.taskTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        } else {
+            holder.taskTextView.setPaintFlags(0);
+        }
+
     }
 
     @Override
@@ -64,6 +73,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
                 }
             });
 
+            statusCheckBox.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if(stateListener != null && position != RecyclerView.NO_POSITION) {
+                    stateListener.onItemClick(tasks.get(position), position);
+                }
+            });
+
         }
     }
 
@@ -73,6 +89,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     public void setOnClickListener(onItemClickListener listener) {
         this.listener = listener;
+    }
+
+    public void setOnClickSateListener(onItemClickListener listener) {
+        this.stateListener = listener;
     }
 
 }
