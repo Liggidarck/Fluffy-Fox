@@ -37,7 +37,17 @@
         android:id="@+id/navigation_password"
         android:name="com.george.android.tasker.ui.passwords.PasswordsFragment"
         android:label="@string/title_passwords"
-        tools:layout="@layout/fragment_passwords" />
+        tools:layout="@layout/fragment_passwords" >
+        <action
+            android:id="@+id/action_navigation_password_to_navigation_generator_password"
+            app:destination="@id/navigation_generator_password" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_generator_password"
+        android:name="com.george.android.tasker.ui.passwords.PasswordGeneratorFragment"
+        android:label="Генератор паролей"
+        tools:layout="@layout/fragment_password_generator" />
 
     <fragment
         android:id="@+id/navigation_note_bin"

@@ -2,8 +2,14 @@ package com.george.android.tasker.ui.passwords;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.george.android.tasker.R;
 import com.george.android.tasker.data.passwords.PasswordAdapter;
 import com.george.android.tasker.databinding.ActivityAddEditPasswordBinding;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
@@ -41,6 +48,9 @@ public class AddEditPasswordActivity extends AppCompatActivity {
         binding = ActivityAddEditPasswordBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String defaultEmail = sharedPreferences.getString("user_email", "Не указано");
+
         passwordsViewModel = new ViewModelProvider(this).get(PasswordsViewModel.class);
         passwordsViewModel.getAllPasswords().observe(AddEditPasswordActivity.this, passwords -> passwordAdapter.setPasswords(passwords));
 
@@ -48,7 +58,7 @@ public class AddEditPasswordActivity extends AppCompatActivity {
         binding.toolbarAddEditPasswords.setNavigationOnClickListener(v -> savePassword());
 
         Intent intent = getIntent();
-        if(intent.hasExtra(EXTRA_ID)) {
+        if (intent.hasExtra(EXTRA_ID)) {
             url = intent.getStringExtra(EXTRA_URL);
             email = intent.getStringExtra(EXTRA_EMAIL);
             password = intent.getStringExtra(EXTRA_PASSWORD);
@@ -57,7 +67,32 @@ public class AddEditPasswordActivity extends AppCompatActivity {
             Objects.requireNonNull(binding.textInputUrl.getEditText()).setText(url);
             Objects.requireNonNull(binding.textInputLogin.getEditText()).setText(email);
             Objects.requireNonNull(binding.textInputPassword.getEditText()).setText(password);
+        } else {
+            if (!defaultEmail.equals("Не указано"))
+                Objects.requireNonNull(binding.textInputLogin.getEditText()).setText(defaultEmail);
         }
+
+        binding.textInputUrl.setEndIconOnClickListener(v -> {
+            if (validateWeb()) {
+                String url = Objects.requireNonNull(binding.textInputUrl.getEditText()).getText().toString();
+                v.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+            } else {
+                Snackbar.make(v, "Ошибка! Пустой адрес", Snackbar.LENGTH_LONG).show();
+            }
+        });
+
+        binding.textInputLogin.setEndIconOnClickListener(v -> {
+            String login = Objects.requireNonNull(binding.textInputLogin.getEditText()).getText().toString();
+            if (!login.trim().isEmpty()) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("", login);
+                assert clipboard != null;
+                clipboard.setPrimaryClip(clip);
+                Snackbar.make(v, "Логин скопирован", Snackbar.LENGTH_LONG).show();
+            } else {
+                Snackbar.make(v, "Пустой логин не копируется", Snackbar.LENGTH_LONG).show();
+            }
+        });
 
     }
 
@@ -66,7 +101,7 @@ public class AddEditPasswordActivity extends AppCompatActivity {
         String email = Objects.requireNonNull(binding.textInputLogin.getEditText()).getText().toString();
         String password = Objects.requireNonNull(binding.textInputPassword.getEditText()).getText().toString();
 
-        if(url.trim().isEmpty() | email.trim().isEmpty() | password.trim().isEmpty()) {
+        if (url.trim().isEmpty() | email.trim().isEmpty() | password.trim().isEmpty()) {
             finish();
             return;
         }
@@ -85,10 +120,15 @@ public class AddEditPasswordActivity extends AppCompatActivity {
         finish();
     }
 
+    public boolean validateWeb() {
+        String check = Objects.requireNonNull(binding.textInputUrl.getEditText()).getText().toString().trim();
+        return !check.isEmpty();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.add_password_menu, menu);
+        menuInflater.inflate(R.menu.delete_menu, menu);
         return true;
     }
 
@@ -96,26 +136,27 @@ public class AddEditPasswordActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.delete_password_item:
-                AlertDialog.Builder builder = new AlertDialog.Builder(AddEditPasswordActivity.this);
-                builder.setTitle("Внимание!")
-                        .setMessage("Вы уверены что хотите удалить пароль?")
-                        .setPositiveButton("ок", (dialog, id) -> deletePassword())
-                        .setNegativeButton("Отмена", (dialog, id) -> dialog.dismiss());
-                builder.create().show();
+            case R.id.delete_item:
+                if (adapterPosition != -1) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(AddEditPasswordActivity.this);
+                    builder.setTitle("Внимание!")
+                            .setMessage("Вы уверены что хотите удалить пароль?")
+                            .setPositiveButton("ок", (dialog, id) -> {
+                                passwordsViewModel.delete(passwordAdapter.getPasswordAt(adapterPosition));
+                                Toast.makeText(AddEditPasswordActivity.this, "Пароль удален", Toast.LENGTH_SHORT).show();
+                                finish();
+                            })
+                            .setNegativeButton("Отмена", (dialog, id) -> dialog.dismiss());
+                    builder.create().show();
+                } else {
+                    Toast.makeText(this, "Такой пароль удалить невозможно", Toast.LENGTH_SHORT).show();
+                }
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    void deletePassword() {
-        if (adapterPosition != -1) {
-            Toast.makeText(AddEditPasswordActivity.this, "Пароль удален", Toast.LENGTH_SHORT).show();
-            passwordsViewModel.delete(passwordAdapter.getPasswordAt(adapterPosition));
-            finish();
-        } else {
-            Toast.makeText(this, "Пустой пароль удалить невозможно", Toast.LENGTH_SHORT).show();
-        }
-    }
+
 }
