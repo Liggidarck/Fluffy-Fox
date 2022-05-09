@@ -24,4 +24,7 @@ public interface PasswordDao {
     @Query("SELECT * FROM password_table")
     LiveData<List<Password>> getAllPasswords();
 
+    @Query("SELECT * FROM password_table WHERE url LIKE '%' || :search || '%'")
+    LiveData<List<Password>> findPassword(String search);
+
 }

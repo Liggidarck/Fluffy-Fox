@@ -27,7 +27,7 @@ public interface NoteDao {
     @Query("SELECT * FROM note_table")
     LiveData<List<Note>> getAllNotes();
 
-    @Query("SELECT * FROM note_table WHERE title LIKE :search OR description LIKE :search")
+    @Query("SELECT * FROM note_table WHERE title LIKE '%' || :search  || '%' OR description LIKE '%' || :search  || '%'")
     LiveData<List<Note>> findNote(String search);
 
 }

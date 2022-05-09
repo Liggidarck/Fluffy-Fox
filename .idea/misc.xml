@@ -35,6 +35,7 @@
         <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/fragment_passwords.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/fragment_tasks.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/layout/fragment_today.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/note_item.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/password_item.xml" value="0.5" />
         <entry key="app/src/main/res/layout/task_item.xml" value="0.35104166666666664" />

@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/navigation_today"
+        android:icon="@drawable/ic_baseline_warning_24"
+        android:title="Сегодня" />
+
+    <item
         android:id="@+id/navigation_note"
         android:icon="@drawable/ic_bookmark_add_black_24dp"
         android:title="@string/title_notes" />

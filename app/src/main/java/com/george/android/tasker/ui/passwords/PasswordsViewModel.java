@@ -38,6 +38,10 @@ public class PasswordsViewModel extends AndroidViewModel {
         return allPasswords;
     }
 
+    public LiveData<List<Password>> findPassword(String search) {
+        return repository.findPassword(search);
+    }
+
     public static String randomPassword(int length, boolean isSymbols, boolean isNumbers) {
         String chars = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
         String numbers = "1234567890";

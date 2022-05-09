@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_note">
+    app:startDestination="@+id/navigation_today">
 
     <fragment
         android:id="@+id/navigation_note"
@@ -54,5 +54,11 @@
         android:name="com.george.android.tasker.ui.notes.BinNoteFragment"
         android:label="Корзина заметок"
         tools:layout="@layout/fragment_bin_note" />
+
+    <fragment
+        android:id="@+id/navigation_today"
+        android:name="com.george.android.tasker.ui.today.TodayFragment"
+        android:label="TodayFragment"
+        tools:layout="@layout/fragment_today"/>
 
 </navigation>
