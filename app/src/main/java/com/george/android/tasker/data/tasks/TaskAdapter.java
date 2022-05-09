@@ -1,5 +1,6 @@
 package com.george.android.tasker.data.tasks;
 
+import android.annotation.SuppressLint;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.george.android.tasker.data.tasks.room.Task;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
@@ -40,7 +42,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         } else {
             holder.taskTextView.setPaintFlags(0);
         }
-
     }
 
     @Override
@@ -48,9 +49,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         return tasks.size();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
         notifyDataSetChanged();
+    }
+
+    public void removeTask(int position) {
     }
 
     public Task getTaskAt(int position) {

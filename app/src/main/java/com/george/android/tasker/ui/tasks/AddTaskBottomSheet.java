@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +20,18 @@ import com.george.android.tasker.data.tasks.room.Task;
 import com.george.android.tasker.databinding.AddTaskBottomSheetBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 public class AddTaskBottomSheet extends BottomSheetDialogFragment {
 
     AddTaskBottomSheetBinding binding;
     TasksViewModel tasksViewModel;
+
+    public static final String TAG = "AddTaskBottomSheet";
 
     @Nullable
     @Override
@@ -68,8 +75,15 @@ public class AddTaskBottomSheet extends BottomSheetDialogFragment {
 
     public void saveTask() {
         String taskText = Objects.requireNonNull(binding.textTaskInput.getEditText()).getText().toString();
+
+        Date currentDate = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+        String dateCreate = dateFormat.format(currentDate);
+
+        Log.d(TAG, "saveTask: " + dateCreate);
+
         if (!taskText.isEmpty()) {
-            Task task = new Task(taskText, false);
+            Task task = new Task(taskText, false, null, dateCreate, null);
             tasksViewModel.insert(task);
             dismiss();
         } else {

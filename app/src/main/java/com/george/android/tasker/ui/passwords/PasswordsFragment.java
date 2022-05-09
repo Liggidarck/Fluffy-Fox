@@ -23,6 +23,7 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -88,7 +89,7 @@ public class PasswordsFragment extends Fragment {
             NavController passwordController =
                     Navigation.findNavController(PasswordsFragment.this.requireActivity(),
                             R.id.nav_host_fragment_activity_main);
-            passwordController.navigate(R.id.action_navigation_password_to_navigation_generator_password);
+            passwordController.navigate(R.id.action_navigation_password_to_navigation_generator_password, null, getNavOptions());
         });
 
         binding.buttonGeneratePassword.setOnLongClickListener(view -> {
@@ -115,6 +116,15 @@ public class PasswordsFragment extends Fragment {
         });
 
         return root;
+    }
+
+    protected NavOptions getNavOptions() {
+        return new NavOptions.Builder()
+                .setEnterAnim(androidx.navigation.ui.R.anim.nav_default_enter_anim)
+                .setExitAnim(androidx.navigation.ui.R.anim.nav_default_exit_anim)
+                .setPopEnterAnim(androidx.navigation.ui.R.anim.nav_default_pop_enter_anim)
+                .setPopExitAnim(androidx.navigation.ui.R.anim.nav_default_pop_exit_anim)
+                .build();
     }
 
     ActivityResultLauncher<Intent> addPasswordResultLauncher = registerForActivityResult(

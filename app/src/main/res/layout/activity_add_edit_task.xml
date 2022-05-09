@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.tasks.AddEditTaskActivity">
+    tools:context=".ui.tasks.EditTaskActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarEditTask"
@@ -15,35 +15,106 @@
         app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
         app:title="Задача" />
 
-    <RelativeLayout
+    <EditText
+        android:id="@+id/textEditTaskInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbarEditTask"
-        android:layout_marginStart="10dp">
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="15dp"
+        android:background="@null"
+        android:hint="Переимновать задачу"
+        android:textSize="23sp" />
 
-        <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/taskStateCheckBox"
+    <RelativeLayout
+        android:id="@+id/calendarTaskView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textEditTaskInput"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:id="@+id/calendarTaskImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_outline_today_24" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textEditTaskInput"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <TextView
+            android:id="@+id/calendarTaskText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/calendarTaskImage"
+            android:text="Добавить дату выполнения"
+            android:textSize="15sp"
+            android:textColor="@color/gray"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/informationTaskView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/calendarTaskView"
+        android:layout_marginStart="10dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:id="@+id/informationTaskImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_outline_format_align_left_24"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+
+        <EditText
+            android:id="@+id/informationTaskEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/taskStateCheckBox"
+            android:layout_toEndOf="@id/informationTaskImage"
+            android:layout_marginStart="10dp"
             android:layout_centerVertical="true"
-            android:hint="Переименовать задачу"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="10dp">
+            android:hint="Добавить замметку"
+            android:textSize="15sp"
+            android:background="@null"
+            android:textColor="@color/gray" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text" />
+    </RelativeLayout>
 
-        </com.google.android.material.textfield.TextInputLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="10dp"
+        android:background="#FFFFFF"
+        android:outlineProvider="bounds"
+        android:elevation="40dp">
+
+        <TextView
+            android:id="@+id/dateCreateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="Созданно ср, 4 мая" />
+
+        <Button
+            android:id="@+id/taskCompleteBtn"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="Задача выполнена"
+            android:textAllCaps="false" />
 
     </RelativeLayout>
 

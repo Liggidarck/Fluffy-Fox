@@ -3,7 +3,6 @@ package com.george.android.tasker.ui.tasks;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +39,9 @@ public class TasksFragment extends Fragment {
         binding.recyclerTasks.setAdapter(taskAdapter);
 
         tasksViewModel.getAllTasks().observe(TasksFragment.this.requireActivity(),
-                tasks -> taskAdapter.setTasks(tasks));
+                tasks -> {
+                    taskAdapter.setTasks(tasks);
+                });
 
         binding.buttonAddTask.setOnClickListener(v -> {
             AddTaskBottomSheet addTaskBottomSheet = new AddTaskBottomSheet();
@@ -48,22 +49,28 @@ public class TasksFragment extends Fragment {
         });
 
         taskAdapter.setOnClickListener((task, position) -> {
-            Intent intent = new Intent(TasksFragment.this.requireActivity(), AddEditTaskActivity.class);
-            intent.putExtra(AddEditTaskActivity.EXTRA_ID, task.getId());
-            intent.putExtra(AddEditTaskActivity.EXTRA_TEXT, task.getTitle());
-            intent.putExtra(AddEditTaskActivity.EXTRA_STATUS, task.isStatus());
-            intent.putExtra(AddEditTaskActivity.EXTRA_ADAPTER_POSITION, position);
+            Intent intent = new Intent(TasksFragment.this.requireActivity(), EditTaskActivity.class);
+            intent.putExtra(EditTaskActivity.EXTRA_ID, task.getId());
+            intent.putExtra(EditTaskActivity.EXTRA_TEXT, task.getTitle());
+            intent.putExtra(EditTaskActivity.EXTRA_STATUS, task.isStatus());
+            intent.putExtra(EditTaskActivity.EXTRA_ADAPTER_POSITION, position);
+            intent.putExtra(EditTaskActivity.EXTRA_DATE_COMPLETE, task.getDateComplete());
+            intent.putExtra(EditTaskActivity.EXTRA_DATE_CREATE, task.getDateCreate());
+            intent.putExtra(EditTaskActivity.EXTRA_NOTE_TASK, task.getNoteTask());
             editTaskResultLauncher.launch(intent);
         });
 
         taskAdapter.setOnClickSateListener((task, position) -> {
             boolean currentState = task.isStatus();
+            String dateComplete = task.getDateComplete();
+            String dateCreate = task.getDateCreate();
+            String noteTask = task.getNoteTask();
 
             Task updateStatus;
             if (currentState) {
-                updateStatus = new Task(task.getTitle(), false);
+                updateStatus = new Task(task.getTitle(), false, dateComplete, dateCreate, noteTask);
             } else {
-                updateStatus = new Task(task.getTitle(), true);
+                updateStatus = new Task(task.getTitle(), true, dateComplete, dateCreate, noteTask);
             }
             updateStatus.setId(task.getId());
             tasksViewModel.update(updateStatus);
@@ -75,20 +82,23 @@ public class TasksFragment extends Fragment {
     ActivityResultLauncher<Intent> editTaskResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if(result.getResultCode() == Activity.RESULT_OK) {
+                if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent intent = result.getData();
 
                     assert intent != null;
-                    int id = intent.getIntExtra(AddEditTaskActivity.EXTRA_ID, -1);
+                    int id = intent.getIntExtra(EditTaskActivity.EXTRA_ID, -1);
                     if (id == -1) {
                         Toast.makeText(TasksFragment.this.requireActivity(), "Task can't update", Toast.LENGTH_SHORT).show();
-                       return;
+                        return;
                     }
 
-                    String textTask = intent.getStringExtra(AddEditTaskActivity.EXTRA_TEXT);
-                    boolean statusTask = intent.getBooleanExtra(AddEditTaskActivity.EXTRA_STATUS, false);
+                    String textTask = intent.getStringExtra(EditTaskActivity.EXTRA_TEXT);
+                    boolean statusTask = intent.getBooleanExtra(EditTaskActivity.EXTRA_STATUS, false);
+                    String dateComplete = intent.getStringExtra(EditTaskActivity.EXTRA_DATE_COMPLETE);
+                    String dateCreate = intent.getStringExtra(EditTaskActivity.EXTRA_DATE_CREATE);
+                    String noteTask = intent.getStringExtra(EditTaskActivity.EXTRA_NOTE_TASK);
 
-                    Task task = new Task(textTask, statusTask);
+                    Task task = new Task(textTask, statusTask, dateComplete, dateCreate, noteTask);
                     task.setId(id);
                     tasksViewModel.update(task);
                 }

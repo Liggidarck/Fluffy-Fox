@@ -21,6 +21,7 @@
         <entry key="..\:/Users/Temp/AndroidStudioProjects/Tasker/app/src/main/res/menu/bottom_nav_menu.xml" value="0.264" />
         <entry key="..\:/Users/Temp/AndroidStudioProjects/Tasker/app/src/main/res/menu/note_menu.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Temp/AndroidStudioProjects/Tasker/app/src/main/res/menu/search_note_menu.xml" value="0.25416666666666665" />
+        <entry key="app/src/main/res/drawable/line_black.xml" value="0.3" />
         <entry key="app/src/main/res/layout/activity_add_edit_note.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/activity_add_edit_password.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/activity_add_edit_task.xml" value="0.35104166666666664" />
@@ -36,6 +37,7 @@
         <entry key="app/src/main/res/layout/fragment_tasks.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/note_item.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/password_item.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/task_item.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/menu/add_note_menu.xml" value="0.1" />
         <entry key="app/src/main/res/menu/add_password_menu.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.35104166666666664" />
