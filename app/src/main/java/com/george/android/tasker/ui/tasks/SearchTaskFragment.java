@@ -3,8 +3,9 @@ package com.george.android.tasker.ui.tasks;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -12,52 +13,42 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.george.android.tasker.R;
 import com.george.android.tasker.data.tasks.TaskAdapter;
 import com.george.android.tasker.data.tasks.room.Task;
-import com.george.android.tasker.databinding.FragmentTasksBinding;
-import com.george.android.tasker.ui.notes.NoteFragment;
+import com.george.android.tasker.databinding.FragmentSearchTaskBinding;
 
-public class TasksFragment extends Fragment {
+import java.util.Objects;
 
-    FragmentTasksBinding binding;
+public class SearchTaskFragment extends Fragment {
+
+    FragmentSearchTaskBinding binding;
     TasksViewModel tasksViewModel;
+    TaskAdapter adapter = new TaskAdapter();
 
-    public static final String TAG = "TasksFragment";
-
-    TaskAdapter taskAdapter = new TaskAdapter();
-
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentTasksBinding.inflate(inflater, container, false);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentSearchTaskBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
-        binding.toolbarTasks.inflateMenu(R.menu.task_menu);
 
         tasksViewModel = new ViewModelProvider(this).get(TasksViewModel.class);
 
-        binding.recyclerTasks.setLayoutManager(new LinearLayoutManager(TasksFragment.this.requireActivity()));
-        binding.recyclerTasks.setHasFixedSize(true);
-        binding.recyclerTasks.setAdapter(taskAdapter);
+        binding.searchTaskToolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
 
-        tasksViewModel.getAllTasks().observe(TasksFragment.this.requireActivity(),
-                tasks -> {
-                    taskAdapter.setTasks(tasks);
-                });
+        binding.recyclerSearchTask.setLayoutManager(new LinearLayoutManager(SearchTaskFragment.this.requireActivity()));
+        binding.recyclerSearchTask.setHasFixedSize(true);
+        binding.recyclerSearchTask.setAdapter(adapter);
 
-        binding.buttonAddTask.setOnClickListener(v -> {
-            AddTaskBottomSheet addTaskBottomSheet = new AddTaskBottomSheet();
-            addTaskBottomSheet.show(getParentFragmentManager(), "AddTaskBottomSheet");
-        });
+        tasksViewModel.getAllTasks().observe(SearchTaskFragment.this.requireActivity(),
+                tasks -> adapter.setTasks(tasks));
 
-        taskAdapter.setOnClickListener((task, position) -> {
-            Intent intent = new Intent(TasksFragment.this.requireActivity(), EditTaskActivity.class);
+        adapter.setOnClickListener((task, position) -> {
+            Intent intent = new Intent(SearchTaskFragment.this.requireActivity(), EditTaskActivity.class);
             intent.putExtra(EditTaskActivity.EXTRA_ID, task.getId());
             intent.putExtra(EditTaskActivity.EXTRA_TEXT, task.getTitle());
             intent.putExtra(EditTaskActivity.EXTRA_STATUS, task.isStatus());
@@ -68,29 +59,22 @@ public class TasksFragment extends Fragment {
             editTaskResultLauncher.launch(intent);
         });
 
-        taskAdapter.setOnClickSateListener((task, position) -> {
-            boolean currentState = task.isStatus();
-            String dateComplete = task.getDateComplete();
-            String dateCreate = task.getDateCreate();
-            String noteTask = task.getNoteTask();
+        Objects.requireNonNull(binding.textInputTaskSearch.getEditText()).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            Task updateStatus;
-            if (currentState) {
-                updateStatus = new Task(task.getTitle(), false, dateComplete, dateCreate, noteTask);
-            } else {
-                updateStatus = new Task(task.getTitle(), true, dateComplete, dateCreate, noteTask);
             }
-            updateStatus.setId(task.getId());
-            tasksViewModel.update(updateStatus);
-        });
 
-        binding.toolbarTasks.setOnMenuItemClickListener(item -> {
-            if(item.getItemId() == R.id.search_task_item) {
-                NavController BinController = Navigation.findNavController(TasksFragment.this.requireActivity(),
-                                R.id.nav_host_fragment_activity_main);
-                BinController.navigate(R.id.action_navigation_task_to_navigation_task_search);
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
             }
-            return false;
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                tasksViewModel.findTask(s.toString()).observe(SearchTaskFragment.this.requireActivity(),
+                        tasks -> adapter.setTasks(tasks));
+            }
         });
 
         return root;
@@ -105,7 +89,7 @@ public class TasksFragment extends Fragment {
                     assert intent != null;
                     int id = intent.getIntExtra(EditTaskActivity.EXTRA_ID, -1);
                     if (id == -1) {
-                        Toast.makeText(TasksFragment.this.requireActivity(), "Task can't update", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SearchTaskFragment.this.requireActivity(), "Task can't update", Toast.LENGTH_SHORT).show();
                         return;
                     }
 

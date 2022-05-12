@@ -31,7 +31,7 @@ public class SearchNoteFragment extends Fragment {
 
     FragmentNoteSearchBinding binding;
     NoteAdapter noteAdapter = new NoteAdapter();
-    private NoteViewModel noteViewModel;
+    NoteViewModel noteViewModel;
 
     @Nullable
     @Override

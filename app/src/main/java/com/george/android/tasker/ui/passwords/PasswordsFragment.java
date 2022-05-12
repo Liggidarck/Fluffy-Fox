@@ -31,6 +31,7 @@ import com.george.android.tasker.SettingsActivity;
 import com.george.android.tasker.data.passwords.PasswordAdapter;
 import com.george.android.tasker.data.passwords.room.Password;
 import com.george.android.tasker.databinding.FragmentPasswordsBinding;
+import com.george.android.tasker.ui.tasks.TasksFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 public class PasswordsFragment extends Fragment {
@@ -106,6 +107,11 @@ public class PasswordsFragment extends Fragment {
         binding.toolbarPasswords.inflateMenu(R.menu.password_menu);
         binding.toolbarPasswords.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
+                case R.id.search_password:
+                    NavController BinController = Navigation.findNavController(PasswordsFragment.this.requireActivity(),
+                            R.id.nav_host_fragment_activity_main);
+                    BinController.navigate(R.id.action_navigation_password_to_searchPasswordFragment);
+                    return true;
                 case R.id.password_settings:
                     startActivity(new Intent(PasswordsFragment.this.requireActivity(), SettingsActivity.class));
                     return true;

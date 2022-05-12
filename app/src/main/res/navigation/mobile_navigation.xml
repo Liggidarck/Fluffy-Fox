@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_today">
+    app:startDestination="@+id/navigation_note">
 
     <fragment
         android:id="@+id/navigation_note"
@@ -31,7 +31,11 @@
         android:id="@+id/navigation_task"
         android:name="com.george.android.tasker.ui.tasks.TasksFragment"
         android:label="@string/title_tasks"
-        tools:layout="@layout/fragment_tasks" />
+        tools:layout="@layout/fragment_tasks" >
+        <action
+            android:id="@+id/action_navigation_task_to_navigation_task_search"
+            app:destination="@id/navigation_task_search" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_password"
@@ -41,6 +45,9 @@
         <action
             android:id="@+id/action_navigation_password_to_navigation_generator_password"
             app:destination="@id/navigation_generator_password" />
+        <action
+            android:id="@+id/action_navigation_password_to_searchPasswordFragment"
+            app:destination="@id/searchPasswordFragment" />
     </fragment>
 
     <fragment
@@ -55,10 +62,15 @@
         android:label="Корзина заметок"
         tools:layout="@layout/fragment_bin_note" />
 
+
+    <fragment android:id="@+id/navigation_task_search"
+        android:name="com.george.android.tasker.ui.tasks.SearchTaskFragment"
+        tools:layout="@layout/fragment_search_task"
+        android:label="Поиск задач"/>
     <fragment
-        android:id="@+id/navigation_today"
-        android:name="com.george.android.tasker.ui.today.TodayFragment"
-        android:label="TodayFragment"
-        tools:layout="@layout/fragment_today"/>
+        android:id="@+id/searchPasswordFragment"
+        android:name="com.george.android.tasker.ui.passwords.SearchPasswordFragment"
+        android:label="SearchPasswordFragment"
+        tools:layout="@layout/fragment_password_search"/>
 
 </navigation>

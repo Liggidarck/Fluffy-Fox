@@ -5,10 +5,12 @@ import static com.george.android.tasker.ui.passwords.PasswordsViewModel.randomPa
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,9 +36,12 @@ public class PasswordGeneratorFragment extends Fragment {
         View root = generatorBinding.getRoot();
         generatorBinding.toolbarGenerator.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireActivity().getBaseContext());
+        String maxValue = sharedPreferences.getString("generator_passwords_length", "32");
+
         generatorBinding.lengthPasswordSlider.setStepSize(1);
         generatorBinding.lengthPasswordSlider.setValueFrom(1);
-        generatorBinding.lengthPasswordSlider.setValueTo(32);
+        generatorBinding.lengthPasswordSlider.setValueTo(Float.parseFloat(maxValue));
         generatorBinding.lengthPasswordSlider.setValue(16);
 
         generatorBinding.passwordText.setText(randomPassword(16, true, true));

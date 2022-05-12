@@ -33,17 +33,24 @@
         <entry key="app/src/main/res/layout/fragment_note.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/fragment_note_search.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/layout/fragment_password_generator.xml" value="0.35052083333333334" />
+        <entry key="app/src/main/res/layout/fragment_password_search.xml" value="0.3494791666666667" />
         <entry key="app/src/main/res/layout/fragment_passwords.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/layout/fragment_search_task.xml" value="0.3494791666666667" />
         <entry key="app/src/main/res/layout/fragment_tasks.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/fragment_today.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/note_item.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/password_item.xml" value="0.5" />
         <entry key="app/src/main/res/layout/task_item.xml" value="0.35104166666666664" />
-        <entry key="app/src/main/res/menu/add_note_menu.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/add_note_menu.xml" value="0.35052083333333334" />
         <entry key="app/src/main/res/menu/add_password_menu.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/menu/delete_menu.xml" value="0.35052083333333334" />
         <entry key="app/src/main/res/menu/note_bin_menu.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/menu/note_menu.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/menu/password_menu.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/task_menu.xml" value="0.3494791666666667" />
+        <entry key="app/src/main/res/xml/root_preferences.xml" value="0.35052083333333334" />
       </map>
     </option>
   </component>
