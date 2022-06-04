@@ -1,6 +1,7 @@
 package com.george.android.tasker.ui.notes;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -54,7 +55,7 @@ public class AddEditNoteActivity extends AppCompatActivity {
         binding.addEditNoteToolbar.setNavigationOnClickListener(v -> saveNote());
 
         Intent intent = getIntent();
-        if(intent.hasExtra(EXTRA_ID)){
+        if (intent.hasExtra(EXTRA_ID)) {
             title = intent.getStringExtra(EXTRA_TITLE);
             description = intent.getStringExtra(EXTRA_DESCRIPTION);
             binding.editTextNoteTitle.setText(title);
@@ -67,9 +68,9 @@ public class AddEditNoteActivity extends AppCompatActivity {
     }
 
     public void showSoftKeyboard(View view) {
-        if(view.requestFocus()){
-            InputMethodManager imm =(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(view,InputMethodManager.SHOW_IMPLICIT);
+        if (view.requestFocus()) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
         }
     }
 
@@ -77,7 +78,7 @@ public class AddEditNoteActivity extends AppCompatActivity {
         String title = binding.editTextNoteTitle.getText().toString();
         String description = binding.editTextNoteDescription.getText().toString();
 
-        if(title.trim().isEmpty() & description.trim().isEmpty()) {
+        if (title.trim().isEmpty() & description.trim().isEmpty()) {
             finish();
             return;
         }
@@ -108,16 +109,26 @@ public class AddEditNoteActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.delete_note_item:
                 if (adapterPosition != -1) {
-                    Toast.makeText(AddEditNoteActivity.this, "Note deleted", Toast.LENGTH_SHORT).show();
-                    binViewModel.insert(new BinNote(title, description));
-                    noteViewModel.delete(noteAdapter.getNoteAt(adapterPosition));
-                    finish();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(AddEditNoteActivity.this);
+                    builder.setTitle("Внимание!")
+                            .setMessage("Вы уверены что хотите удалить задачу?")
+                            .setPositiveButton("ок", (dialog, id) -> {
+                                        binViewModel.insert(new BinNote(title, description));
+                                        noteViewModel.delete(noteAdapter.getNoteAt(adapterPosition));
+                                        Toast.makeText(AddEditNoteActivity.this, "Заметка удалена", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                            )
+                            .setNegativeButton("Отмена", (dialog, id) -> dialog.dismiss());
+                    builder.create().show();
+
                 } else {
                     Toast.makeText(AddEditNoteActivity.this, "Note can't deleted", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             case R.id.share_note_item:
-                if(title == null & description == null) {
+                if (title == null & description == null) {
                     Toast.makeText(this, "Empty note can't shared", Toast.LENGTH_SHORT).show();
                 } else {
                     String sharing_data = title + "\n" + description;

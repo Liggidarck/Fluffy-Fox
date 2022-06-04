@@ -103,16 +103,15 @@ public class EditTaskActivity extends AppCompatActivity {
             setDate();
         };
 
-        binding.calendarTaskView.setOnClickListener(v -> {
-            new DatePickerDialog(EditTaskActivity.this, date, datePickCalendar
-                    .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar.get(Calendar.DAY_OF_MONTH)).show();
-        });
+        binding.calendarTaskView.setOnClickListener(v ->
+                new DatePickerDialog(EditTaskActivity.this, date, datePickCalendar
+                        .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar.get(Calendar.DAY_OF_MONTH)).show());
     }
 
     void setDate() {
         String date_text = "dd.MM.yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(date_text, Locale.US);
-        binding.calendarTaskText.setText(sdf.format(datePickCalendar.getTime()));
+        binding.calendarTaskText.setText("Дата выполнения: " + sdf.format(datePickCalendar.getTime()));
     }
 
     void saveTask(boolean status) {

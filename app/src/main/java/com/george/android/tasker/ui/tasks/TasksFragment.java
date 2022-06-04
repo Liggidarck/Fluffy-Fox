@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -12,7 +11,6 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -23,7 +21,6 @@ import com.george.android.tasker.R;
 import com.george.android.tasker.data.tasks.TaskAdapter;
 import com.george.android.tasker.data.tasks.room.Task;
 import com.george.android.tasker.databinding.FragmentTasksBinding;
-import com.george.android.tasker.ui.notes.NoteFragment;
 
 public class TasksFragment extends Fragment {
 
@@ -47,9 +44,7 @@ public class TasksFragment extends Fragment {
         binding.recyclerTasks.setAdapter(taskAdapter);
 
         tasksViewModel.getAllTasks().observe(TasksFragment.this.requireActivity(),
-                tasks -> {
-                    taskAdapter.setTasks(tasks);
-                });
+                tasks -> taskAdapter.setTasks(tasks));
 
         binding.buttonAddTask.setOnClickListener(v -> {
             AddTaskBottomSheet addTaskBottomSheet = new AddTaskBottomSheet();

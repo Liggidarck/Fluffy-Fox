@@ -29,6 +29,7 @@ import com.george.android.tasker.data.notes.recycle_bin.BinNote;
 import com.george.android.tasker.databinding.FragmentNoteBinding;
 import com.george.android.tasker.ui.notes.view_models.NoteBinViewModel;
 import com.george.android.tasker.ui.notes.view_models.NoteViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
 public class NoteFragment extends Fragment {
 
@@ -63,7 +64,8 @@ public class NoteFragment extends Fragment {
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
+                    viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
             }
 
@@ -76,6 +78,10 @@ public class NoteFragment extends Fragment {
 
                 binViewModel.insert(binNote);
                 noteViewModel.delete(noteAdapter.getNoteAt(viewHolder.getAdapterPosition()));
+
+                Snackbar.make(binding.fragmentNoteCoordinator,
+                                "Заметка " + title + " удалена", Snackbar.LENGTH_SHORT)
+                        .show();
             }
         }).attachToRecyclerView(binding.recyclerViewNotes);
 
