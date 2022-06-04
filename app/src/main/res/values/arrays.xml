@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="length_password" >
+        <item>16 символов</item>
+        <item>20 символов</item>
+        <item>32 символов</item>
+        <item>40 символов</item>
+        <item>50 символов</item>
+        <item>64 символов</item>
+    </string-array>
+
+    <string-array name="length_password_data" >
+        <item>16</item>
+        <item>20</item>
+        <item>32</item>
+        <item>40</item>
+        <item>50</item>
+        <item>64</item>
+    </string-array>
+</resources>

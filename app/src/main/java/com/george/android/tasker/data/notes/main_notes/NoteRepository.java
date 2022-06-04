@@ -1,6 +1,7 @@
 package com.george.android.tasker.data.notes.main_notes;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
@@ -35,6 +36,10 @@ public class NoteRepository {
 
     public LiveData<List<Note>> getAllNotes() {
         return allNotes;
+    }
+
+    public LiveData<List<Note>> findNotes (String query){
+        return noteDao.findNote(query);
     }
 
     private static class InsertNoteAsyncTask extends AsyncTask<Note, Void, Void> {

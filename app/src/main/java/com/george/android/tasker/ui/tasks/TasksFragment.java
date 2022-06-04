@@ -13,8 +13,11 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.george.android.tasker.R;
 import com.george.android.tasker.data.tasks.TaskAdapter;
 import com.george.android.tasker.data.tasks.room.Task;
 import com.george.android.tasker.databinding.FragmentTasksBinding;
@@ -32,6 +35,8 @@ public class TasksFragment extends Fragment {
         binding = FragmentTasksBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        binding.toolbarTasks.inflateMenu(R.menu.task_menu);
+
         tasksViewModel = new ViewModelProvider(this).get(TasksViewModel.class);
 
         binding.recyclerTasks.setLayoutManager(new LinearLayoutManager(TasksFragment.this.requireActivity()));
@@ -39,9 +44,7 @@ public class TasksFragment extends Fragment {
         binding.recyclerTasks.setAdapter(taskAdapter);
 
         tasksViewModel.getAllTasks().observe(TasksFragment.this.requireActivity(),
-                tasks -> {
-                    taskAdapter.setTasks(tasks);
-                });
+                tasks -> taskAdapter.setTasks(tasks));
 
         binding.buttonAddTask.setOnClickListener(v -> {
             AddTaskBottomSheet addTaskBottomSheet = new AddTaskBottomSheet();
@@ -74,6 +77,15 @@ public class TasksFragment extends Fragment {
             }
             updateStatus.setId(task.getId());
             tasksViewModel.update(updateStatus);
+        });
+
+        binding.toolbarTasks.setOnMenuItemClickListener(item -> {
+            if(item.getItemId() == R.id.search_task_item) {
+                NavController BinController = Navigation.findNavController(TasksFragment.this.requireActivity(),
+                                R.id.nav_host_fragment_activity_main);
+                BinController.navigate(R.id.action_navigation_task_to_navigation_task_search);
+            }
+            return false;
         });
 
         return root;

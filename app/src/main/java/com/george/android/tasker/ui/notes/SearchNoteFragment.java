@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,26 +17,21 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.george.android.tasker.data.notes.main_notes.NoteAdapter;
 import com.george.android.tasker.data.notes.main_notes.Note;
-import com.george.android.tasker.data.notes.main_notes.NoteDatabase;
+import com.george.android.tasker.data.notes.main_notes.NoteAdapter;
 import com.george.android.tasker.databinding.FragmentNoteSearchBinding;
 import com.george.android.tasker.ui.notes.view_models.NoteViewModel;
 
-import java.util.List;
 import java.util.Objects;
 
 public class SearchNoteFragment extends Fragment {
 
-    public static final String TAG = "SearchNoteFragment";
-
     FragmentNoteSearchBinding binding;
     NoteAdapter noteAdapter = new NoteAdapter();
-    private NoteViewModel noteViewModel;
+    NoteViewModel noteViewModel;
 
     @Nullable
     @Override
@@ -53,25 +47,24 @@ public class SearchNoteFragment extends Fragment {
 
         binding.searchNoteToolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
 
+        noteViewModel.getAllNotes().observe(SearchNoteFragment.this.requireActivity(),
+                notes -> noteAdapter.setNotes(notes));
+
         Objects.requireNonNull(binding.textInputNoteSearch.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
-                Log.d(TAG, "afterTextChanged: " + editable.toString());
-                LiveData<List<Note>> notesList = NoteDatabase
-                        .getInstance(SearchNoteFragment.this.getActivity())
-                        .noteDao()
-                        .findNote(editable.toString());
-                notesList.observe(SearchNoteFragment.this.requireActivity(), notes -> noteAdapter.setNotes(notes));
+            public void afterTextChanged(Editable s) {
+                noteViewModel.findNote(s.toString()).observe(SearchNoteFragment.this.requireActivity(),
+                        notes -> noteAdapter.setNotes(notes));
             }
         });
 

@@ -38,6 +38,10 @@ public class TaskRepository {
         return allTasks;
     }
 
+    public LiveData<List<Task>> findTask(String search) {
+        return taskDao.findTasks(search);
+    }
+
     public static class InsertTaskAsyncTask extends AsyncTask<Task, Void, Void> {
 
         private TaskDao taskDao;

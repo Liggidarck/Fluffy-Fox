@@ -38,4 +38,8 @@ public class TasksViewModel extends AndroidViewModel {
         return allTasks;
     }
 
+    public LiveData<List<Task>> findTask(String search) {
+        return repository.findTask(search);
+    }
+
 }

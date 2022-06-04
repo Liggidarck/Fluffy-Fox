@@ -38,6 +38,10 @@ public class PasswordRepository {
         return allPasswords;
     }
 
+    public LiveData<List<Password>> findPassword(String search) {
+        return passwordDao.findPassword(search);
+    }
+
     private static class InsertPasswordAsyncTask extends AsyncTask<Password, Void, Void> {
 
         private final PasswordDao passwordDao;

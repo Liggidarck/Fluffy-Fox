@@ -1,4 +1,5 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory app:title="@string/title_passwords">
 
@@ -7,6 +8,15 @@
             app:title="Логин по умолчанию"
             app:useSimpleSummaryProvider="true" />
 
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Генератор паролей">
+
+        <ListPreference
+            android:defaultValue="32"
+            android:entries="@array/length_password"
+            android:entryValues="@array/length_password_data"
+            android:key="generator_passwords_length"
+            android:title="Максимальная длина пароля" />
     </PreferenceCategory>
 
 </PreferenceScreen>

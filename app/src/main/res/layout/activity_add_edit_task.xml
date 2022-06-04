@@ -15,81 +15,101 @@
         app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
         app:title="Задача" />
 
-    <EditText
-        android:id="@+id/textEditTaskInput"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbarEditTask"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="15dp"
-        android:background="@null"
-        android:hint="Переимновать задачу"
-        android:textSize="23sp" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbarEditTask">
 
-    <RelativeLayout
-        android:id="@+id/calendarTaskView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textEditTaskInput"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true">
-
-        <ImageView
-            android:id="@+id/calendarTaskImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:src="@drawable/ic_outline_today_24" />
-
-        <TextView
-            android:id="@+id/calendarTaskText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
-            android:layout_toEndOf="@id/calendarTaskImage"
-            android:text="Добавить дату выполнения"
-            android:textSize="15sp"
-            android:textColor="@color/gray"/>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/informationTaskView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/calendarTaskView"
-        android:layout_marginStart="10dp"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true">
-
-        <ImageView
-            android:id="@+id/informationTaskImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_outline_format_align_left_24"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"/>
-
-        <EditText
-            android:id="@+id/informationTaskEdit"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/informationTaskImage"
-            android:layout_marginStart="10dp"
-            android:layout_centerVertical="true"
-            android:hint="Добавить замметку"
-            android:textSize="15sp"
-            android:background="@null"
-            android:textColor="@color/gray" />
+            android:layout_height="wrap_content" >
 
-    </RelativeLayout>
+            <EditText
+                android:id="@+id/textEditTaskInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="15dp"
+                android:background="@null"
+                android:hint="Переимновать задачу"
+                android:textSize="23sp" />
+
+            <RelativeLayout
+                android:id="@+id/calendarTaskView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textEditTaskInput"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/calendarTaskImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:src="@drawable/ic_outline_today_24" />
+
+                <TextView
+                    android:id="@+id/calendarTaskText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/calendarTaskImage"
+                    android:text="Добавить дату выполнения"
+                    android:textSize="15sp"
+                    android:textColor="@color/gray"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/informationTaskView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/calendarTaskView"
+                android:layout_marginStart="10dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/informationTaskImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_outline_format_align_left_24"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"/>
+
+                <EditText
+                    android:id="@+id/informationTaskEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/informationTaskImage"
+                    android:layout_marginStart="10dp"
+                    android:layout_centerVertical="true"
+                    android:hint="Добавить замметку"
+                    android:textSize="15sp"
+                    android:background="@null"
+                    android:textColor="@color/gray" />
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_below="@+id/informationTaskView" />
+
+
+        </RelativeLayout>
+
+    </ScrollView>
+
 
     <RelativeLayout
         android:layout_width="match_parent"
