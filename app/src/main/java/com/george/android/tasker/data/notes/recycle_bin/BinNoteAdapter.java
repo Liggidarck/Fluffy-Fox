@@ -49,8 +49,8 @@ public class BinNoteAdapter extends RecyclerView.Adapter<BinNoteAdapter.BinNoteH
     }
 
     class BinNoteHolder extends RecyclerView.ViewHolder {
-        private TextView textViewTitle;
-        private TextView textViewDescription;
+        private final TextView textViewTitle;
+        private final TextView textViewDescription;
 
         public BinNoteHolder(@NonNull View itemView) {
             super(itemView);

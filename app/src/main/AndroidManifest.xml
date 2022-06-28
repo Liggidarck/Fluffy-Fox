@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tasker">
         <activity
-            android:name=".ui.tasks.EditTaskActivity"
+            android:name=".ui.tasks.task.EditTaskActivity"
             android:exported="false" />
         <activity
             android:name=".SettingsActivity"

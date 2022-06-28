@@ -70,11 +70,11 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewUrl;
-        TextView textViewEmail;
-        TextView passwordLogoTextView;
-        CircleImageView circlePassword;
-        ImageView imageViewCopyPassword;
+        final TextView textViewUrl;
+        final TextView textViewEmail;
+        final TextView passwordLogoTextView;
+        final CircleImageView circlePassword;
+        final ImageView imageViewCopyPassword;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

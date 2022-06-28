@@ -1,4 +1,4 @@
-package com.george.android.tasker.data.tasks.room;
+package com.george.android.tasker.data.tasks.task;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -14,13 +14,15 @@ public class Task {
     private final String dateComplete;
     private final String dateCreate;
     private final String noteTask;
+    private int folderId;
 
-    public Task(String title, boolean status, String dateComplete, String dateCreate, String noteTask) {
+    public Task(String title, boolean status, String dateComplete, String dateCreate, String noteTask, int folderId) {
         this.title = title;
         this.status = status;
         this.dateComplete = dateComplete;
         this.dateCreate = dateCreate;
         this.noteTask = noteTask;
+        this.folderId = folderId;
     }
 
     public void setId(int id) {
@@ -49,5 +51,13 @@ public class Task {
 
     public String getNoteTask() {
         return noteTask;
+    }
+
+    public int getFolderId() {
+        return folderId;
+    }
+
+    public void setFolderId(int folderId) {
+        this.folderId = folderId;
     }
 }

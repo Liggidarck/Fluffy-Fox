@@ -1,13 +1,13 @@
-package com.george.android.tasker.data.tasks;
+package com.george.android.tasker.data.tasks.task;
 
 import android.app.Application;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
-import com.george.android.tasker.data.tasks.room.Task;
-import com.george.android.tasker.data.tasks.room.TaskDao;
-import com.george.android.tasker.data.tasks.room.TaskDatabase;
+import com.george.android.tasker.data.tasks.task.Task;
+import com.george.android.tasker.data.tasks.task.TaskDao;
+import com.george.android.tasker.data.tasks.task.TaskDatabase;
 
 import java.util.List;
 
@@ -36,6 +36,10 @@ public class TaskRepository {
 
     public LiveData<List<Task>> getAllTasks() {
         return allTasks;
+    }
+
+    public LiveData<List<Task>> getFoldersTasks(int folderId) {
+        return taskDao.getTasksInFolder(folderId);
     }
 
     public LiveData<List<Task>> findTask(String search) {

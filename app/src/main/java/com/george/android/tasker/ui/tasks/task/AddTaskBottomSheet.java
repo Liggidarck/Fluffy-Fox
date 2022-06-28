@@ -1,4 +1,4 @@
-package com.george.android.tasker.ui.tasks;
+package com.george.android.tasker.ui.tasks.task;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.george.android.tasker.data.tasks.room.Task;
+import com.george.android.tasker.data.tasks.task.Task;
 import com.george.android.tasker.databinding.AddTaskBottomSheetBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -32,6 +32,7 @@ public class AddTaskBottomSheet extends BottomSheetDialogFragment {
     TasksViewModel tasksViewModel;
 
     public static final String TAG = "AddTaskBottomSheet";
+    int folderID;
 
     @Nullable
     @Override
@@ -40,6 +41,10 @@ public class AddTaskBottomSheet extends BottomSheetDialogFragment {
         View view = binding.getRoot();
         Objects.requireNonNull(getDialog()).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         showSoftKeyboard(binding.textTaskInput);
+
+        assert this.getArguments() != null;
+        folderID = this.getArguments().getInt("folderID");
+        Log.d(TAG, "onCreateView: folderID: " + folderID);
 
         tasksViewModel = new ViewModelProvider(this).get(TasksViewModel.class);
 
@@ -73,7 +78,7 @@ public class AddTaskBottomSheet extends BottomSheetDialogFragment {
         return view;
     }
 
-    public void saveTask() {
+    void saveTask() {
         String taskText = Objects.requireNonNull(binding.textTaskInput.getEditText()).getText().toString();
 
         Date currentDate = new Date();
@@ -83,7 +88,7 @@ public class AddTaskBottomSheet extends BottomSheetDialogFragment {
         Log.d(TAG, "saveTask: " + dateCreate);
 
         if (!taskText.isEmpty()) {
-            Task task = new Task(taskText, false, null, dateCreate, null);
+            Task task = new Task(taskText, false, null, dateCreate, null, folderID);
             tasksViewModel.insert(task);
             dismiss();
         } else {
@@ -91,7 +96,7 @@ public class AddTaskBottomSheet extends BottomSheetDialogFragment {
         }
     }
 
-    public void showSoftKeyboard(View view) {
+    void showSoftKeyboard(View view) {
         if (view.requestFocus()) {
             InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);

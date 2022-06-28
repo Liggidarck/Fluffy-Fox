@@ -12,8 +12,8 @@ import java.util.List;
 
 public class NoteBinViewModel extends AndroidViewModel {
 
-    private BinNoteRepository repository;
-    private LiveData<List<BinNote>> allBinNotes;
+    private final BinNoteRepository repository;
+    private final LiveData<List<BinNote>> allBinNotes;
 
     public NoteBinViewModel(Application application){
         super(application);

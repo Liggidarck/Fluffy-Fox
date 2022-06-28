@@ -18,9 +18,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.george.android.tasker.data.tasks.TaskAdapter;
-import com.george.android.tasker.data.tasks.room.Task;
+import com.george.android.tasker.data.tasks.task.TaskAdapter;
+import com.george.android.tasker.data.tasks.task.Task;
 import com.george.android.tasker.databinding.FragmentSearchTaskBinding;
+import com.george.android.tasker.ui.tasks.task.EditTaskActivity;
+import com.george.android.tasker.ui.tasks.task.TasksViewModel;
 
 import java.util.Objects;
 
@@ -56,6 +58,7 @@ public class SearchTaskFragment extends Fragment {
             intent.putExtra(EditTaskActivity.EXTRA_DATE_COMPLETE, task.getDateComplete());
             intent.putExtra(EditTaskActivity.EXTRA_DATE_CREATE, task.getDateCreate());
             intent.putExtra(EditTaskActivity.EXTRA_NOTE_TASK, task.getNoteTask());
+            intent.putExtra(EditTaskActivity.EXTRA_FOLDER_ID, task.getFolderId());
             editTaskResultLauncher.launch(intent);
         });
 
@@ -98,8 +101,9 @@ public class SearchTaskFragment extends Fragment {
                     String dateComplete = intent.getStringExtra(EditTaskActivity.EXTRA_DATE_COMPLETE);
                     String dateCreate = intent.getStringExtra(EditTaskActivity.EXTRA_DATE_CREATE);
                     String noteTask = intent.getStringExtra(EditTaskActivity.EXTRA_NOTE_TASK);
+                    int folderId = intent.getIntExtra(EditTaskActivity.EXTRA_FOLDER_ID, -1);
 
-                    Task task = new Task(textTask, statusTask, dateComplete, dateCreate, noteTask);
+                    Task task = new Task(textTask, statusTask, dateComplete, dateCreate, noteTask, folderId);
                     task.setId(id);
                     tasksViewModel.update(task);
                 }

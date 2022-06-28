@@ -9,8 +9,8 @@ import java.util.List;
 
 public class BinNoteRepository {
 
-    private BinNoteDao binNoteDao;
-    private LiveData<List<BinNote>> allBinNotes;
+    private final BinNoteDao binNoteDao;
+    private final LiveData<List<BinNote>> allBinNotes;
 
     public BinNoteRepository(Application application) {
         BinNoteDatabase database = BinNoteDatabase.getInstance(application);
@@ -35,7 +35,7 @@ public class BinNoteRepository {
     }
 
     private static class InsertBinAsyncTask extends AsyncTask<BinNote, Void, Void> {
-        private BinNoteDao noteDao;
+        private final BinNoteDao noteDao;
 
         private InsertBinAsyncTask(BinNoteDao noteDao) {
             this.noteDao = noteDao;
@@ -49,7 +49,7 @@ public class BinNoteRepository {
     }
 
     private static class DeleteBinAsyncTask extends AsyncTask<BinNote, Void, Void> {
-        private BinNoteDao noteDao;
+        private final BinNoteDao noteDao;
 
         private DeleteBinAsyncTask(BinNoteDao noteDao) {
             this.noteDao = noteDao;
@@ -63,7 +63,7 @@ public class BinNoteRepository {
     }
 
     private static class ClearBinAsyncTask extends AsyncTask<BinNote, Void, Void> {
-        private BinNoteDao noteDao;
+        private final BinNoteDao noteDao;
 
         private ClearBinAsyncTask(BinNoteDao noteDao) {
             this.noteDao = noteDao;

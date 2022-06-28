@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.george.android.tasker.data.passwords.PasswordAdapter;
 import com.george.android.tasker.data.passwords.room.Password;
 import com.george.android.tasker.databinding.FragmentPasswordSearchBinding;
-import com.george.android.tasker.ui.tasks.SearchTaskFragment;
 
 import java.util.Objects;
 

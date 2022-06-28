@@ -1,4 +1,4 @@
-package com.george.android.tasker.ui.tasks;
+package com.george.android.tasker.ui.tasks.task;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.george.android.tasker.R;
-import com.george.android.tasker.data.tasks.TaskAdapter;
+import com.george.android.tasker.data.tasks.task.TaskAdapter;
 import com.george.android.tasker.databinding.ActivityAddEditTaskBinding;
 
 import java.text.SimpleDateFormat;
@@ -32,6 +32,7 @@ public class EditTaskActivity extends AppCompatActivity {
     public static final String EXTRA_DATE_CREATE = "com.george.android.tasker.ui.tasks.EXTRA_DATE_CREATE";
     public static final String EXTRA_NOTE_TASK = "com.george.android.tasker.ui.tasks.EXTRA_NOTE_TASK";
     public static final String EXTRA_ADAPTER_POSITION = "com.george.android.tasker.ui.tasks.EXTRA_ADAPTER_POSITION";
+    public static final String EXTRA_FOLDER_ID = "com.george.android.tasker.ui.tasks.EXTRA_FOLDER_ID";
 
     TasksViewModel tasksViewModel;
     TaskAdapter taskAdapter = new TaskAdapter();
@@ -40,6 +41,7 @@ public class EditTaskActivity extends AppCompatActivity {
     Calendar datePickCalendar;
 
     String dateCreate;
+    int folderId;
 
     int adapterPosition;
     boolean status;
@@ -65,8 +67,10 @@ public class EditTaskActivity extends AppCompatActivity {
             String dateComplete = intent.getStringExtra(EXTRA_DATE_COMPLETE);
             dateCreate = intent.getStringExtra(EXTRA_DATE_CREATE);
             String noteTask = intent.getStringExtra(EXTRA_NOTE_TASK);
+            folderId = intent.getIntExtra(EXTRA_FOLDER_ID, -1);
 
             Log.d(TAG, "onCreate: " + dateCreate);
+            Log.d(TAG, "onCreate: folderID: " + folderId);
 
             if (status) {
                 binding.textEditTaskInput.setPaintFlags(binding.textEditTaskInput.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -122,6 +126,7 @@ public class EditTaskActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_DATE_COMPLETE, binding.calendarTaskText.getText().toString());
         intent.putExtra(EXTRA_DATE_CREATE, dateCreate);
         intent.putExtra(EXTRA_NOTE_TASK, getNoteTask());
+        intent.putExtra(EXTRA_FOLDER_ID, folderId);
 
         if (textTask.trim().isEmpty()) {
             finish();
