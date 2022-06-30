@@ -1,12 +1,10 @@
 package com.george.android.tasker.ui.tasks.folder;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.george.android.tasker.data.tasks.folder.TaskFolder;
 import com.george.android.tasker.databinding.AddFolderTaskBottomSheetBinding;
+import com.george.android.tasker.utils.Utils;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.Objects;
@@ -28,9 +27,10 @@ public class AddFolderTaskBottomSheet extends BottomSheetDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = AddFolderTaskBottomSheetBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+        Utils utils = new Utils();
 
         Objects.requireNonNull(getDialog()).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        showSoftKeyboard(binding.textTaskFolderInput);
+        utils.showSoftKeyboard(binding.textTaskFolderInput, AddFolderTaskBottomSheet.this.requireActivity());
 
         tasksFolderViewModel = new ViewModelProvider(this).get(TasksFolderViewModel.class);
 
@@ -49,13 +49,6 @@ public class AddFolderTaskBottomSheet extends BottomSheetDialogFragment {
             dismiss();
         } else {
           binding.textTaskFolderInput.setError("Папка без названия");
-        }
-    }
-
-    void showSoftKeyboard(View view) {
-        if (view.requestFocus()) {
-            InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.george.android.tasker.ui.tasks.folder;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,8 @@ public class TaskFolderFragment extends Fragment {
     TasksFolderViewModel tasksFolderViewModel;
 
     TaskFolderAdapter taskFolderAdapter = new TaskFolderAdapter();
+
+    public static final String TAG = "TaskFolderFragment";
 
     @Nullable
     @Override
@@ -53,6 +56,20 @@ public class TaskFolderFragment extends Fragment {
             bundle.putString("folderName", name);
 
             navController.navigate(R.id.action_navigation_task_to_tasksFragment, bundle);
+        });
+
+        taskFolderAdapter.setOnLongClickListener((taskFolder, position) -> {
+            Log.d(TAG, "id folder: " + taskFolder.getFolderId());
+
+            Bundle bundle = new Bundle();
+            bundle.putInt("folderId", taskFolder.getFolderId());
+            bundle.putString("name", taskFolder.getNameFolder());
+            bundle.putInt("position", position);
+
+
+            EditFolderTaskBottomSheet editFolderTaskBottomSheet = new EditFolderTaskBottomSheet();
+            editFolderTaskBottomSheet.setArguments(bundle);
+            editFolderTaskBottomSheet.show(getParentFragmentManager(), "EditFolderTaskBottomSheet");
         });
 
         binding.buttonAddTaskFolder.setOnClickListener(v -> {

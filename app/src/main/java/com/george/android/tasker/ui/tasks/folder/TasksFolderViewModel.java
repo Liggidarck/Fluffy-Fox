@@ -13,8 +13,8 @@ import java.util.List;
 
 public class TasksFolderViewModel extends AndroidViewModel {
 
-    TaskFolderRepository repository;
-    LiveData<List<TaskFolder>> allFolders;
+    final TaskFolderRepository repository;
+    final LiveData<List<TaskFolder>> allFolders;
 
     public TasksFolderViewModel(@NonNull Application application) {
         super(application);

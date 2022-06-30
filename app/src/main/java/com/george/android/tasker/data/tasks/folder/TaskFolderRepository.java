@@ -1,16 +1,18 @@
 package com.george.android.tasker.data.tasks.folder;
 
 import android.app.Application;
-import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class TaskFolderRepository {
 
-    TaskFolderDao taskFolderDao;
-    LiveData<List<TaskFolder>> allFolderTask;
+    final TaskFolderDao taskFolderDao;
+    final LiveData<List<TaskFolder>> allFolderTask;
+    final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public TaskFolderRepository(Application application) {
         TaskFolderDatabase database = TaskFolderDatabase.getInstance(application);
@@ -19,64 +21,18 @@ public class TaskFolderRepository {
     }
 
     public void insert(TaskFolder taskFolder) {
-        new insertFolderTask(taskFolderDao).execute(taskFolder);
+        executorService.execute(() -> taskFolderDao.insert(taskFolder));
     }
 
     public void update(TaskFolder taskFolder) {
-        new updateFolderTask(taskFolderDao).execute(taskFolder);
+        executorService.execute(() -> taskFolderDao.update(taskFolder));
     }
 
     public void delete(TaskFolder taskFolder) {
-        new deleteFolderTask(taskFolderDao).execute(taskFolder);
+        executorService.execute(() -> taskFolderDao.delete(taskFolder));
     }
 
     public LiveData<List<TaskFolder>> getAllFolderTask() {
         return allFolderTask;
     }
-
-    public static class insertFolderTask extends AsyncTask<TaskFolder, Void, Void> {
-
-        private TaskFolderDao taskFolderDao;
-        private insertFolderTask(TaskFolderDao taskFolderDao) {
-            this.taskFolderDao = taskFolderDao;
-        }
-
-
-        @Override
-        protected Void doInBackground(TaskFolder... taskFolders) {
-            taskFolderDao.insert(taskFolders[0]);
-            return null;
-        }
-    }
-
-    public static class updateFolderTask extends AsyncTask<TaskFolder, Void, Void> {
-
-        private TaskFolderDao taskFolderDao;
-        private updateFolderTask(TaskFolderDao taskFolderDao) {
-            this.taskFolderDao = taskFolderDao;
-        }
-
-
-        @Override
-        protected Void doInBackground(TaskFolder... taskFolders) {
-            taskFolderDao.update(taskFolders[0]);
-            return null;
-        }
-    }
-
-    public static class deleteFolderTask extends AsyncTask<TaskFolder, Void, Void> {
-
-        private TaskFolderDao taskFolderDao;
-        private deleteFolderTask(TaskFolderDao taskFolderDao) {
-            this.taskFolderDao = taskFolderDao;
-        }
-
-
-        @Override
-        protected Void doInBackground(TaskFolder... taskFolders) {
-            taskFolderDao.delete(taskFolders[0]);
-            return null;
-        }
-    }
-
 }

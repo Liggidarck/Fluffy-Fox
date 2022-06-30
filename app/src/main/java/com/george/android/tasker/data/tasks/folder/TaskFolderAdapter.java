@@ -18,6 +18,8 @@ public class TaskFolderAdapter extends RecyclerView.Adapter<TaskFolderAdapter.Vi
 
     private List<TaskFolder> taskFolders = new ArrayList<>();
     private onItemClickListener listener;
+    private onLongClickListener onLongClickListener;
+    public static final String TAG = "TaskFolderAdapter";
 
     @NonNull
     @Override
@@ -60,6 +62,14 @@ public class TaskFolderAdapter extends RecyclerView.Adapter<TaskFolderAdapter.Vi
                     listener.onItemClick(taskFolders.get(position), position);
                 }
             });
+
+            itemView.setOnLongClickListener(v -> {
+                int position = getAdapterPosition();
+                if(onLongClickListener != null && position != RecyclerView.NO_POSITION) {
+                    onLongClickListener.onItemLongClick(taskFolders.get(position), position);
+                }
+                return true;
+            });
         }
     }
 
@@ -67,8 +77,16 @@ public class TaskFolderAdapter extends RecyclerView.Adapter<TaskFolderAdapter.Vi
         void onItemClick(TaskFolder taskFolder, int position);
     }
 
+    public interface onLongClickListener {
+        void onItemLongClick(TaskFolder taskFolder, int position);
+    }
+
     public void setOnClickListener(onItemClickListener listener) {
         this.listener = listener;
+    }
+
+    public void setOnLongClickListener(onLongClickListener onLongClickListener) {
+        this.onLongClickListener = onLongClickListener;
     }
 
 }

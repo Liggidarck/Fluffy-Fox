@@ -30,4 +30,7 @@ public interface TaskDao {
     @Query("SELECT * FROM task_table WHERE title LIKE '%' || :search || '%' ")
     LiveData<List<Task>> findTasks(String search);
 
+    @Query("DELETE FROM task_table WHERE folderId LIKE :folderId")
+    void deleteTasksFolder(int folderId);
+
 }

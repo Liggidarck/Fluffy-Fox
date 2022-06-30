@@ -34,6 +34,10 @@ public class TasksViewModel extends AndroidViewModel {
         repository.delete(task);
     }
 
+    public void deleteTasksFolder(int folderId) {
+        repository.deleteTasksFolder(folderId);
+    }
+
     public LiveData<List<Task>> getAllTasks() {
         return allTasks;
     }

@@ -1,13 +1,15 @@
 package com.george.android.tasker.data.notes.main_notes;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Database(entities = {Note.class}, version = 2)
 public abstract class NoteDatabase extends RoomDatabase {
@@ -29,21 +31,9 @@ public abstract class NoteDatabase extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
-            new PopulateDbAsyncTask(instance).execute();
+            ExecutorService service = Executors.newSingleThreadExecutor();
+            service.execute(() -> instance.noteDao());
         }
     };
-
-    private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        private final NoteDao noteDao;
-        private PopulateDbAsyncTask(NoteDatabase db) {
-            noteDao = db.noteDao();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            return null;
-        }
-    }
 
 }

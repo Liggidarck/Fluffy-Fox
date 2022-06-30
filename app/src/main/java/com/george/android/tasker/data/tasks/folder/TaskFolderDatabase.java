@@ -1,13 +1,15 @@
 package com.george.android.tasker.data.tasks.folder;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Database(entities = {TaskFolder.class}, version = 1)
 public abstract class TaskFolderDatabase extends RoomDatabase {
@@ -30,22 +32,9 @@ public abstract class TaskFolderDatabase extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
-            new PopulateDbAsyncTask(instance).execute();
+            ExecutorService service = Executors.newSingleThreadExecutor();
+            service.execute(() -> instance.taskFolderDao());
         }
     };
-
-    private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        private TaskFolderDao taskFolderDao;
-
-        private PopulateDbAsyncTask(TaskFolderDatabase db) {
-            taskFolderDao = db.taskFolderDao();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            return null;
-        }
-    }
 
 }
