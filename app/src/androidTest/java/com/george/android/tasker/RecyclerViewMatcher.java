@@ -9,8 +9,6 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-import java.util.Objects;
-
 public class RecyclerViewMatcher {
 
     private final int recyclerViewId;

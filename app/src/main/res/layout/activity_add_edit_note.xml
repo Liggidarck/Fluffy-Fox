@@ -23,7 +23,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="10dp"
                 android:background="@null"
-                android:hint="Название"
+                android:hint="@string/title_note"
                 android:inputType="textMultiLine"
                 android:textSize="23sp"
                 android:autofillHints="no" />
@@ -37,12 +37,12 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="30dp"
                 android:background="@null"
-                android:hint="Текст"
+                android:hint="description_note"
                 android:textSize="15sp"
                 android:inputType="textMultiLine"
                 android:autofillHints="no"/>
 
-            <LinearLayout
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="60dp" />
 
@@ -63,6 +63,7 @@
             android:background="@color/white"
             app:layout_collapseMode="pin"
             app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+            app:menu="@menu/add_note_menu"
             app:titleTextColor="@android:color/white" />
 
     </com.google.android.material.appbar.AppBarLayout>

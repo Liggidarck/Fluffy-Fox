@@ -29,12 +29,15 @@
 
     <fragment
         android:id="@+id/navigation_task"
-        android:name="com.george.android.tasker.ui.tasks.TasksFragment"
+        android:name="com.george.android.tasker.ui.tasks.folder.TaskFolderFragment"
         android:label="@string/title_tasks"
-        tools:layout="@layout/fragment_tasks" >
+        tools:layout="@layout/fragment_task_folder" >
         <action
             android:id="@+id/action_navigation_task_to_navigation_task_search"
             app:destination="@id/navigation_task_search" />
+        <action
+            android:id="@+id/action_navigation_task_to_tasksFragment"
+            app:destination="@id/tasksFragment" />
     </fragment>
 
     <fragment
@@ -67,10 +70,17 @@
         android:name="com.george.android.tasker.ui.tasks.SearchTaskFragment"
         tools:layout="@layout/fragment_search_task"
         android:label="Поиск задач"/>
+
     <fragment
         android:id="@+id/searchPasswordFragment"
         android:name="com.george.android.tasker.ui.passwords.SearchPasswordFragment"
         android:label="SearchPasswordFragment"
         tools:layout="@layout/fragment_password_search"/>
+
+    <fragment
+        android:id="@+id/tasksFragment"
+        android:name="com.george.android.tasker.ui.tasks.task.TasksFragment"
+        android:label="fragment_tasks"
+        tools:layout="@layout/fragment_tasks" />
 
 </navigation>

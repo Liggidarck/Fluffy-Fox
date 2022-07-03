@@ -1,13 +1,15 @@
 package com.george.android.tasker.data.notes.recycle_bin;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Database(entities = {BinNote.class}, version = 1)
 public abstract class BinNoteDatabase extends RoomDatabase {
@@ -30,21 +32,9 @@ public abstract class BinNoteDatabase extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
-            new PopulateDb(instance).execute();
+            ExecutorService executorService = Executors.newSingleThreadExecutor();
+            executorService.execute(() -> instance.noteBinDao());
         }
     };
-
-    private static class PopulateDb extends AsyncTask<Void, Void, Void> {
-
-        private final BinNoteDao noteBinDao;
-        private PopulateDb(BinNoteDatabase db) {
-            noteBinDao = db.noteBinDao();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            return null;
-        }
-    }
 
 }

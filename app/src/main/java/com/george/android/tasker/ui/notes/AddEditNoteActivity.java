@@ -2,14 +2,11 @@ package com.george.android.tasker.ui.notes;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,6 +19,7 @@ import com.george.android.tasker.data.notes.recycle_bin.BinNote;
 import com.george.android.tasker.databinding.ActivityAddEditNoteBinding;
 import com.george.android.tasker.ui.notes.view_models.NoteBinViewModel;
 import com.george.android.tasker.ui.notes.view_models.NoteViewModel;
+import com.george.android.tasker.utils.Utils;
 
 public class AddEditNoteActivity extends AppCompatActivity {
 
@@ -44,6 +42,7 @@ public class AddEditNoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityAddEditNoteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        Utils utils = new Utils();
 
         noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
         binViewModel = new ViewModelProvider(this).get(NoteBinViewModel.class);
@@ -62,16 +61,9 @@ public class AddEditNoteActivity extends AppCompatActivity {
             binding.editTextNoteDescription.setText(description);
             adapterPosition = intent.getIntExtra(EXTRA_ADAPTER_POSITION, -1);
         } else {
-            showSoftKeyboard(binding.editTextNoteDescription);
+            utils.showSoftKeyboard(binding.editTextNoteDescription, AddEditNoteActivity.this);
         }
 
-    }
-
-    public void showSoftKeyboard(View view) {
-        if (view.requestFocus()) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
-        }
     }
 
     private void saveNote() {
@@ -141,6 +133,7 @@ public class AddEditNoteActivity extends AppCompatActivity {
                     Intent shareIntent = Intent.createChooser(sendIntent, null);
                     startActivity(shareIntent);
                 }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -1,4 +1,4 @@
-package com.george.android.tasker.ui.tasks;
+package com.george.android.tasker.ui.tasks.task;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,13 +13,10 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.george.android.tasker.R;
-import com.george.android.tasker.data.tasks.TaskAdapter;
-import com.george.android.tasker.data.tasks.room.Task;
+import com.george.android.tasker.data.tasks.task.Task;
+import com.george.android.tasker.data.tasks.task.TaskAdapter;
 import com.george.android.tasker.databinding.FragmentTasksBinding;
 
 public class TasksFragment extends Fragment {
@@ -27,15 +24,19 @@ public class TasksFragment extends Fragment {
     FragmentTasksBinding binding;
     TasksViewModel tasksViewModel;
 
-    public static final String TAG = "TasksFragment";
-
     TaskAdapter taskAdapter = new TaskAdapter();
+    int folderId;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentTasksBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        binding.toolbarTasks.inflateMenu(R.menu.task_menu);
+        assert getArguments() != null;
+        folderId = getArguments().getInt("folderId");
+        String folderName = getArguments().getString("folderName");
+
+        binding.toolbarTasks.setTitle(folderName);
+        binding.toolbarTasks.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
 
         tasksViewModel = new ViewModelProvider(this).get(TasksViewModel.class);
 
@@ -43,11 +44,16 @@ public class TasksFragment extends Fragment {
         binding.recyclerTasks.setHasFixedSize(true);
         binding.recyclerTasks.setAdapter(taskAdapter);
 
-        tasksViewModel.getAllTasks().observe(TasksFragment.this.requireActivity(),
+        tasksViewModel.getFoldersTasks(folderId).observe(TasksFragment.this.requireActivity(),
                 tasks -> taskAdapter.setTasks(tasks));
 
         binding.buttonAddTask.setOnClickListener(v -> {
             AddTaskBottomSheet addTaskBottomSheet = new AddTaskBottomSheet();
+
+            Bundle bundle = new Bundle();
+            bundle.putInt("folderID", folderId);
+            addTaskBottomSheet.setArguments(bundle);
+
             addTaskBottomSheet.show(getParentFragmentManager(), "AddTaskBottomSheet");
         });
 
@@ -60,6 +66,7 @@ public class TasksFragment extends Fragment {
             intent.putExtra(EditTaskActivity.EXTRA_DATE_COMPLETE, task.getDateComplete());
             intent.putExtra(EditTaskActivity.EXTRA_DATE_CREATE, task.getDateCreate());
             intent.putExtra(EditTaskActivity.EXTRA_NOTE_TASK, task.getNoteTask());
+            intent.putExtra(EditTaskActivity.EXTRA_FOLDER_ID, task.getFolderId());
             editTaskResultLauncher.launch(intent);
         });
 
@@ -71,21 +78,12 @@ public class TasksFragment extends Fragment {
 
             Task updateStatus;
             if (currentState) {
-                updateStatus = new Task(task.getTitle(), false, dateComplete, dateCreate, noteTask);
+                updateStatus = new Task(task.getTitle(), false, dateComplete, dateCreate, noteTask, folderId);
             } else {
-                updateStatus = new Task(task.getTitle(), true, dateComplete, dateCreate, noteTask);
+                updateStatus = new Task(task.getTitle(), true, dateComplete, dateCreate, noteTask, folderId);
             }
             updateStatus.setId(task.getId());
             tasksViewModel.update(updateStatus);
-        });
-
-        binding.toolbarTasks.setOnMenuItemClickListener(item -> {
-            if(item.getItemId() == R.id.search_task_item) {
-                NavController BinController = Navigation.findNavController(TasksFragment.this.requireActivity(),
-                                R.id.nav_host_fragment_activity_main);
-                BinController.navigate(R.id.action_navigation_task_to_navigation_task_search);
-            }
-            return false;
         });
 
         return root;
@@ -109,8 +107,9 @@ public class TasksFragment extends Fragment {
                     String dateComplete = intent.getStringExtra(EditTaskActivity.EXTRA_DATE_COMPLETE);
                     String dateCreate = intent.getStringExtra(EditTaskActivity.EXTRA_DATE_CREATE);
                     String noteTask = intent.getStringExtra(EditTaskActivity.EXTRA_NOTE_TASK);
+                    int folderId = intent.getIntExtra(EditTaskActivity.EXTRA_FOLDER_ID, -1);
 
-                    Task task = new Task(textTask, statusTask, dateComplete, dateCreate, noteTask);
+                    Task task = new Task(textTask, statusTask, dateComplete, dateCreate, noteTask, folderId);
                     task.setId(id);
                     tasksViewModel.update(task);
                 }

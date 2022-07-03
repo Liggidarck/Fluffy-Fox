@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/share_note_item"
-        android:title="Поделится"
+        android:title="@string/share"
         android:icon="@drawable/ic_outline_share_24"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/delete_note_item"
-        android:title="Удалить"
+        android:title="@string/delete"
         android:icon="@drawable/ic_baseline_delete_outline_24"
         app:showAsAction="ifRoom"/>
 

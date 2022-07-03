@@ -9,9 +9,9 @@ public class Password {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    private String url;
-    private String email;
-    private String password;
+    private final String url;
+    private final String email;
+    private final String password;
 
     public Password(String url, String email, String password) {
         this.url = url;

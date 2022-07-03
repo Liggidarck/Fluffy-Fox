@@ -1,7 +1,6 @@
 package com.george.android.tasker.data.passwords;
 
 import android.app.Application;
-import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
@@ -10,11 +9,14 @@ import com.george.android.tasker.data.passwords.room.PasswordDao;
 import com.george.android.tasker.data.passwords.room.PasswordDatabase;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class PasswordRepository {
 
     private final PasswordDao passwordDao;
     private final LiveData<List<Password>> allPasswords;
+    final ExecutorService service = Executors.newSingleThreadExecutor();
 
     public PasswordRepository(Application application) {
         PasswordDatabase database = PasswordDatabase.getInstance(application);
@@ -23,15 +25,15 @@ public class PasswordRepository {
     }
 
     public void insert(Password password) {
-        new InsertPasswordAsyncTask(passwordDao).execute(password);
+        service.execute(() -> passwordDao.insert(password));
     }
 
     public void update(Password password) {
-        new UpdatePasswordAsyncTask(passwordDao).execute(password);
+        service.execute(() -> passwordDao.update(password));
     }
 
     public void delete(Password password) {
-        new DeletePasswordAsyncTask(passwordDao).execute(password);
+        service.execute(() -> passwordDao.delete(password));
     }
 
     public LiveData<List<Password>> getAllPasswords() {
@@ -40,49 +42,6 @@ public class PasswordRepository {
 
     public LiveData<List<Password>> findPassword(String search) {
         return passwordDao.findPassword(search);
-    }
-
-    private static class InsertPasswordAsyncTask extends AsyncTask<Password, Void, Void> {
-
-        private final PasswordDao passwordDao;
-        private InsertPasswordAsyncTask(PasswordDao passwordDao) {
-            this.passwordDao = passwordDao;
-        }
-
-        @Override
-        protected Void doInBackground(Password... passwords) {
-            passwordDao.insert(passwords[0]);
-            return null;
-        }
-    }
-
-    private static class UpdatePasswordAsyncTask extends AsyncTask<Password, Void, Void> {
-
-        private final PasswordDao passwordDao;
-        private UpdatePasswordAsyncTask(PasswordDao passwordDao) {
-            this.passwordDao = passwordDao;
-        }
-
-        @Override
-        protected Void doInBackground(Password... passwords) {
-            passwordDao.update(passwords[0]);
-            return null;
-        }
-    }
-
-
-    private static class DeletePasswordAsyncTask extends AsyncTask<Password, Void, Void> {
-
-        private final PasswordDao passwordDao;
-        private DeletePasswordAsyncTask(PasswordDao passwordDao) {
-            this.passwordDao = passwordDao;
-        }
-
-        @Override
-        protected Void doInBackground(Password... passwords) {
-            passwordDao.delete(passwords[0]);
-            return null;
-        }
     }
 
 }

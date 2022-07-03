@@ -94,14 +94,18 @@ public class NoteFragment extends Fragment {
             editNoteResultLauncher.launch(intent);
         });
 
+        noteAdapter.setOnLongClickItemListener((note, position) -> {
+            Log.d(TAG, "note: " + note.getDescription());
+        });
+
         binding.toolbarNotes.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.search_note_item:
                     Log.d(TAG, "onCreateView: search");
-                    NavController SearchController =
+                    NavController searchController =
                             Navigation.findNavController(NoteFragment.this.requireActivity(),
                                     R.id.nav_host_fragment_activity_main);
-                    SearchController.navigate(R.id.action_navigation_note_to_navigation_note_search);
+                    searchController.navigate(R.id.action_navigation_note_to_navigation_note_search);
                     return true;
                 case R.id.delete_all_note_item:
                     Log.d(TAG, "onCreateView: delete all notes");
@@ -121,6 +125,7 @@ public class NoteFragment extends Fragment {
                             Navigation.findNavController(NoteFragment.this.requireActivity(),
                                     R.id.nav_host_fragment_activity_main);
                     BinController.navigate(R.id.action_navigation_note_to_navigation_note_bin);
+                    return true;
                 default:
                     return false;
             }

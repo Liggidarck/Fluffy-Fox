@@ -5,10 +5,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -17,7 +14,6 @@ import androidx.test.filters.LargeTest;
 
 import com.george.android.tasker.MainActivity;
 import com.george.android.tasker.R;
-import com.george.android.tasker.RecyclerViewMatcher;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -35,12 +31,12 @@ public class CreateNewNoteTest {
         onView(ViewMatchers.withId(R.id.navigation_note))
                 .perform(click());
 
-        onView(withId(R.id.button_add_note))
+        onView(withId(R.id.buttonAddNote))
                 .perform(click());
 
-        onView(withId(R.id.edit_text_note_title))
+        onView(withId(R.id.editTextNoteTitle))
                 .perform(typeText("title note"));
-        onView(withId(R.id.edit_text_note_description))
+        onView(withId(R.id.editTextNoteDescription))
                 .perform(typeText("note_description"));
 
         pressBack();

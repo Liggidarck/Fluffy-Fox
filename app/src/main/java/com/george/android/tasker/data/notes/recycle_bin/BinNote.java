@@ -9,8 +9,8 @@ public class BinNote {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    private String title;
-    private String description;
+    private final String title;
+    private final String description;
 
     public BinNote(String title, String description) {
         this.title = title;

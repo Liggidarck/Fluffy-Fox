@@ -18,6 +18,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
 
     private List<Note> notes = new ArrayList<>();
     private onItemClickListener listener;
+    private onItemLongClickListener longListener;
 
     @NonNull
     @Override
@@ -38,16 +39,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         return notes.size();
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    public void setNotes(List<Note> notes) {
-        this.notes = notes;
-        notifyDataSetChanged();
-    }
-
-    public Note getNoteAt(int position) {
-        return notes.get(position);
-    }
-
     class NoteHolder extends RecyclerView.ViewHolder {
         private final TextView textViewTitle;
         private final TextView textViewDescription;
@@ -62,15 +53,42 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
                     listener.onItemClick(notes.get(position), position);
                 }
             });
+
+            itemView.setOnLongClickListener(v -> {
+                int position = getAdapterPosition();
+                if (longListener != null && position != RecyclerView.NO_POSITION) {
+                    longListener.onLongItemClick(notes.get(position), position);
+                }
+                return true;
+            });
+
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
+        notifyDataSetChanged();
+    }
+
+    public Note getNoteAt(int position) {
+        return notes.get(position);
     }
 
     public interface onItemClickListener {
         void onItemClick(Note note, int position);
     }
 
+    public interface onItemLongClickListener {
+        void onLongItemClick(Note note, int position);
+    }
+
     public void setOnClickItemListener(onItemClickListener listener) {
         this.listener = listener;
+    }
+
+    public void setOnLongClickItemListener(onItemLongClickListener longListener) {
+        this.longListener = longListener;
     }
 
 }

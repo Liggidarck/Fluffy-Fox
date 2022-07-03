@@ -31,7 +31,6 @@ import com.george.android.tasker.SettingsActivity;
 import com.george.android.tasker.data.passwords.PasswordAdapter;
 import com.george.android.tasker.data.passwords.room.Password;
 import com.george.android.tasker.databinding.FragmentPasswordsBinding;
-import com.george.android.tasker.ui.tasks.TasksFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 public class PasswordsFragment extends Fragment {
