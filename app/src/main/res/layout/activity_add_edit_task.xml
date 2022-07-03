@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         app:menu="@menu/delete_menu"
         app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
-        app:title="Задача" />
+        app:title="@string/task_title" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -32,7 +32,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="15dp"
                 android:background="@null"
-                android:hint="Переимновать задачу"
+                android:hint="@string/rename_task"
                 android:textSize="23sp" />
 
             <RelativeLayout
@@ -61,7 +61,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@id/calendarTaskImage"
-                    android:text="Добавить дату выполнения"
+                    android:text="@string/add_date_done"
                     android:textSize="15sp"
                     android:textColor="@color/gray"/>
 
@@ -92,7 +92,7 @@
                     android:layout_toEndOf="@id/informationTaskImage"
                     android:layout_marginStart="10dp"
                     android:layout_centerVertical="true"
-                    android:hint="Добавить замметку"
+                    android:hint="@string/add_note_task"
                     android:textSize="15sp"
                     android:background="@null"
                     android:textColor="@color/gray" />
@@ -133,7 +133,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:text="Задача выполнена"
+            android:text="@string/task_completed"
             android:textAllCaps="false" />
 
     </RelativeLayout>

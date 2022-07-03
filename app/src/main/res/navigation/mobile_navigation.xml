@@ -70,11 +70,13 @@
         android:name="com.george.android.tasker.ui.tasks.SearchTaskFragment"
         tools:layout="@layout/fragment_search_task"
         android:label="Поиск задач"/>
+
     <fragment
         android:id="@+id/searchPasswordFragment"
         android:name="com.george.android.tasker.ui.passwords.SearchPasswordFragment"
         android:label="SearchPasswordFragment"
         tools:layout="@layout/fragment_password_search"/>
+
     <fragment
         android:id="@+id/tasksFragment"
         android:name="com.george.android.tasker.ui.tasks.task.TasksFragment"

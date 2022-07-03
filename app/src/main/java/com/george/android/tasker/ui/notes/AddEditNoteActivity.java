@@ -133,6 +133,7 @@ public class AddEditNoteActivity extends AppCompatActivity {
                     Intent shareIntent = Intent.createChooser(sendIntent, null);
                     startActivity(shareIntent);
                 }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

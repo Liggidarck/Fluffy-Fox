@@ -4,16 +4,16 @@
 
     <item
         android:id="@+id/search_note_item"
-        android:title="Поиск"
+        android:title="@string/search"
         android:icon="@drawable/ic_outline_search_24"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/delete_all_note_item"
-        android:title="Удлаить все заметки" />
+        android:title="@string/delete_all_notes" />
 
     <item
         android:id="@+id/recycle_bin_note"
-        android:title="Корзина" />
+        android:title="@string/bin" />
 
 </menu>

@@ -12,7 +12,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:hint="Добавить задачу"
+        android:hint="@string/add_task"
         app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -32,6 +32,6 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="10dp"
         style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:text="Добавить" />
+        android:text="@string/add" />
 
 </RelativeLayout>
