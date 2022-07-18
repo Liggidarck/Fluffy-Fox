@@ -16,12 +16,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.george.android.tasker.R;
-import com.george.android.tasker.data.notes.main_notes.Note;
-import com.george.android.tasker.data.notes.recycle_bin.BinNote;
-import com.george.android.tasker.data.notes.recycle_bin.BinNoteAdapter;
+import com.george.android.tasker.data.model.Note;
+import com.george.android.tasker.data.model.BinNote;
+import com.george.android.tasker.ui.adapters.BinNoteAdapter;
 import com.george.android.tasker.databinding.FragmentBinNoteBinding;
-import com.george.android.tasker.ui.notes.view_models.NoteBinViewModel;
-import com.george.android.tasker.ui.notes.view_models.NoteViewModel;
+import com.george.android.tasker.data.viewmodel.NoteBinViewModel;
+import com.george.android.tasker.data.viewmodel.NoteViewModel;
 
 public class BinNoteFragment extends Fragment {
 
@@ -87,5 +87,11 @@ public class BinNoteFragment extends Fragment {
         }).attachToRecyclerView(binding.recyclerViewBinNote);
 
         return root;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

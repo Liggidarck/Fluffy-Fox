@@ -23,12 +23,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.george.android.tasker.R;
-import com.george.android.tasker.data.notes.main_notes.Note;
-import com.george.android.tasker.data.notes.main_notes.NoteAdapter;
-import com.george.android.tasker.data.notes.recycle_bin.BinNote;
+import com.george.android.tasker.data.model.Note;
+import com.george.android.tasker.ui.adapters.NoteAdapter;
+import com.george.android.tasker.data.model.BinNote;
 import com.george.android.tasker.databinding.FragmentNoteBinding;
-import com.george.android.tasker.ui.notes.view_models.NoteBinViewModel;
-import com.george.android.tasker.ui.notes.view_models.NoteViewModel;
+import com.george.android.tasker.data.viewmodel.NoteBinViewModel;
+import com.george.android.tasker.data.viewmodel.NoteViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 public class NoteFragment extends Fragment {

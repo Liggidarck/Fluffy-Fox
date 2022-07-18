@@ -14,11 +14,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.george.android.tasker.R;
-import com.george.android.tasker.data.notes.main_notes.NoteAdapter;
-import com.george.android.tasker.data.notes.recycle_bin.BinNote;
+import com.george.android.tasker.ui.adapters.NoteAdapter;
+import com.george.android.tasker.data.model.BinNote;
 import com.george.android.tasker.databinding.ActivityAddEditNoteBinding;
-import com.george.android.tasker.ui.notes.view_models.NoteBinViewModel;
-import com.george.android.tasker.ui.notes.view_models.NoteViewModel;
+import com.george.android.tasker.data.viewmodel.NoteBinViewModel;
+import com.george.android.tasker.data.viewmodel.NoteViewModel;
 import com.george.android.tasker.utils.Utils;
 
 public class AddEditNoteActivity extends AppCompatActivity {

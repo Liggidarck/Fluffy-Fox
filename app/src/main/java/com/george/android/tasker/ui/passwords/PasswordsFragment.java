@@ -27,9 +27,10 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.george.android.tasker.R;
-import com.george.android.tasker.SettingsActivity;
-import com.george.android.tasker.data.passwords.PasswordAdapter;
-import com.george.android.tasker.data.passwords.room.Password;
+import com.george.android.tasker.data.viewmodel.PasswordsViewModel;
+import com.george.android.tasker.ui.SettingsActivity;
+import com.george.android.tasker.ui.adapters.PasswordAdapter;
+import com.george.android.tasker.data.model.Password;
 import com.george.android.tasker.databinding.FragmentPasswordsBinding;
 import com.google.android.material.snackbar.Snackbar;
 

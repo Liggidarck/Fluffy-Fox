@@ -20,7 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.george.android.tasker.R;
-import com.george.android.tasker.data.passwords.PasswordAdapter;
+import com.george.android.tasker.ui.adapters.PasswordAdapter;
+import com.george.android.tasker.data.viewmodel.PasswordsViewModel;
 import com.george.android.tasker.databinding.ActivityAddEditPasswordBinding;
 import com.google.android.material.snackbar.Snackbar;
 

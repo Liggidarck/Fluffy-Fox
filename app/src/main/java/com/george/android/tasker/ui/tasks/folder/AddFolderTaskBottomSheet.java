@@ -10,7 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.george.android.tasker.data.tasks.folder.TaskFolder;
+import com.george.android.tasker.data.model.TaskFolder;
+import com.george.android.tasker.data.viewmodel.TasksFolderViewModel;
 import com.george.android.tasker.databinding.AddFolderTaskBottomSheetBinding;
 import com.george.android.tasker.utils.Utils;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;

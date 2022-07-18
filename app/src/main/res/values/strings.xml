@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tasker</string>
+    <string name="app_name">Voltage</string>
     <string name="title_notes">Заметки</string>
     <string name="title_tasks">Задачи</string>
     <string name="title_passwords">Пароли</string>
@@ -30,4 +30,7 @@
     <string name="delete_all_notes">Удлаить все заметки</string>
     <string name="default_login">Логин по умолчанию</string>
     <string name="max_length_password">Максимальная длина пароля</string>
+    <string name="note_text">Текст заметки</string>
+    <string name="warning_text">Внимание!</string>
+    <string name="conform_delete_folder_tasks">Вы действительно хотите удалить папку и все элементы в ней?</string>
 </resources>

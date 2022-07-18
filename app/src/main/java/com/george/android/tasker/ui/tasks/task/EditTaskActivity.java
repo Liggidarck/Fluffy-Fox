@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.george.android.tasker.R;
-import com.george.android.tasker.data.tasks.task.TaskAdapter;
+import com.george.android.tasker.data.viewmodel.TasksViewModel;
 import com.george.android.tasker.databinding.ActivityAddEditTaskBinding;
 
 import java.text.SimpleDateFormat;
@@ -35,18 +35,17 @@ public class EditTaskActivity extends AppCompatActivity {
     public static final String EXTRA_FOLDER_ID = "com.george.android.tasker.ui.tasks.EXTRA_FOLDER_ID";
 
     TasksViewModel tasksViewModel;
-    TaskAdapter taskAdapter = new TaskAdapter();
 
     ActivityAddEditTaskBinding binding;
     Calendar datePickCalendar;
 
     String dateCreate;
-    int folderId;
+    int folderId, taskId;
 
     int adapterPosition;
     boolean status;
 
-    public static final String TAG = "AddEditTaskActivity";
+    public static final String TAG = EditTaskActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +54,12 @@ public class EditTaskActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         tasksViewModel = new ViewModelProvider(this).get(TasksViewModel.class);
-        tasksViewModel.getAllTasks().observe(EditTaskActivity.this, tasks -> taskAdapter.setTasks(tasks));
 
         setSupportActionBar(binding.toolbarEditTask);
 
         Intent intent = getIntent();
         if (intent.hasExtra(EXTRA_ID)) {
+            taskId = intent.getIntExtra(EXTRA_ID, -1);
             String textTask = intent.getStringExtra(EXTRA_TEXT);
             status = intent.getBooleanExtra(EXTRA_STATUS, false);
             adapterPosition = intent.getIntExtra(EXTRA_ADAPTER_POSITION, -1);
@@ -155,27 +154,25 @@ public class EditTaskActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.delete_item:
-                if (adapterPosition != -1) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(EditTaskActivity.this);
-                    builder.setTitle("Внимание!")
-                            .setMessage("Вы уверены что хотите удалить задачу?")
-                            .setPositiveButton("ок", (dialog, id) -> {
-                                        tasksViewModel.delete(taskAdapter.getTaskAt(adapterPosition));
-                                        Toast.makeText(EditTaskActivity.this, "Задача удалена", Toast.LENGTH_SHORT).show();
-                                        finish();
-                                    }
-                            )
-                            .setNegativeButton("Отмена", (dialog, id) -> dialog.dismiss());
-                    builder.create().show();
+        if (item.getItemId() == R.id.delete_item) {
+            if (adapterPosition != -1) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditTaskActivity.this);
+                builder.setTitle("Внимание!")
+                        .setMessage("Вы уверены что хотите удалить задачу?")
+                        .setPositiveButton("ок", (dialog, id) -> {
+                                    tasksViewModel.delete(taskId);
+                                    Toast.makeText(EditTaskActivity.this, "Задача удалена", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
+                        )
+                        .setNegativeButton("Отмена", (dialog, id) -> dialog.dismiss());
+                builder.create().show();
 
-                } else {
-                    Toast.makeText(this, "Такую задачу удалить невозможно", Toast.LENGTH_SHORT).show();
-                }
-            default:
-                return super.onOptionsItemSelected(item);
+            } else {
+                Toast.makeText(this, "Такую задачу удалить невозможно", Toast.LENGTH_SHORT).show();
+            }
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

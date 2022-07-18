@@ -1,6 +1,6 @@
 package com.george.android.tasker.ui.passwords;
 
-import static com.george.android.tasker.ui.passwords.PasswordsViewModel.randomPassword;
+import static com.george.android.tasker.data.viewmodel.PasswordsViewModel.randomPassword;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
