@@ -2,7 +2,6 @@ package com.george.android.tasker.data.database.passwords;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -20,8 +19,8 @@ public interface PasswordDao {
     @Update
     void update(Password password);
 
-    @Delete
-    void delete(Password password);
+    @Query("DELETE FROM password_table WHERE id LIKE :passwordId")
+    void delete(int passwordId);
 
     @Query("SELECT * FROM password_table")
     LiveData<List<Password>> getAllPasswords();

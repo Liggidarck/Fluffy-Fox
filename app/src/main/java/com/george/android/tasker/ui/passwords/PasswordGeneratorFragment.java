@@ -22,8 +22,6 @@ import androidx.fragment.app.Fragment;
 import com.george.android.tasker.databinding.FragmentPasswordGeneratorBinding;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.Objects;
-
 public class PasswordGeneratorFragment extends Fragment {
 
     FragmentPasswordGeneratorBinding generatorBinding;
@@ -73,15 +71,11 @@ public class PasswordGeneratorFragment extends Fragment {
     }
 
     public void onCopyBtnClick(View view) {
-        if (Objects.requireNonNull(generatorBinding.passwordText.getText()).toString().equals("Сгенерируй меня!")) {
-            Snackbar.make(view, "Сгенерируй пароль что бы его скопировать", Snackbar.LENGTH_SHORT).setAction("error", null).show();
-        } else {
-            ClipboardManager clipboard = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText("", generatorBinding.passwordText.getText().toString());
-            assert clipboard != null;
-            clipboard.setPrimaryClip(clip);
-            Snackbar.make(view, "Пароль скопирован", Snackbar.LENGTH_SHORT).setAction("done", null).show();
-        }
+        ClipboardManager clipboard = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("", generatorBinding.passwordText.getText().toString());
+        assert clipboard != null;
+        clipboard.setPrimaryClip(clip);
+        Snackbar.make(view, "Пароль скопирован", Snackbar.LENGTH_SHORT).setAction("done", null).show();
     }
 
     @Override

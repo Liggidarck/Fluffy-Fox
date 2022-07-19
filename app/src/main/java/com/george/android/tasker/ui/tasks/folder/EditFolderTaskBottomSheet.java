@@ -15,10 +15,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.george.android.tasker.R;
 import com.george.android.tasker.data.model.TaskFolder;
-import com.george.android.tasker.ui.adapters.TaskFolderAdapter;
 import com.george.android.tasker.data.viewmodel.TasksFolderViewModel;
-import com.george.android.tasker.databinding.EditFolderTaskBottomSheetBinding;
 import com.george.android.tasker.data.viewmodel.TasksViewModel;
+import com.george.android.tasker.databinding.EditFolderTaskBottomSheetBinding;
 import com.george.android.tasker.utils.Utils;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -27,8 +26,6 @@ public class EditFolderTaskBottomSheet extends BottomSheetDialogFragment {
     EditFolderTaskBottomSheetBinding binding;
     TasksFolderViewModel tasksFolderViewModel;
     TasksViewModel tasksViewModel;
-
-    TaskFolderAdapter taskFolderAdapter = new TaskFolderAdapter();
 
     int folderId, position;
     String name;
@@ -46,9 +43,6 @@ public class EditFolderTaskBottomSheet extends BottomSheetDialogFragment {
         tasksFolderViewModel = new ViewModelProvider(this).get(TasksFolderViewModel.class);
         tasksViewModel = new ViewModelProvider(this).get(TasksViewModel.class);
 
-        tasksFolderViewModel.getAllFolders().observe(EditFolderTaskBottomSheet.this.requireActivity(),
-                taskFolders -> taskFolderAdapter.setTaskFolders(taskFolders));
-
         assert getArguments() != null;
         folderId = getArguments().getInt("folderId");
         position = getArguments().getInt("position");
@@ -56,32 +50,9 @@ public class EditFolderTaskBottomSheet extends BottomSheetDialogFragment {
 
         requireNonNull(binding.nameFolderTextLayout.getEditText()).setText(name);
 
-        binding.deleteFolderTaskBtn.setOnClickListener(v ->
-                new AlertDialog.Builder(EditFolderTaskBottomSheet.this.requireActivity())
-                        .setTitle(R.string.warning_text)
-                        .setMessage(R.string.conform_delete_folder_tasks)
-                        .setPositiveButton("Да", (dialog, which) -> {
-                            //Удаляем папку
-                            TaskFolder taskFolder = taskFolderAdapter.getTaskFolderAt(position);
-                            tasksFolderViewModel.delete(taskFolder);
+        binding.deleteFolderTaskBtn.setOnClickListener(this::deleteFolder);
 
-                            //Удаляем все элементы из папки
-                            tasksViewModel.deleteTasksFolder(folderId);
-
-                            dialog.dismiss();
-                            dismiss();
-                        })
-                        .setNegativeButton("Отмена", (dialog, which) -> dialog.dismiss())
-                        .create()
-                        .show());
-
-        binding.saveFolderTaskBtn.setOnClickListener(v -> {
-            String name = binding.nameFolderTextLayout.getEditText().getText().toString();
-            TaskFolder taskFolder = new TaskFolder(name);
-            taskFolder.setFolderId(folderId);
-            tasksFolderViewModel.update(taskFolder);
-            dismiss();
-        });
+        binding.saveFolderTaskBtn.setOnClickListener(this::saveFolder);
 
         return root;
     }
@@ -92,5 +63,32 @@ public class EditFolderTaskBottomSheet extends BottomSheetDialogFragment {
         binding = null;
     }
 
+
+    private void deleteFolder(View v) {
+        new AlertDialog.Builder(EditFolderTaskBottomSheet.this.requireActivity())
+                .setTitle(R.string.warning_text)
+                .setMessage(R.string.conform_delete_folder_tasks)
+                .setPositiveButton("Да", (dialog, which) -> {
+                    //Удаляем папку
+                    tasksFolderViewModel.delete(folderId);
+
+                    //Удаляем все элементы из папки
+                    tasksViewModel.deleteTasksFolder(folderId);
+
+                    dialog.dismiss();
+                    dismiss();
+                })
+                .setNegativeButton("Отмена", (dialog, which) -> dialog.dismiss())
+                .create()
+                .show();
+    }
+
+    private void saveFolder(View v) {
+        String name = requireNonNull(binding.nameFolderTextLayout.getEditText()).getText().toString();
+        TaskFolder taskFolder = new TaskFolder(name);
+        taskFolder.setFolderId(folderId);
+        tasksFolderViewModel.update(taskFolder);
+        dismiss();
+    }
 
 }

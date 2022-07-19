@@ -53,7 +53,10 @@ public class PasswordsFragment extends Fragment {
         binding.passwordRecyclerView.setHasFixedSize(true);
         binding.passwordRecyclerView.setAdapter(passwordAdapter);
 
-        passwordsViewModel.getAllPasswords().observe(PasswordsFragment.this.requireActivity(), passwords -> passwordAdapter.setPasswords(passwords));
+        passwordsViewModel
+                .getAllPasswords()
+                .observe(PasswordsFragment.this.requireActivity(),
+                        passwords -> passwordAdapter.setPasswords(passwords));
 
         binding.buttonAddPassword.setOnClickListener(v -> {
             Intent intent = new Intent(PasswordsFragment.this.requireActivity(), AddEditPasswordActivity.class);

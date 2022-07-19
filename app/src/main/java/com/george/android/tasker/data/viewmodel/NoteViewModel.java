@@ -30,8 +30,8 @@ public class NoteViewModel extends AndroidViewModel {
         repository.update(note);
     }
 
-    public void delete(Note note){
-        repository.delete(note);
+    public void delete(int noteId){
+        repository.delete(noteId);
     }
 
     public void deleteAllNote() {

@@ -30,8 +30,8 @@ public class PasswordsViewModel extends AndroidViewModel {
         repository.update(password);
     }
 
-    public void delete(Password password) {
-        repository.delete(password);
+    public void delete(int passwordId) {
+        repository.delete(passwordId);
     }
 
     public LiveData<List<Password>> getAllPasswords() {

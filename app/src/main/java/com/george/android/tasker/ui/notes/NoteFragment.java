@@ -77,7 +77,7 @@ public class NoteFragment extends Fragment {
                 BinNote binNote = new BinNote(title, description);
 
                 binViewModel.insert(binNote);
-                noteViewModel.delete(noteAdapter.getNoteAt(viewHolder.getAdapterPosition()));
+                noteViewModel.delete(note.getId());
 
                 Snackbar.make(binding.fragmentNoteCoordinator,
                                 "Заметка " + title + " удалена", Snackbar.LENGTH_SHORT)
@@ -94,9 +94,7 @@ public class NoteFragment extends Fragment {
             editNoteResultLauncher.launch(intent);
         });
 
-        noteAdapter.setOnLongClickItemListener((note, position) -> {
-            Log.d(TAG, "note: " + note.getDescription());
-        });
+        noteAdapter.setOnLongClickItemListener((note, position) -> Log.d(TAG, "note: " + note.getDescription()));
 
         binding.toolbarNotes.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {

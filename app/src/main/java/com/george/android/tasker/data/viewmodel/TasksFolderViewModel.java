@@ -30,8 +30,8 @@ public class TasksFolderViewModel extends AndroidViewModel {
         repository.update(taskFolder);
     }
 
-    public void delete(TaskFolder taskFolder) {
-        repository.delete(taskFolder);
+    public void delete(int folderId) {
+        repository.delete(folderId);
     }
 
     public LiveData<List<TaskFolder>> getAllFolders() {

@@ -30,8 +30,8 @@ public class NoteRepository {
         service.execute(() -> noteDao.update(note));
     }
 
-    public void delete(Note note) {
-        service.execute(() -> noteDao.delete(note));
+    public void delete(int noteId) {
+        service.execute(() -> noteDao.delete(noteId));
     }
 
     public void deleteAllNotes() {

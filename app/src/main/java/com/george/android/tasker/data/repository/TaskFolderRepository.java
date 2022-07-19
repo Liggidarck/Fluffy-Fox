@@ -32,8 +32,8 @@ public class TaskFolderRepository {
         executorService.execute(() -> taskFolderDao.update(taskFolder));
     }
 
-    public void delete(TaskFolder taskFolder) {
-        executorService.execute(() -> taskFolderDao.delete(taskFolder));
+    public void delete(int folderId) {
+        executorService.execute(() -> taskFolderDao.delete(folderId));
     }
 
     public LiveData<List<TaskFolder>> getAllFolderTask() {

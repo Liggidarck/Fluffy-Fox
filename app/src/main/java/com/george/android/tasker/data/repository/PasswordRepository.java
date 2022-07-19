@@ -32,8 +32,8 @@ public class PasswordRepository {
         service.execute(() -> passwordDao.update(password));
     }
 
-    public void delete(Password password) {
-        service.execute(() -> passwordDao.delete(password));
+    public void delete(int passwordId) {
+        service.execute(() -> passwordDao.delete(passwordId));
     }
 
     public LiveData<List<Password>> getAllPasswords() {

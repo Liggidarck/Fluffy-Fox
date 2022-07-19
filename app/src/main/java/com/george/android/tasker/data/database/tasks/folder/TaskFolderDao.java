@@ -2,7 +2,6 @@ package com.george.android.tasker.data.database.tasks.folder;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -20,8 +19,8 @@ public interface TaskFolderDao {
     @Update
     void update(TaskFolder taskFolder);
 
-    @Delete
-    void delete(TaskFolder taskFolder);
+    @Query("DELETE FROM folder_task_table WHERE folderId LIKE :folderId")
+    void delete(int folderId);
 
     @Query("SELECT * FROM folder_task_table")
     LiveData<List<TaskFolder>> getAllTaskFolders();
