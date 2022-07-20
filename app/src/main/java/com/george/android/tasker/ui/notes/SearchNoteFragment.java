@@ -20,10 +20,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.george.android.tasker.data.notes.main_notes.Note;
-import com.george.android.tasker.data.notes.main_notes.NoteAdapter;
+import com.george.android.tasker.data.model.Note;
+import com.george.android.tasker.ui.adapters.NoteAdapter;
 import com.george.android.tasker.databinding.FragmentNoteSearchBinding;
-import com.george.android.tasker.ui.notes.view_models.NoteViewModel;
+import com.george.android.tasker.data.viewmodel.NoteViewModel;
 
 import java.util.Objects;
 
@@ -104,5 +104,11 @@ public class SearchNoteFragment extends Fragment {
                 }
             }
     );
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 
 }

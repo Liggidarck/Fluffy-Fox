@@ -37,7 +37,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="30dp"
                 android:background="@null"
-                android:hint="description_note"
+                android:hint="@string/note_text"
                 android:textSize="15sp"
                 android:inputType="textMultiLine"
                 android:autofillHints="no"/>

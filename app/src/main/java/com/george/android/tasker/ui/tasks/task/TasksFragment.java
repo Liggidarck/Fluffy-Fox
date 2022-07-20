@@ -15,8 +15,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.george.android.tasker.data.tasks.task.Task;
-import com.george.android.tasker.data.tasks.task.TaskAdapter;
+import com.george.android.tasker.data.model.Task;
+import com.george.android.tasker.ui.adapters.TaskAdapter;
+import com.george.android.tasker.data.viewmodel.TasksViewModel;
 import com.george.android.tasker.databinding.FragmentTasksBinding;
 
 public class TasksFragment extends Fragment {

@@ -1,6 +1,5 @@
 package com.george.android.tasker.ui.passwords;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -20,7 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.george.android.tasker.R;
-import com.george.android.tasker.data.passwords.PasswordAdapter;
+import com.george.android.tasker.data.viewmodel.PasswordsViewModel;
 import com.george.android.tasker.databinding.ActivityAddEditPasswordBinding;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -35,12 +34,10 @@ public class AddEditPasswordActivity extends AppCompatActivity {
     public static final String EXTRA_ADAPTER_POSITION = "com.george.android.tasker.ui.passwords.EXTRA_ADAPTER_POSITION";
 
     ActivityAddEditPasswordBinding binding;
-    PasswordAdapter passwordAdapter = new PasswordAdapter();
-
     PasswordsViewModel passwordsViewModel;
 
     String url, email, password;
-    int adapterPosition = -1;
+    int adapterPosition = -1, passwordId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +49,13 @@ public class AddEditPasswordActivity extends AppCompatActivity {
         String defaultEmail = sharedPreferences.getString("user_email", "Не указано");
 
         passwordsViewModel = new ViewModelProvider(this).get(PasswordsViewModel.class);
-        passwordsViewModel.getAllPasswords().observe(AddEditPasswordActivity.this, passwords -> passwordAdapter.setPasswords(passwords));
 
         setSupportActionBar(binding.toolbarAddEditPasswords);
         binding.toolbarAddEditPasswords.setNavigationOnClickListener(v -> savePassword());
 
         Intent intent = getIntent();
         if (intent.hasExtra(EXTRA_ID)) {
+            passwordId = intent.getIntExtra(EXTRA_ID, -1);
             url = intent.getStringExtra(EXTRA_URL);
             email = intent.getStringExtra(EXTRA_EMAIL);
             password = intent.getStringExtra(EXTRA_PASSWORD);
@@ -132,30 +129,27 @@ public class AddEditPasswordActivity extends AppCompatActivity {
         return true;
     }
 
-    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.delete_item:
-                if (adapterPosition != -1) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(AddEditPasswordActivity.this);
-                    builder.setTitle("Внимание!")
-                            .setMessage("Вы уверены что хотите удалить пароль?")
-                            .setPositiveButton("ок", (dialog, id) -> {
-                                passwordsViewModel.delete(passwordAdapter.getPasswordAt(adapterPosition));
-                                Toast.makeText(AddEditPasswordActivity.this, "Пароль удален", Toast.LENGTH_SHORT).show();
-                                finish();
-                            })
-                            .setNegativeButton("Отмена", (dialog, id) -> dialog.dismiss());
-                    builder.create().show();
-                } else {
-                    Toast.makeText(this, "Такой пароль удалить невозможно", Toast.LENGTH_SHORT).show();
-                }
+        if (item.getItemId() == R.id.delete_item) {
+            if (adapterPosition != -1) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(AddEditPasswordActivity.this);
+                builder.setTitle("Внимание!")
+                        .setMessage("Вы уверены что хотите удалить пароль?")
+                        .setPositiveButton("ок", (dialog, id) -> {
+                            passwordsViewModel.delete(passwordId);
+                            Toast.makeText(AddEditPasswordActivity.this, "Пароль удален", Toast.LENGTH_SHORT).show();
+                            finish();
+                        })
+                        .setNegativeButton("Отмена", (dialog, id) -> dialog.dismiss());
+                builder.create().show();
+            } else {
+                Toast.makeText(this, "Такой пароль удалить невозможно", Toast.LENGTH_SHORT).show();
+            }
 
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
 

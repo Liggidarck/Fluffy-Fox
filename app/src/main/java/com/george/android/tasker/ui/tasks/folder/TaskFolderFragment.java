@@ -15,7 +15,8 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.george.android.tasker.R;
-import com.george.android.tasker.data.tasks.folder.TaskFolderAdapter;
+import com.george.android.tasker.ui.adapters.TaskFolderAdapter;
+import com.george.android.tasker.data.viewmodel.TasksFolderViewModel;
 import com.george.android.tasker.databinding.FragmentTaskFolderBinding;
 
 public class TaskFolderFragment extends Fragment {

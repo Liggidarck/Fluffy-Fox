@@ -16,7 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.george.android.tasker.data.tasks.task.Task;
+import com.george.android.tasker.data.model.Task;
+import com.george.android.tasker.data.viewmodel.TasksViewModel;
 import com.george.android.tasker.databinding.AddTaskBottomSheetBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 

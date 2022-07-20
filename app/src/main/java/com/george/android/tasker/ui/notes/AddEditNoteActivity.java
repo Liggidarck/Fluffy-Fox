@@ -14,11 +14,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.george.android.tasker.R;
-import com.george.android.tasker.data.notes.main_notes.NoteAdapter;
-import com.george.android.tasker.data.notes.recycle_bin.BinNote;
+import com.george.android.tasker.data.model.BinNote;
+import com.george.android.tasker.data.viewmodel.NoteBinViewModel;
+import com.george.android.tasker.data.viewmodel.NoteViewModel;
 import com.george.android.tasker.databinding.ActivityAddEditNoteBinding;
-import com.george.android.tasker.ui.notes.view_models.NoteBinViewModel;
-import com.george.android.tasker.ui.notes.view_models.NoteViewModel;
 import com.george.android.tasker.utils.Utils;
 
 public class AddEditNoteActivity extends AppCompatActivity {
@@ -29,12 +28,11 @@ public class AddEditNoteActivity extends AppCompatActivity {
     public static final String EXTRA_ADAPTER_POSITION = "com.george.android.tasker.ui.notes.EXTRA_ADAPTER_POSITION";
 
     ActivityAddEditNoteBinding binding;
-    NoteAdapter noteAdapter = new NoteAdapter();
 
     NoteBinViewModel binViewModel;
     NoteViewModel noteViewModel;
 
-    int adapterPosition = -1;
+    int adapterPosition = -1, noteId;
     String title, description;
 
     @Override
@@ -47,14 +45,13 @@ public class AddEditNoteActivity extends AppCompatActivity {
         noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
         binViewModel = new ViewModelProvider(this).get(NoteBinViewModel.class);
 
-        noteViewModel.getAllNotes().observe(AddEditNoteActivity.this, noteAdapter::setNotes);
-
         binding.addEditNoteToolbar.setTitle("");
         setSupportActionBar(binding.addEditNoteToolbar);
         binding.addEditNoteToolbar.setNavigationOnClickListener(v -> saveNote());
 
         Intent intent = getIntent();
         if (intent.hasExtra(EXTRA_ID)) {
+            noteId = intent.getIntExtra(EXTRA_ID, -1);
             title = intent.getStringExtra(EXTRA_TITLE);
             description = intent.getStringExtra(EXTRA_DESCRIPTION);
             binding.editTextNoteTitle.setText(title);
@@ -107,7 +104,7 @@ public class AddEditNoteActivity extends AppCompatActivity {
                             .setMessage("Вы уверены что хотите удалить задачу?")
                             .setPositiveButton("ок", (dialog, id) -> {
                                         binViewModel.insert(new BinNote(title, description));
-                                        noteViewModel.delete(noteAdapter.getNoteAt(adapterPosition));
+                                        noteViewModel.delete(noteId);
                                         Toast.makeText(AddEditNoteActivity.this, "Заметка удалена", Toast.LENGTH_SHORT).show();
                                         finish();
                                     }

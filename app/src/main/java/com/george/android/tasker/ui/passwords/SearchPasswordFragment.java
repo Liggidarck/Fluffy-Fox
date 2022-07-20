@@ -18,8 +18,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.george.android.tasker.data.passwords.PasswordAdapter;
-import com.george.android.tasker.data.passwords.room.Password;
+import com.george.android.tasker.ui.adapters.PasswordAdapter;
+import com.george.android.tasker.data.model.Password;
+import com.george.android.tasker.data.viewmodel.PasswordsViewModel;
 import com.george.android.tasker.databinding.FragmentPasswordSearchBinding;
 
 import java.util.Objects;
