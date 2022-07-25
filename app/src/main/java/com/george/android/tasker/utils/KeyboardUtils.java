@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-public class Utils {
+public class KeyboardUtils {
 
     public void showSoftKeyboard(View view, Context context) {
         if (view.requestFocus()) {
