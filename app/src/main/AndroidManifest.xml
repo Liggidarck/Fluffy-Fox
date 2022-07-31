@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Tasker">
+        android:theme="@style/Theme.SplashScreen">
         <activity
             android:name=".ui.tasks.task.EditTaskActivity"
             android:exported="false" />

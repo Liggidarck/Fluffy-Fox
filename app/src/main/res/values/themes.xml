@@ -14,12 +14,10 @@
         <!-- Customize your theme here. -->
         <item name="android:fontFamily">@font/google_sans_medium</item>
     </style>
-    <style name="SplashScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/purple_500</item>
-        <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
-        <item name="android:windowBackground">@drawable/background_splash</item>
+    <style name="SplashScreenTheme" parent="Theme.SplashScreen.IconBackground">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.Tasker</item>
     </style>
 
     <style name="AddTaskDialogTheme" parent="Theme.Design.Light.BottomSheetDialog" >
