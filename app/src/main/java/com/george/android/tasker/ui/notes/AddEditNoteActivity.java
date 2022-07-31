@@ -18,7 +18,7 @@ import com.george.android.tasker.data.model.BinNote;
 import com.george.android.tasker.data.viewmodel.NoteBinViewModel;
 import com.george.android.tasker.data.viewmodel.NoteViewModel;
 import com.george.android.tasker.databinding.ActivityAddEditNoteBinding;
-import com.george.android.tasker.utils.Utils;
+import com.george.android.tasker.utils.KeyboardUtils;
 
 public class AddEditNoteActivity extends AppCompatActivity {
 
@@ -40,7 +40,7 @@ public class AddEditNoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityAddEditNoteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        Utils utils = new Utils();
+        KeyboardUtils utils = new KeyboardUtils();
 
         noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
         binViewModel = new ViewModelProvider(this).get(NoteBinViewModel.class);

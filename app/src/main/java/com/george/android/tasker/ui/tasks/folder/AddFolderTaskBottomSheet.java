@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.george.android.tasker.data.model.TaskFolder;
 import com.george.android.tasker.data.viewmodel.TasksFolderViewModel;
 import com.george.android.tasker.databinding.AddFolderTaskBottomSheetBinding;
-import com.george.android.tasker.utils.Utils;
+import com.george.android.tasker.utils.KeyboardUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.Objects;
@@ -28,7 +28,7 @@ public class AddFolderTaskBottomSheet extends BottomSheetDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = AddFolderTaskBottomSheetBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
-        Utils utils = new Utils();
+        KeyboardUtils utils = new KeyboardUtils();
 
         Objects.requireNonNull(getDialog()).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         utils.showSoftKeyboard(binding.textTaskFolderInput, AddFolderTaskBottomSheet.this.requireActivity());

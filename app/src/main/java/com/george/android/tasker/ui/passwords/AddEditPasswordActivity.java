@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,6 +39,8 @@ public class AddEditPasswordActivity extends AppCompatActivity {
 
     String url, email, password;
     int adapterPosition = -1, passwordId;
+
+    public static final String TAG = AddEditPasswordActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,11 @@ public class AddEditPasswordActivity extends AppCompatActivity {
         binding.textInputUrl.setEndIconOnClickListener(v -> {
             if (validateWeb()) {
                 String url = Objects.requireNonNull(binding.textInputUrl.getEditText()).getText().toString();
+                Log.d(TAG, "onCreate: " + url);
+                if(!url.contains("https")) {
+                    url = "https://" + url;
+                }
+
                 v.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
             } else {
                 Snackbar.make(v, "Ошибка! Пустой адрес", Snackbar.LENGTH_LONG).show();
