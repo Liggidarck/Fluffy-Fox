@@ -37,6 +37,7 @@ public class AddEditNoteActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Tasker);
         super.onCreate(savedInstanceState);
         binding = ActivityAddEditNoteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
