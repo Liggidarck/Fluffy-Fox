@@ -16,8 +16,8 @@ public interface BinNoteDao {
     @Insert
     void insert(BinNote binNote);
 
-    @Delete
-    void delete(BinNote binNote);
+    @Query("DELETE FROM note_bin WHERE id LIKE :id")
+    void delete(int id);
 
     @Query("SELECT * FROM note_bin")
     LiveData<List<BinNote>> getAllBinNote();

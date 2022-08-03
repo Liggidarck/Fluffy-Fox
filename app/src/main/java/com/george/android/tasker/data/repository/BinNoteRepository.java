@@ -32,8 +32,8 @@ public class BinNoteRepository {
         service.execute(binNoteDao::deleteBin);
     }
 
-    public void delete(BinNote binNote) {
-        service.execute(() -> binNoteDao.delete(binNote));
+    public void delete(int id) {
+        service.execute(() -> binNoteDao.delete(id));
     }
 
     public LiveData<List<BinNote>> getAllBinNotes() {

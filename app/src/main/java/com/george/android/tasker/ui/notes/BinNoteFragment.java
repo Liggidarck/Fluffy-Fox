@@ -64,8 +64,18 @@ public class BinNoteFragment extends Fragment {
         binding.recyclerViewBinNote.setHasFixedSize(true);
         binding.recyclerViewBinNote.setAdapter(binNoteAdapter);
 
-        binViewModel.getAllBinNotes().observe(BinNoteFragment.this.requireActivity(),
-                binNotes -> binNoteAdapter.setBinNotes(binNotes));
+        binViewModel.getAllBinNotes().observe(BinNoteFragment.this.requireActivity(), binNotes -> {
+            binNoteAdapter.setBinNotes(binNotes);
+            try {
+                if (binNotes.size() == 0) {
+                    binding.emptyView.setVisibility(View.VISIBLE);
+                } else {
+                    binding.emptyView.setVisibility(View.INVISIBLE);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -84,7 +94,7 @@ public class BinNoteFragment extends Fragment {
 
                 Note note = new Note(title, description);
                 noteViewModel.insert(note);
-                binViewModel.delete(binNote);
+                binViewModel.delete(binNote.getId());
             }
         }).attachToRecyclerView(binding.recyclerViewBinNote);
 

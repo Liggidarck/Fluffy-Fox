@@ -60,7 +60,18 @@ public class NoteFragment extends Fragment {
         binding.recyclerViewNotes.setHasFixedSize(true);
         binding.recyclerViewNotes.setAdapter(noteAdapter);
 
-        noteViewModel.getAllNotes().observe(NoteFragment.this.requireActivity(), noteAdapter::setNotes);
+        noteViewModel.getAllNotes().observe(NoteFragment.this.requireActivity(), listNotes -> {
+            noteAdapter.setNotes(listNotes);
+            try {
+                if (listNotes.size() == 0) {
+                    binding.emptyView.setVisibility(View.VISIBLE);
+                } else {
+                    binding.emptyView.setVisibility(View.INVISIBLE);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -72,15 +83,13 @@ public class NoteFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 Note note = noteAdapter.getNoteAt(viewHolder.getAdapterPosition());
-                String title = note.getTitle();
-                String description = note.getDescription();
-                BinNote binNote = new BinNote(title, description);
+                BinNote binNote = new BinNote(note.getTitle(), note.getDescription());
 
                 binViewModel.insert(binNote);
                 noteViewModel.delete(note.getId());
 
                 Snackbar.make(binding.fragmentNoteCoordinator,
-                                "Заметка " + title + " удалена", Snackbar.LENGTH_SHORT)
+                                "Заметка " + note.getTitle() + " удалена", Snackbar.LENGTH_SHORT)
                         .show();
             }
         }).attachToRecyclerView(binding.recyclerViewNotes);

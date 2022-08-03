@@ -25,8 +25,8 @@ public class NoteBinViewModel extends AndroidViewModel {
         repository.insert(note);
     }
 
-    public void delete(BinNote binNote) {
-        repository.delete(binNote);
+    public void delete(int id) {
+        repository.delete(id);
     }
 
     public void clearBin() {
