@@ -85,7 +85,7 @@ public class EditFolderTaskBottomSheet extends BottomSheetDialogFragment {
 
     private void saveFolder(View v) {
         String name = requireNonNull(binding.nameFolderTextLayout.getEditText()).getText().toString();
-        TaskFolder taskFolder = new TaskFolder(name);
+        TaskFolder taskFolder = new TaskFolder(name, position);
         taskFolder.setFolderId(folderId);
         tasksFolderViewModel.update(taskFolder);
         dismiss();

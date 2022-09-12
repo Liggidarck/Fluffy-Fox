@@ -15,10 +15,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.george.android.tasker.R;
 import com.george.android.tasker.data.model.BinNote;
+import com.george.android.tasker.data.model.Note;
 import com.george.android.tasker.data.viewmodel.NoteBinViewModel;
 import com.george.android.tasker.data.viewmodel.NoteViewModel;
 import com.george.android.tasker.databinding.ActivityAddEditNoteBinding;
 import com.george.android.tasker.utils.KeyboardUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddEditNoteActivity extends AppCompatActivity {
 
@@ -26,14 +30,18 @@ public class AddEditNoteActivity extends AppCompatActivity {
     public static final String EXTRA_TITLE = "com.george.android.tasker.ui.notes.EXTRA_TITLE";
     public static final String EXTRA_DESCRIPTION = "com.george.android.tasker.ui.notes.EXTRA_DESCRIPTION";
     public static final String EXTRA_ADAPTER_POSITION = "com.george.android.tasker.ui.notes.EXTRA_ADAPTER_POSITION";
+    public static final String EXTRA_POSITION = "com.george.android.tasker.ui.notes.EXTRA_POSITION";
 
     ActivityAddEditNoteBinding binding;
 
     NoteBinViewModel binViewModel;
     NoteViewModel noteViewModel;
 
-    int adapterPosition = -1, noteId;
+    int adapterPosition = -1;
+    int noteId;
+    int position = -1;
     String title, description;
+    List<Note> noteList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +63,7 @@ public class AddEditNoteActivity extends AppCompatActivity {
             noteId = intent.getIntExtra(EXTRA_ID, -1);
             title = intent.getStringExtra(EXTRA_TITLE);
             description = intent.getStringExtra(EXTRA_DESCRIPTION);
+            position = intent.getIntExtra(EXTRA_POSITION, -1);
             binding.editTextNoteTitle.setText(title);
             binding.editTextNoteDescription.setText(description);
             adapterPosition = intent.getIntExtra(EXTRA_ADAPTER_POSITION, -1);
@@ -62,20 +71,31 @@ public class AddEditNoteActivity extends AppCompatActivity {
             utils.showSoftKeyboard(binding.editTextNoteDescription, AddEditNoteActivity.this);
         }
 
+        noteViewModel.getAllNotes().observe(this, notes -> {
+            noteList = notes;
+        });
     }
 
     private void saveNote() {
         String title = binding.editTextNoteTitle.getText().toString();
         String description = binding.editTextNoteDescription.getText().toString();
+        int position;
 
         if (title.trim().isEmpty() & description.trim().isEmpty()) {
             finish();
             return;
         }
 
+        if(noteList.size() == 0) {
+            position = 0;
+        } else {
+            position = noteList.size() + 1;
+        }
+
         Intent data = new Intent();
         data.putExtra(EXTRA_TITLE, title);
         data.putExtra(EXTRA_DESCRIPTION, description);
+        data.putExtra(EXTRA_POSITION, position);
 
         int id = getIntent().getIntExtra(EXTRA_ID, -1);
         if (id != -1) {

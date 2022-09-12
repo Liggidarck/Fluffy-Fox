@@ -40,6 +40,10 @@ public class TaskRepository {
         executorService.execute(() -> taskDao.deleteTasksFolder(folderId));
     }
 
+    public void updatePosition(List<Task> tasks) {
+        executorService.execute(() -> taskDao.updatePosition(tasks));
+    }
+
     public LiveData<List<Task>> getAllTasks() {
         return allTasks;
     }

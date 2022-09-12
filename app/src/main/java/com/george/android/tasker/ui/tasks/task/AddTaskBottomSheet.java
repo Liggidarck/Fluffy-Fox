@@ -23,7 +23,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -34,6 +36,7 @@ public class AddTaskBottomSheet extends BottomSheetDialogFragment {
 
     public static final String TAG = "AddTaskBottomSheet";
     int folderID;
+    List<Task> taskList;
 
     @Nullable
     @Override
@@ -86,15 +89,26 @@ public class AddTaskBottomSheet extends BottomSheetDialogFragment {
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         String dateCreate = dateFormat.format(currentDate);
 
-        Log.d(TAG, "saveTask: " + dateCreate);
 
-        if (!taskText.isEmpty()) {
-            Task task = new Task(taskText, false, null, dateCreate, null, folderID);
-            tasksViewModel.insert(task);
-            dismiss();
-        } else {
-            binding.textTaskInput.setError("Пустая задача не добавляется");
-        }
+        tasksViewModel.getFoldersTasks(folderID).observe(this, tasks -> {
+            taskList = tasks;
+
+            Log.d(TAG, "saveTask: " + dateCreate);
+
+            if (!taskText.isEmpty()) {
+                int position;
+                if (taskList.size() == 0) {
+                    position = 0;
+                } else {
+                    position = taskList.size() + 1;
+                }
+                Task task = new Task(taskText, false, null, dateCreate, null, folderID, position);
+                tasksViewModel.insert(task);
+                dismiss();
+            } else {
+                binding.textTaskInput.setError("Пустая задача не добавляется");
+            }
+        });
     }
 
     void showSoftKeyboard(View view) {

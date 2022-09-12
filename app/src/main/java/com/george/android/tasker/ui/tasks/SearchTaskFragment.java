@@ -103,7 +103,7 @@ public class SearchTaskFragment extends Fragment {
                     String noteTask = intent.getStringExtra(EditTaskActivity.EXTRA_NOTE_TASK);
                     int folderId = intent.getIntExtra(EditTaskActivity.EXTRA_FOLDER_ID, -1);
 
-                    Task task = new Task(textTask, statusTask, dateComplete, dateCreate, noteTask, folderId);
+                    Task task = new Task(textTask, statusTask, dateComplete, dateCreate, noteTask, folderId, 0);
                     task.setId(id);
                     tasksViewModel.update(task);
                 }

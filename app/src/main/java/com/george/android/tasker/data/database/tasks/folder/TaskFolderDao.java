@@ -3,6 +3,7 @@ package com.george.android.tasker.data.database.tasks.folder;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -19,10 +20,13 @@ public interface TaskFolderDao {
     @Update
     void update(TaskFolder taskFolder);
 
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    void updatePosition(List<TaskFolder> folders);
+
     @Query("DELETE FROM folder_task_table WHERE folderId LIKE :folderId")
     void delete(int folderId);
 
-    @Query("SELECT * FROM folder_task_table")
+    @Query("SELECT * FROM folder_task_table ORDER BY position")
     LiveData<List<TaskFolder>> getAllTaskFolders();
 
 }

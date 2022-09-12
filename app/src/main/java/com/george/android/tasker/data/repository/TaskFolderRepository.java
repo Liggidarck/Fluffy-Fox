@@ -32,6 +32,10 @@ public class TaskFolderRepository {
         executorService.execute(() -> taskFolderDao.update(taskFolder));
     }
 
+    public void updatePosition(List<TaskFolder> folders) {
+        executorService.execute(() -> taskFolderDao.updatePosition(folders));
+    }
+
     public void delete(int folderId) {
         executorService.execute(() -> taskFolderDao.delete(folderId));
     }

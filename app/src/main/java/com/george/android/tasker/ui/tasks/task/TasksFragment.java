@@ -3,6 +3,7 @@ package com.george.android.tasker.ui.tasks.task;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +14,18 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.george.android.tasker.data.model.Task;
-import com.george.android.tasker.ui.adapters.TaskAdapter;
 import com.george.android.tasker.data.viewmodel.TasksViewModel;
 import com.george.android.tasker.databinding.FragmentTasksBinding;
+import com.george.android.tasker.ui.adapters.TaskAdapter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class TasksFragment extends Fragment {
 
@@ -26,7 +33,11 @@ public class TasksFragment extends Fragment {
     TasksViewModel tasksViewModel;
 
     TaskAdapter taskAdapter = new TaskAdapter();
+    List<Task> tasks = new ArrayList<>();
+
     int folderId;
+
+    public static final String TAG = TasksFragment.class.getSimpleName();
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentTasksBinding.inflate(inflater, container, false);
@@ -45,8 +56,13 @@ public class TasksFragment extends Fragment {
         binding.recyclerTasks.setHasFixedSize(true);
         binding.recyclerTasks.setAdapter(taskAdapter);
 
-        tasksViewModel.getFoldersTasks(folderId).observe(TasksFragment.this.requireActivity(),
-                tasks -> taskAdapter.setTasks(tasks));
+        tasksViewModel.getFoldersTasks(folderId).observe(TasksFragment.this.requireActivity(), tasks -> {
+            this.tasks = tasks;
+            taskAdapter.setTasks(tasks);
+        });
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(binding.recyclerTasks);
 
         binding.buttonAddTask.setOnClickListener(v -> {
             AddTaskBottomSheet addTaskBottomSheet = new AddTaskBottomSheet();
@@ -68,6 +84,7 @@ public class TasksFragment extends Fragment {
             intent.putExtra(EditTaskActivity.EXTRA_DATE_CREATE, task.getDateCreate());
             intent.putExtra(EditTaskActivity.EXTRA_NOTE_TASK, task.getNoteTask());
             intent.putExtra(EditTaskActivity.EXTRA_FOLDER_ID, task.getFolderId());
+            intent.putExtra(EditTaskActivity.EXTRA_POSITION, task.getPosition());
             editTaskResultLauncher.launch(intent);
         });
 
@@ -79,9 +96,11 @@ public class TasksFragment extends Fragment {
 
             Task updateStatus;
             if (currentState) {
-                updateStatus = new Task(task.getTitle(), false, dateComplete, dateCreate, noteTask, folderId);
+                updateStatus = new Task(task.getTitle(), false, dateComplete,
+                        dateCreate, noteTask, folderId, task.getPosition());
             } else {
-                updateStatus = new Task(task.getTitle(), true, dateComplete, dateCreate, noteTask, folderId);
+                updateStatus = new Task(task.getTitle(), true, dateComplete,
+                        dateCreate, noteTask, folderId, task.getPosition());
             }
             updateStatus.setId(task.getId());
             tasksViewModel.update(updateStatus);
@@ -89,6 +108,51 @@ public class TasksFragment extends Fragment {
 
         return root;
     }
+
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
+
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
+                              @NonNull RecyclerView.ViewHolder target) {
+
+            int fromPosition = viewHolder.getAdapterPosition();
+            int toPosition = target.getAdapterPosition();
+
+            if (fromPosition < toPosition) {
+                for (int position = fromPosition; position < toPosition; position++) {
+                    Collections.swap(tasks, position, position + 1);
+
+                    int order1 = tasks.get(position).getPosition();
+                    int order2 = tasks.get(position + 1).getPosition();
+                    tasks.get(position).setPosition(order2);
+                    tasks.get(position + 1).setPosition(order1);
+                }
+            } else {
+                for (int i = fromPosition; i > toPosition; i--) {
+                    Collections.swap(tasks, i, i - 1);
+
+                    int order1 = tasks.get(i).getPosition();
+                    int order2 = tasks.get(i - 1).getPosition();
+                    tasks.get(i).setPosition(order2);
+                    tasks.get(i - 1).setPosition(order1);
+                }
+            }
+            taskAdapter.notifyItemMoved(fromPosition, toPosition);
+            return true;
+        }
+
+        @Override
+        public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+            super.clearView(recyclerView, viewHolder);
+            Log.d(TAG, "clearView: start update");
+            tasksViewModel.updatePosition(tasks);
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+        }
+    };
 
     ActivityResultLauncher<Intent> editTaskResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -109,8 +173,9 @@ public class TasksFragment extends Fragment {
                     String dateCreate = intent.getStringExtra(EditTaskActivity.EXTRA_DATE_CREATE);
                     String noteTask = intent.getStringExtra(EditTaskActivity.EXTRA_NOTE_TASK);
                     int folderId = intent.getIntExtra(EditTaskActivity.EXTRA_FOLDER_ID, -1);
+                    int position = intent.getIntExtra(EditTaskActivity.EXTRA_POSITION, -1);
 
-                    Task task = new Task(textTask, statusTask, dateComplete, dateCreate, noteTask, folderId);
+                    Task task = new Task(textTask, statusTask, dateComplete, dateCreate, noteTask, folderId, position);
                     task.setId(id);
                     tasksViewModel.update(task);
                 }

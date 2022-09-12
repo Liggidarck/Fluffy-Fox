@@ -42,6 +42,10 @@ public class TasksViewModel extends AndroidViewModel {
         return allTasks;
     }
 
+    public void updatePosition(List<Task> tasks) {
+        repository.updatePosition(tasks);
+    }
+
     public LiveData<List<Task>> getFoldersTasks(int folderId) {
         return repository.getFoldersTasks(folderId);
     }

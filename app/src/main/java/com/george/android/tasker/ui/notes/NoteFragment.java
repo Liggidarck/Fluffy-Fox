@@ -31,6 +31,10 @@ import com.george.android.tasker.data.viewmodel.NoteBinViewModel;
 import com.george.android.tasker.data.viewmodel.NoteViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class NoteFragment extends Fragment {
 
     public static final String TAG = "NoteFragment";
@@ -39,6 +43,7 @@ public class NoteFragment extends Fragment {
     private NoteViewModel noteViewModel;
     private NoteBinViewModel binViewModel;
 
+    List<Note> noteList = new ArrayList<>();
     NoteAdapter noteAdapter = new NoteAdapter();
 
     @SuppressLint("NonConstantResourceId")
@@ -60,8 +65,12 @@ public class NoteFragment extends Fragment {
         binding.recyclerViewNotes.setHasFixedSize(true);
         binding.recyclerViewNotes.setAdapter(noteAdapter);
 
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(binding.recyclerViewNotes);
+
         noteViewModel.getAllNotes().observe(NoteFragment.this.requireActivity(), listNotes -> {
             noteAdapter.setNotes(listNotes);
+            noteList = listNotes;
             try {
                 if (listNotes.size() == 0) {
                     binding.emptyView.setVisibility(View.VISIBLE);
@@ -72,27 +81,6 @@ public class NoteFragment extends Fragment {
                 e.printStackTrace();
             }
         });
-
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
-                    viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                Note note = noteAdapter.getNoteAt(viewHolder.getAdapterPosition());
-                BinNote binNote = new BinNote(note.getTitle(), note.getDescription());
-
-                binViewModel.insert(binNote);
-                noteViewModel.delete(note.getId());
-
-                Snackbar.make(binding.fragmentNoteCoordinator,
-                                "Заметка " + note.getTitle() + " удалена", Snackbar.LENGTH_SHORT)
-                        .show();
-            }
-        }).attachToRecyclerView(binding.recyclerViewNotes);
 
         noteAdapter.setOnClickItemListener((note, position) -> {
             Intent intent = new Intent(NoteFragment.this.getActivity(), AddEditNoteActivity.class);
@@ -142,6 +130,64 @@ public class NoteFragment extends Fragment {
         return root;
     }
 
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
+
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
+                              @NonNull RecyclerView.ViewHolder target) {
+
+            int fromPosition = viewHolder.getAdapterPosition();
+            int toPosition = target.getAdapterPosition();
+
+            if (fromPosition < toPosition) {
+                for (int position = fromPosition; position < toPosition; position++) {
+                    Collections.swap(noteList, position, position + 1);
+
+                    int order1 = noteList.get(position).getPosition();
+                    int order2 = noteList.get(position + 1).getPosition();
+                    noteList.get(position).setPosition(order2);
+                    noteList.get(position + 1).setPosition(order1);
+                }
+            } else {
+                for (int i = fromPosition; i > toPosition; i--) {
+                    Collections.swap(noteList, i, i - 1);
+
+                    int order1 = noteList.get(i).getPosition();
+                    int order2 = noteList.get(i - 1).getPosition();
+                    noteList.get(i).setPosition(order2);
+                    noteList.get(i - 1).setPosition(order1);
+                }
+            }
+            noteAdapter.notifyItemMoved(fromPosition, toPosition);
+            return true;
+        }
+
+        @Override
+        public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+            super.clearView(recyclerView, viewHolder);
+            Log.d(TAG, "clearView: start update");
+            noteViewModel.updatePosition(noteList);
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            Note note = noteAdapter.getNoteAt(viewHolder.getAdapterPosition());
+            BinNote binNote = new BinNote(note.getTitle(), note.getDescription());
+
+            binViewModel.insert(binNote);
+            noteViewModel.delete(note.getId());
+
+            Snackbar.make(binding.fragmentNoteCoordinator,
+                            "Заметка " + note.getTitle() + " удалена", Snackbar.LENGTH_SHORT)
+                    .show();
+        }
+
+        @Override
+        public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+            return makeMovementFlags(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0);
+        }
+    };
+
     ActivityResultLauncher<Intent> addNoteResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -150,8 +196,9 @@ public class NoteFragment extends Fragment {
                     assert intent != null;
                     String title = intent.getStringExtra(AddEditNoteActivity.EXTRA_TITLE);
                     String description = intent.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION);
+                    int position = intent.getIntExtra(AddEditNoteActivity.EXTRA_POSITION, -1);
 
-                    Note note = new Note(title, description);
+                    Note note = new Note(title, description, position);
                     noteViewModel.insert(note);
                 }
             }
@@ -171,8 +218,9 @@ public class NoteFragment extends Fragment {
 
                     String title = intent.getStringExtra(AddEditNoteActivity.EXTRA_TITLE);
                     String description = intent.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION);
+                    int position = intent.getIntExtra(AddEditNoteActivity.EXTRA_POSITION, -1);
 
-                    Note note = new Note(title, description);
+                    Note note = new Note(title, description, position);
                     note.setId(id);
                     noteViewModel.update(note);
                 }

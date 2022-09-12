@@ -12,12 +12,19 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.george.android.tasker.R;
-import com.george.android.tasker.ui.adapters.TaskFolderAdapter;
+import com.george.android.tasker.data.model.TaskFolder;
 import com.george.android.tasker.data.viewmodel.TasksFolderViewModel;
 import com.george.android.tasker.databinding.FragmentTaskFolderBinding;
+import com.george.android.tasker.ui.adapters.TaskFolderAdapter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class TaskFolderFragment extends Fragment {
 
@@ -26,6 +33,7 @@ public class TaskFolderFragment extends Fragment {
 
     TaskFolderAdapter taskFolderAdapter = new TaskFolderAdapter();
 
+    List<TaskFolder> folders = new ArrayList<>();
     public static final String TAG = "TaskFolderFragment";
 
     @Nullable
@@ -38,12 +46,12 @@ public class TaskFolderFragment extends Fragment {
 
         tasksFolderViewModel = new ViewModelProvider(this).get(TasksFolderViewModel.class);
 
-        binding.recyclerTasksFolder.setLayoutManager(new LinearLayoutManager(TaskFolderFragment.this.requireActivity()));
-        binding.recyclerTasksFolder.setHasFixedSize(true);
-        binding.recyclerTasksFolder.setAdapter(taskFolderAdapter);
+        initRecyclerView();
 
-        tasksFolderViewModel.getAllFolders().observe(TaskFolderFragment.this.requireActivity(),
-                taskFolders -> taskFolderAdapter.setTaskFolders(taskFolders));
+        tasksFolderViewModel.getAllFolders().observe(TaskFolderFragment.this.requireActivity(), taskFolders -> {
+            folders = taskFolders;
+            taskFolderAdapter.setTaskFolders(taskFolders);
+        });
 
         taskFolderAdapter.setOnClickListener((taskFolder, position) -> {
             NavController navController = Navigation.findNavController(TaskFolderFragment.this.requireActivity(),
@@ -59,13 +67,13 @@ public class TaskFolderFragment extends Fragment {
             navController.navigate(R.id.action_navigation_task_to_tasksFragment, bundle);
         });
 
-        taskFolderAdapter.setOnLongClickListener((taskFolder, position) -> {
+        taskFolderAdapter.setOnFolderClickListener((taskFolder, position) -> {
             Log.d(TAG, "id folder: " + taskFolder.getFolderId());
 
             Bundle bundle = new Bundle();
             bundle.putInt("folderId", taskFolder.getFolderId());
             bundle.putString("name", taskFolder.getNameFolder());
-            bundle.putInt("position", position);
+            bundle.putInt("position", taskFolder.getPosition());
 
 
             EditFolderTaskBottomSheet editFolderTaskBottomSheet = new EditFolderTaskBottomSheet();
@@ -75,11 +83,11 @@ public class TaskFolderFragment extends Fragment {
 
         binding.buttonAddTaskFolder.setOnClickListener(v -> {
             AddFolderTaskBottomSheet addFolderTaskBottomSheet = new AddFolderTaskBottomSheet();
-            addFolderTaskBottomSheet.show(getParentFragmentManager(),"AddFolderTaskBottomSheet");
+            addFolderTaskBottomSheet.show(getParentFragmentManager(), "AddFolderTaskBottomSheet");
         });
 
         binding.toolbarTasksFolder.setOnMenuItemClickListener(item -> {
-            if(item.getItemId() == R.id.search_task_item) {
+            if (item.getItemId() == R.id.search_task_item) {
                 NavController navController = Navigation.findNavController(TaskFolderFragment.this.requireActivity(),
                         R.id.nav_host_fragment_activity_main);
                 navController.navigate(R.id.action_navigation_task_to_navigation_task_search);
@@ -89,6 +97,65 @@ public class TaskFolderFragment extends Fragment {
 
         return root;
     }
+
+    private void initRecyclerView() {
+        binding.recyclerTasksFolder.setLayoutManager(new LinearLayoutManager(TaskFolderFragment.this.requireActivity()));
+        binding.recyclerTasksFolder.setHasFixedSize(true);
+        binding.recyclerTasksFolder.setAdapter(taskFolderAdapter);
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(binding.recyclerTasksFolder);
+    }
+
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
+
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            int fromPosition = viewHolder.getAdapterPosition();
+            int toPosition = target.getAdapterPosition();
+
+            if (fromPosition < toPosition) {
+                for (int position = fromPosition; position < toPosition; position++) {
+                    Collections.swap(folders, position, position + 1);
+
+                    int order1 = folders.get(position).getPosition();
+                    int order2 = folders.get(position + 1).getPosition();
+                    folders.get(position).setPosition(order2);
+                    folders.get(position + 1).setPosition(order1);
+                }
+            } else {
+                for (int i = fromPosition; i > toPosition; i--) {
+                    Collections.swap(folders, i, i - 1);
+
+                    int order1 = folders.get(i).getPosition();
+                    int order2 = folders.get(i - 1).getPosition();
+                    folders.get(i).setPosition(order2);
+                    folders.get(i - 1).setPosition(order1);
+                }
+            }
+            taskFolderAdapter.notifyItemMoved(fromPosition, toPosition);
+            return true;
+
+        }
+
+        @Override
+        public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+            return makeMovementFlags(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0);
+        }
+
+        @Override
+        public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+            super.clearView(recyclerView, viewHolder);
+            Log.d(TAG, "clearView: start update");
+            tasksFolderViewModel.updatePositions(folders);
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+        }
+    };
+
 
     @Override
     public void onDestroyView() {

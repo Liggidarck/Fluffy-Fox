@@ -21,6 +21,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     private onItemClickListener listener;
     private onItemLongClickListener longListener;
 
+    public static final String TAG = NoteAdapter.class.getSimpleName();
+
     @NonNull
     @Override
     public NoteHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -16,12 +16,14 @@ import com.george.android.tasker.databinding.AddFolderTaskBottomSheetBinding;
 import com.george.android.tasker.utils.KeyboardUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import java.util.List;
 import java.util.Objects;
 
 public class AddFolderTaskBottomSheet extends BottomSheetDialogFragment {
 
     AddFolderTaskBottomSheetBinding binding;
     TasksFolderViewModel tasksFolderViewModel;
+    List<TaskFolder> taskFolders;
 
     @Nullable
     @Override
@@ -37,6 +39,8 @@ public class AddFolderTaskBottomSheet extends BottomSheetDialogFragment {
 
         binding.addFolderTask.setOnClickListener(v -> saveFolder());
 
+        tasksFolderViewModel.getAllFolders().observe(this, folders -> taskFolders = folders);
+
 
         return view;
     }
@@ -44,12 +48,19 @@ public class AddFolderTaskBottomSheet extends BottomSheetDialogFragment {
     void saveFolder() {
         String nameFolder = Objects.requireNonNull(binding.textTaskFolderInput.getEditText()).getText().toString();
 
-        if(!nameFolder.isEmpty()) {
-            TaskFolder taskFolder = new TaskFolder(nameFolder);
+        if (!nameFolder.isEmpty()) {
+            int position;
+            if (taskFolders.size() == 0) {
+                position = 0;
+            } else {
+                position = taskFolders.size() + 1;
+            }
+
+            TaskFolder taskFolder = new TaskFolder(nameFolder, position);
             tasksFolderViewModel.insert(taskFolder);
             dismiss();
         } else {
-          binding.textTaskFolderInput.setError("Папка без названия");
+            binding.textTaskFolderInput.setError("Папка без названия");
         }
     }
 

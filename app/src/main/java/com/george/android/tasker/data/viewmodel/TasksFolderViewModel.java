@@ -34,6 +34,10 @@ public class TasksFolderViewModel extends AndroidViewModel {
         repository.delete(folderId);
     }
 
+    public void updatePositions(List<TaskFolder> folders) {
+        repository.updatePosition(folders);
+    }
+
     public LiveData<List<TaskFolder>> getAllFolders() {
         return allFolders;
     }

@@ -30,6 +30,10 @@ public class NoteRepository {
         service.execute(() -> noteDao.update(note));
     }
 
+    public void updatePosition(List<Note> noteList) {
+        service.execute(() -> noteDao.updatePosition(noteList));
+    }
+
     public void delete(int noteId) {
         service.execute(() -> noteDao.delete(noteId));
     }

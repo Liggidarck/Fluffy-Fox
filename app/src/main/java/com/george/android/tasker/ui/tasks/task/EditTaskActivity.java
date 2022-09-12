@@ -33,6 +33,7 @@ public class EditTaskActivity extends AppCompatActivity {
     public static final String EXTRA_NOTE_TASK = "com.george.android.tasker.ui.tasks.EXTRA_NOTE_TASK";
     public static final String EXTRA_ADAPTER_POSITION = "com.george.android.tasker.ui.tasks.EXTRA_ADAPTER_POSITION";
     public static final String EXTRA_FOLDER_ID = "com.george.android.tasker.ui.tasks.EXTRA_FOLDER_ID";
+    public static final String EXTRA_POSITION = "com.george.android.tasker.ui.tasks.EXTRA_POSITION";
 
     TasksViewModel tasksViewModel;
 

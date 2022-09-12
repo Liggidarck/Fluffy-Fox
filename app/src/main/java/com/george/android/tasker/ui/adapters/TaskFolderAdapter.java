@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,7 +20,7 @@ public class TaskFolderAdapter extends RecyclerView.Adapter<TaskFolderAdapter.Vi
 
     private List<TaskFolder> taskFolders = new ArrayList<>();
     private onItemClickListener listener;
-    private onLongClickListener onLongClickListener;
+    private onLongClickListener onFolderClickListener;
     public static final String TAG = "TaskFolderAdapter";
 
     @NonNull
@@ -46,16 +47,14 @@ public class TaskFolderAdapter extends RecyclerView.Adapter<TaskFolderAdapter.Vi
         notifyDataSetChanged();
     }
 
-    public TaskFolder getTaskFolderAt(int position) {
-        return taskFolders.get(position);
-    }
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         final TextView taskFolderName;
+        final RelativeLayout folderTaskIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             taskFolderName = itemView.findViewById(R.id.taskFolderName);
+            folderTaskIcon = itemView.findViewById(R.id.folderTaskIcon);
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
@@ -64,12 +63,11 @@ public class TaskFolderAdapter extends RecyclerView.Adapter<TaskFolderAdapter.Vi
                 }
             });
 
-            itemView.setOnLongClickListener(v -> {
+            folderTaskIcon.setOnClickListener(v -> {
                 int position = getAdapterPosition();
-                if(onLongClickListener != null && position != RecyclerView.NO_POSITION) {
-                    onLongClickListener.onItemLongClick(taskFolders.get(position), position);
+                if(onFolderClickListener != null && position != RecyclerView.NO_POSITION) {
+                    onFolderClickListener.onFolderClick(taskFolders.get(position), position);
                 }
-                return true;
             });
         }
     }
@@ -79,15 +77,15 @@ public class TaskFolderAdapter extends RecyclerView.Adapter<TaskFolderAdapter.Vi
     }
 
     public interface onLongClickListener {
-        void onItemLongClick(TaskFolder taskFolder, int position);
+        void onFolderClick(TaskFolder taskFolder, int position);
     }
 
     public void setOnClickListener(onItemClickListener listener) {
         this.listener = listener;
     }
 
-    public void setOnLongClickListener(onLongClickListener onLongClickListener) {
-        this.onLongClickListener = onLongClickListener;
+    public void setOnFolderClickListener(onLongClickListener onFolderClickListener) {
+        this.onFolderClickListener = onFolderClickListener;
     }
 
 }
