@@ -141,11 +141,11 @@ public class AddEditNoteActivity extends AppCompatActivity {
                 if (title == null & description == null) {
                     Toast.makeText(this, "Empty note can't shared", Toast.LENGTH_SHORT).show();
                 } else {
-                    String sharing_data = title + "\n" + description;
+                    String sharingData = title + "\n" + description;
 
                     Intent sendIntent = new Intent();
                     sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, sharing_data);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, sharingData);
                     sendIntent.setType("text/plain");
 
                     Intent shareIntent = Intent.createChooser(sendIntent, null);

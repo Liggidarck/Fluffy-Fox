@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:listitem="@layout/note_item"/>
+            tools:listitem="@layout/note_title_item"/>
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"

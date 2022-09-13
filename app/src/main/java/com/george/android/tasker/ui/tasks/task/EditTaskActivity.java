@@ -42,8 +42,9 @@ public class EditTaskActivity extends AppCompatActivity {
 
     String dateCreate;
     int folderId, taskId;
-
+    int position;
     int adapterPosition;
+
     boolean status;
 
     public static final String TAG = EditTaskActivity.class.getSimpleName();
@@ -69,6 +70,7 @@ public class EditTaskActivity extends AppCompatActivity {
             dateCreate = intent.getStringExtra(EXTRA_DATE_CREATE);
             String noteTask = intent.getStringExtra(EXTRA_NOTE_TASK);
             folderId = intent.getIntExtra(EXTRA_FOLDER_ID, -1);
+            position = intent.getIntExtra(EXTRA_POSITION, -1);
 
             Log.d(TAG, "onCreate: " + dateCreate);
             Log.d(TAG, "onCreate: folderID: " + folderId);
@@ -128,6 +130,7 @@ public class EditTaskActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_DATE_CREATE, dateCreate);
         intent.putExtra(EXTRA_NOTE_TASK, getNoteTask());
         intent.putExtra(EXTRA_FOLDER_ID, folderId);
+        intent.putExtra(EXTRA_POSITION, position);
 
         if (textTask.trim().isEmpty()) {
             finish();

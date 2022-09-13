@@ -24,12 +24,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.george.android.tasker.R;
 import com.george.android.tasker.data.model.Note;
-import com.george.android.tasker.ui.adapters.NoteAdapter;
-import com.george.android.tasker.data.model.BinNote;
-import com.george.android.tasker.databinding.FragmentNoteBinding;
-import com.george.android.tasker.data.viewmodel.NoteBinViewModel;
 import com.george.android.tasker.data.viewmodel.NoteViewModel;
-import com.google.android.material.snackbar.Snackbar;
+import com.george.android.tasker.databinding.FragmentNoteBinding;
+import com.george.android.tasker.ui.adapters.NoteAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,7 +38,6 @@ public class NoteFragment extends Fragment {
     private FragmentNoteBinding binding;
 
     private NoteViewModel noteViewModel;
-    private NoteBinViewModel binViewModel;
 
     List<Note> noteList = new ArrayList<>();
     NoteAdapter noteAdapter = new NoteAdapter();
@@ -54,7 +50,6 @@ public class NoteFragment extends Fragment {
         binding.toolbarNotes.inflateMenu(R.menu.note_menu);
 
         noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
-        binViewModel = new ViewModelProvider(this).get(NoteBinViewModel.class);
 
         binding.buttonAddNote.setOnClickListener(v -> {
             Intent intent = new Intent(NoteFragment.this.getContext(), AddEditNoteActivity.class);
@@ -65,7 +60,7 @@ public class NoteFragment extends Fragment {
         binding.recyclerViewNotes.setHasFixedSize(true);
         binding.recyclerViewNotes.setAdapter(noteAdapter);
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(moveItemsCallback);
         itemTouchHelper.attachToRecyclerView(binding.recyclerViewNotes);
 
         noteViewModel.getAllNotes().observe(NoteFragment.this.requireActivity(), listNotes -> {
@@ -88,10 +83,10 @@ public class NoteFragment extends Fragment {
             intent.putExtra(AddEditNoteActivity.EXTRA_TITLE, note.getTitle());
             intent.putExtra(AddEditNoteActivity.EXTRA_DESCRIPTION, note.getDescription());
             intent.putExtra(AddEditNoteActivity.EXTRA_ADAPTER_POSITION, position);
+            intent.putExtra(AddEditNoteActivity.EXTRA_POSITION, note.getPosition());
             editNoteResultLauncher.launch(intent);
         });
 
-        noteAdapter.setOnLongClickItemListener((note, position) -> Log.d(TAG, "note: " + note.getDescription()));
 
         binding.toolbarNotes.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
@@ -130,7 +125,7 @@ public class NoteFragment extends Fragment {
         return root;
     }
 
-    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
+    ItemTouchHelper.SimpleCallback moveItemsCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
 
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
@@ -170,22 +165,15 @@ public class NoteFragment extends Fragment {
         }
 
         @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            Note note = noteAdapter.getNoteAt(viewHolder.getAdapterPosition());
-            BinNote binNote = new BinNote(note.getTitle(), note.getDescription());
-
-            binViewModel.insert(binNote);
-            noteViewModel.delete(note.getId());
-
-            Snackbar.make(binding.fragmentNoteCoordinator,
-                            "Заметка " + note.getTitle() + " удалена", Snackbar.LENGTH_SHORT)
-                    .show();
-        }
-
-        @Override
         public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
             return makeMovementFlags(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0);
         }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+        }
+
     };
 
     ActivityResultLauncher<Intent> addNoteResultLauncher = registerForActivityResult(

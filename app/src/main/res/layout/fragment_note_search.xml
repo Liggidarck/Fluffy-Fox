@@ -45,7 +45,7 @@
                     android:id="@+id/recycler_view_search_notes"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    tools:listitem="@layout/note_item"
+                    tools:listitem="@layout/note_title_item"
                     android:layout_below="@id/textInputNoteSearch"/>
 
             </LinearLayout>

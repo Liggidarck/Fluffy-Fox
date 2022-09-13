@@ -23,7 +23,7 @@ public class BinNoteAdapter extends RecyclerView.Adapter<BinNoteAdapter.BinNoteH
     @NonNull
     @Override
     public BinNoteHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.note_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.note_title_item, parent, false);
         return new BinNoteHolder(view);
     }
 
