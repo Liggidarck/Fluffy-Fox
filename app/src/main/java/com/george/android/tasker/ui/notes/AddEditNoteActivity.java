@@ -39,7 +39,7 @@ public class AddEditNoteActivity extends AppCompatActivity {
 
     int adapterPosition = -1;
     int noteId;
-    int position = -1;
+    int position;
     String title, description;
     List<Note> noteList = new ArrayList<>();
 
@@ -71,25 +71,17 @@ public class AddEditNoteActivity extends AppCompatActivity {
             utils.showSoftKeyboard(binding.editTextNoteDescription, AddEditNoteActivity.this);
         }
 
-        noteViewModel.getAllNotes().observe(this, notes -> {
-            noteList = notes;
-        });
+
+        noteViewModel.getAllNotes().observe(this, notes -> noteList = notes);
     }
 
     private void saveNote() {
         String title = binding.editTextNoteTitle.getText().toString();
         String description = binding.editTextNoteDescription.getText().toString();
-        int position;
 
         if (title.trim().isEmpty() & description.trim().isEmpty()) {
             finish();
             return;
-        }
-
-        if(noteList.size() == 0) {
-            position = 0;
-        } else {
-            position = noteList.size() + 1;
         }
 
         Intent data = new Intent();
@@ -98,6 +90,12 @@ public class AddEditNoteActivity extends AppCompatActivity {
         data.putExtra(EXTRA_POSITION, position);
 
         int id = getIntent().getIntExtra(EXTRA_ID, -1);
+        int position = getIntent().getIntExtra(EXTRA_POSITION, -1);
+
+        if (position == -1) {
+            data.putExtra(EXTRA_POSITION, noteList.size());
+        }
+
         if (id != -1) {
             data.putExtra(EXTRA_ID, id);
         }

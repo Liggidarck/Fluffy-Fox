@@ -23,7 +23,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.george.android.tasker.R;
+import com.george.android.tasker.data.model.BinNote;
 import com.george.android.tasker.data.model.Note;
+import com.george.android.tasker.data.viewmodel.NoteBinViewModel;
 import com.george.android.tasker.data.viewmodel.NoteViewModel;
 import com.george.android.tasker.databinding.FragmentNoteBinding;
 import com.george.android.tasker.ui.adapters.NoteAdapter;
@@ -38,6 +40,7 @@ public class NoteFragment extends Fragment {
     private FragmentNoteBinding binding;
 
     private NoteViewModel noteViewModel;
+    private NoteBinViewModel noteBinViewModel;
 
     List<Note> noteList = new ArrayList<>();
     NoteAdapter noteAdapter = new NoteAdapter();
@@ -50,6 +53,7 @@ public class NoteFragment extends Fragment {
         binding.toolbarNotes.inflateMenu(R.menu.note_menu);
 
         noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
+        noteBinViewModel = new ViewModelProvider(this).get(NoteBinViewModel.class);
 
         binding.buttonAddNote.setOnClickListener(v -> {
             Intent intent = new Intent(NoteFragment.this.getContext(), AddEditNoteActivity.class);
@@ -125,7 +129,9 @@ public class NoteFragment extends Fragment {
         return root;
     }
 
-    ItemTouchHelper.SimpleCallback moveItemsCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
+    ItemTouchHelper.SimpleCallback moveItemsCallback = new ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT
+    ) {
 
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
@@ -165,13 +171,14 @@ public class NoteFragment extends Fragment {
         }
 
         @Override
-        public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-            return makeMovementFlags(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0);
-        }
-
-        @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            Note note = noteAdapter.getNoteAt(viewHolder.getAdapterPosition());
 
+            String title = note.getTitle();
+            String description = note.getDescription();
+
+            noteBinViewModel.insert(new BinNote(title, description));
+            noteViewModel.delete(note.getId());
         }
 
     };
