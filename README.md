@@ -1,4 +1,4 @@
-# Voltage Note-taking app
+# Fluffy Fox - note taking app
 Note taking app with cool functions powred by Java.
 - Model-View-Controller pattern.
 - All data is saved to a local database.
