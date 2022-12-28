@@ -49,14 +49,7 @@ public class AddFolderTaskBottomSheet extends BottomSheetDialogFragment {
         String nameFolder = Objects.requireNonNull(binding.textTaskFolderInput.getEditText()).getText().toString();
 
         if (!nameFolder.isEmpty()) {
-            int position;
-            if (taskFolders.size() == 0) {
-                position = 0;
-            } else {
-                position = taskFolders.size() + 1;
-            }
-
-            TaskFolder taskFolder = new TaskFolder(nameFolder, position);
+            TaskFolder taskFolder = new TaskFolder(nameFolder);
             tasksFolderViewModel.insert(taskFolder);
             dismiss();
         } else {

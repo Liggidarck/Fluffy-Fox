@@ -96,13 +96,7 @@ public class AddTaskBottomSheet extends BottomSheetDialogFragment {
             Log.d(TAG, "saveTask: " + dateCreate);
 
             if (!taskText.isEmpty()) {
-                int position;
-                if (taskList.size() == 0) {
-                    position = 0;
-                } else {
-                    position = taskList.size() + 1;
-                }
-                Task task = new Task(taskText, false, null, dateCreate, null, folderID, position);
+                Task task = new Task(taskText, false, null, dateCreate, null, folderID);
                 tasksViewModel.insert(task);
                 dismiss();
             } else {

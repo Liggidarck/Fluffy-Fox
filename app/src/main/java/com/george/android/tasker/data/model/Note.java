@@ -11,17 +11,12 @@ public class Note {
 
     private final String title;
     private final String description;
-    private int position;
 
-    public Note(String title, String description, int position) {
+    public Note(String title, String description) {
         this.title = title;
         this.description = description;
-        this.position = position;
     }
 
-    public void setPosition(int position) {
-        this.position = position;
-    }
 
     public void setId(int id) {
         this.id = id;
@@ -33,10 +28,6 @@ public class Note {
 
     public String getTitle() {
         return title;
-    }
-
-    public int getPosition() {
-        return position;
     }
 
     public String getDescription() {

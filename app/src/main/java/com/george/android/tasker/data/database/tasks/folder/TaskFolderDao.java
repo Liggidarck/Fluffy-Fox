@@ -26,7 +26,7 @@ public interface TaskFolderDao {
     @Query("DELETE FROM folder_task_table WHERE folderId LIKE :folderId")
     void delete(int folderId);
 
-    @Query("SELECT * FROM folder_task_table ORDER BY position")
+    @Query("SELECT * FROM folder_task_table")
     LiveData<List<TaskFolder>> getAllTaskFolders();
 
 }

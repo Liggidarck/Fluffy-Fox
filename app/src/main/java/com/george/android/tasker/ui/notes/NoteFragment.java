@@ -18,12 +18,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.george.android.tasker.R;
-import com.george.android.tasker.data.model.BinNote;
 import com.george.android.tasker.data.model.Note;
 import com.george.android.tasker.data.viewmodel.NoteBinViewModel;
 import com.george.android.tasker.data.viewmodel.NoteViewModel;
@@ -31,7 +28,6 @@ import com.george.android.tasker.databinding.FragmentNoteBinding;
 import com.george.android.tasker.ui.adapters.NoteAdapter;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class NoteFragment extends Fragment {
@@ -64,9 +60,6 @@ public class NoteFragment extends Fragment {
         binding.recyclerViewNotes.setHasFixedSize(true);
         binding.recyclerViewNotes.setAdapter(noteAdapter);
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(moveItemsCallback);
-        itemTouchHelper.attachToRecyclerView(binding.recyclerViewNotes);
-
         noteViewModel.getAllNotes().observe(NoteFragment.this.requireActivity(), listNotes -> {
             noteAdapter.setNotes(listNotes);
             noteList = listNotes;
@@ -87,7 +80,6 @@ public class NoteFragment extends Fragment {
             intent.putExtra(AddEditNoteActivity.EXTRA_TITLE, note.getTitle());
             intent.putExtra(AddEditNoteActivity.EXTRA_DESCRIPTION, note.getDescription());
             intent.putExtra(AddEditNoteActivity.EXTRA_ADAPTER_POSITION, position);
-            intent.putExtra(AddEditNoteActivity.EXTRA_POSITION, note.getPosition());
             editNoteResultLauncher.launch(intent);
         });
 
@@ -129,60 +121,6 @@ public class NoteFragment extends Fragment {
         return root;
     }
 
-    ItemTouchHelper.SimpleCallback moveItemsCallback = new ItemTouchHelper.SimpleCallback(
-            ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT
-    ) {
-
-        @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
-                              @NonNull RecyclerView.ViewHolder target) {
-
-            int fromPosition = viewHolder.getAdapterPosition();
-            int toPosition = target.getAdapterPosition();
-
-            if (fromPosition < toPosition) {
-                for (int position = fromPosition; position < toPosition; position++) {
-                    Collections.swap(noteList, position, position + 1);
-
-                    int order1 = noteList.get(position).getPosition();
-                    int order2 = noteList.get(position + 1).getPosition();
-                    noteList.get(position).setPosition(order2);
-                    noteList.get(position + 1).setPosition(order1);
-                }
-            } else {
-                for (int i = fromPosition; i > toPosition; i--) {
-                    Collections.swap(noteList, i, i - 1);
-
-                    int order1 = noteList.get(i).getPosition();
-                    int order2 = noteList.get(i - 1).getPosition();
-                    noteList.get(i).setPosition(order2);
-                    noteList.get(i - 1).setPosition(order1);
-                }
-            }
-            noteAdapter.notifyItemMoved(fromPosition, toPosition);
-            return true;
-        }
-
-        @Override
-        public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-            super.clearView(recyclerView, viewHolder);
-            Log.d(TAG, "clearView: start update");
-            noteViewModel.updatePosition(noteList);
-        }
-
-        @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            Note note = noteAdapter.getNoteAt(viewHolder.getAdapterPosition());
-
-            String title = note.getTitle();
-            String description = note.getDescription();
-
-            noteBinViewModel.insert(new BinNote(title, description));
-            noteViewModel.delete(note.getId());
-        }
-
-    };
-
     ActivityResultLauncher<Intent> addNoteResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -191,9 +129,8 @@ public class NoteFragment extends Fragment {
                     assert intent != null;
                     String title = intent.getStringExtra(AddEditNoteActivity.EXTRA_TITLE);
                     String description = intent.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION);
-                    int position = intent.getIntExtra(AddEditNoteActivity.EXTRA_POSITION, -1);
 
-                    Note note = new Note(title, description, position);
+                    Note note = new Note(title, description);
                     noteViewModel.insert(note);
                 }
             }
@@ -213,9 +150,8 @@ public class NoteFragment extends Fragment {
 
                     String title = intent.getStringExtra(AddEditNoteActivity.EXTRA_TITLE);
                     String description = intent.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION);
-                    int position = intent.getIntExtra(AddEditNoteActivity.EXTRA_POSITION, -1);
 
-                    Note note = new Note(title, description, position);
+                    Note note = new Note(title, description);
                     note.setId(id);
                     noteViewModel.update(note);
                 }

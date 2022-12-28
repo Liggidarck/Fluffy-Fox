@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.george.android.tasker.R;
 import com.george.android.tasker.data.model.Note;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +42,6 @@ public class NoteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 NoteTitleHolder noteTitleHolder = (NoteTitleHolder) holder;
                 noteTitleHolder.textViewTitle.setText(currentNote.getTitle());
                 noteTitleHolder.textViewDescription.setText(currentNote.getDescription());
-                noteTitleHolder.textViewPosition.setText("position: " + currentNote.getPosition());
                 break;
 
             case 2:
@@ -71,13 +68,11 @@ public class NoteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     class NoteTitleHolder extends RecyclerView.ViewHolder {
         private final TextView textViewTitle;
         private final TextView textViewDescription;
-        private final TextView textViewPosition;
 
         public NoteTitleHolder(@NonNull View itemView) {
             super(itemView);
             textViewTitle = itemView.findViewById(R.id.textViewTitle);
             textViewDescription = itemView.findViewById(R.id.textViewDescription);
-            textViewPosition = itemView.findViewById(R.id.textViewPosition);
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
@@ -87,9 +82,6 @@ public class NoteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             });
 
         }
-    }
-    public Note getNoteAt(int position) {
-        return notes.get(position);
     }
 
     class NoteNotTitleHolder extends RecyclerView.ViewHolder {

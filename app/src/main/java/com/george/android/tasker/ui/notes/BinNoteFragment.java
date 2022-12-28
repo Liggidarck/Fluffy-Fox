@@ -92,7 +92,7 @@ public class BinNoteFragment extends Fragment {
                 String title = binNote.getTitle();
                 String description = binNote.getDescription();
 
-                Note note = new Note(title, description, 0);
+                Note note = new Note(title, description);
                 noteViewModel.insert(note);
                 binViewModel.delete(binNote.getId());
             }

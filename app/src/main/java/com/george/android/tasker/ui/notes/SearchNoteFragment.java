@@ -97,7 +97,7 @@ public class SearchNoteFragment extends Fragment {
                         String title = intent.getStringExtra(AddEditNoteActivity.EXTRA_TITLE);
                         String description = intent.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION);
 
-                        Note note = new Note(title, description, 0);
+                        Note note = new Note(title, description);
                         note.setId(id);
                         noteViewModel.update(note);
                     }

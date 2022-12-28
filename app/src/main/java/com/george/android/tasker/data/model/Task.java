@@ -15,24 +15,14 @@ public class Task {
     private final String dateCreate;
     private final String noteTask;
     private int folderId;
-    private int position;
 
-    public Task(String title, boolean status, String dateComplete, String dateCreate, String noteTask, int folderId, int position) {
+    public Task(String title, boolean status, String dateComplete, String dateCreate, String noteTask, int folderId) {
         this.title = title;
         this.status = status;
         this.dateComplete = dateComplete;
         this.dateCreate = dateCreate;
         this.noteTask = noteTask;
         this.folderId = folderId;
-        this.position = position;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
     }
 
     public void setId(int id) {

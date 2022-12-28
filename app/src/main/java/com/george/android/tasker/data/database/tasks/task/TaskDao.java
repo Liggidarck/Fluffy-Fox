@@ -29,7 +29,7 @@ public interface TaskDao {
     @Query("SELECT * FROM task_table")
     LiveData<List<Task>> getAllTasks();
 
-    @Query("SELECT * FROM task_table WHERE folderId LIKE :folderId ORDER BY position")
+    @Query("SELECT * FROM task_table WHERE folderId LIKE :folderId")
     LiveData<List<Task>> getTasksInFolder(int folderId);
 
     @Query("SELECT * FROM task_table WHERE title LIKE '%' || :search || '%' ")
