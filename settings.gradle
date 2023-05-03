@@ -13,4 +13,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Voltage"
-include ':app'
+include ':voltage_offline'
+include ':voltage_online'

@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Voltage</string>
+    <string name="title_notes">Заметки</string>
+    <string name="title_tasks">Задачи</string>
+    <string name="title_passwords">Пароли</string>
+    <string name="title_note">Название</string>
+    <string name="url">Адрес сайта</string>
+    <string name="login_password">Логин</string>
+    <string name="password">Пароль</string>
+    <string name="task_title">Задача</string>
+    <string name="rename_task">Переимновать задачу</string>
+    <string name="add_date_done">Добавить дату выполнения</string>
+    <string name="add_note_task">Добавить заметку</string>
+    <string name="task_completed">Задача выполнена</string>
+    <string name="name_folder">Имя папки</string>
+    <string name="create">Создать</string>
+    <string name="add">Добавить</string>
+    <string name="add_task">Добавить задачу</string>
+    <string name="delete">Удалить</string>
+    <string name="save">Сохранить</string>
+    <string name="bin">Корзина</string>
+    <string name="search">Поиск</string>
+    <string name="generator_passwords">Генератор паролей</string>
+    <string name="special_characters">Особые символы</string>
+    <string name="nums">Цифры</string>
+    <string name="today">Сегодня</string>
+    <string name="settings">Настройки</string>
+    <string name="share">Поделится</string>
+    <string name="clear_bin">Очистить корзину</string>
+    <string name="delete_all_notes">Удлаить все заметки</string>
+    <string name="default_login">Логин по умолчанию</string>
+    <string name="max_length_password">Максимальная длина пароля</string>
+    <string name="note_text">Текст заметки</string>
+    <string name="warning_text">Внимание!</string>
+    <string name="conform_delete_folder_tasks">Вы действительно хотите удалить папку и все элементы в ней?</string>
+</resources>
