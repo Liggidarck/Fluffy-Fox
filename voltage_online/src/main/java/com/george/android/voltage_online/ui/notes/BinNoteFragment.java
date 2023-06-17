@@ -55,7 +55,7 @@ public class BinNoteFragment extends Fragment {
 //        binding.recyclerViewBinNote.setLayoutManager(new LinearLayoutManager(BinNoteFragment.this.requireActivity()));
 //        binding.recyclerViewBinNote.setHasFixedSize(true);
 //        binding.recyclerViewBinNote.setAdapter(binNoteAdapter);
-////
+
 //        binViewModel.getAllBinNotes().observe(BinNoteFragment.this.requireActivity(), binNotes -> {
 //            binNoteAdapter.setBinNotes(binNotes);
 //            try {

@@ -72,7 +72,6 @@ public class SearchNoteFragment extends Fragment {
             intent.putExtra(AddEditNoteActivity.EXTRA_ID, note.getId());
             intent.putExtra(AddEditNoteActivity.EXTRA_TITLE, note.getTitle());
             intent.putExtra(AddEditNoteActivity.EXTRA_DESCRIPTION, note.getDescription());
-            intent.putExtra(AddEditNoteActivity.EXTRA_ADAPTER_POSITION, position);
             editNoteResultLauncher.launch(intent);
         });
 

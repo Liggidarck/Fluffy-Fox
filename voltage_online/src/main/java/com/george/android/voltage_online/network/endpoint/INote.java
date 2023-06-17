@@ -1,5 +1,6 @@
 package com.george.android.voltage_online.network.endpoint;
 
+import com.george.android.voltage_online.model.Message;
 import com.george.android.voltage_online.model.Note;
 
 import java.util.List;
@@ -18,10 +19,10 @@ public interface INote {
     Call<Note> createNote(@Body Note note);
 
     @PUT("note/update")
-    Call<Note> updateNote(@Body Note note);
+    Call<Message> updateNote(@Query("id") long id, @Body Note note);
 
     @DELETE("note/delete")
-    Call<Note> deleteNote(@Query("id") long id);
+    Call<Message> deleteNote(@Query("id") long id);
 
     @GET("note/getAll")
     Call<List<Note>> getAllNotes();

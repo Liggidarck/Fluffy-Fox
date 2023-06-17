@@ -1,7 +1,6 @@
 package com.george.android.voltage_online.ui.notes;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,17 +8,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 
 import com.george.android.voltage_online.R;
 import com.george.android.voltage_online.databinding.FragmentNoteBinding;
@@ -49,38 +44,26 @@ public class NoteFragment extends Fragment {
 
         noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
 
-        binding.buttonAddNote.setOnClickListener(v -> {
-            Intent intent = new Intent(NoteFragment.this.getContext(), AddEditNoteActivity.class);
-            addNoteResultLauncher.launch(intent);
-        });
-
         binding.recyclerViewNotes.setLayoutManager(new LinearLayoutManager(NoteFragment.this.getActivity()));
         binding.recyclerViewNotes.setHasFixedSize(true);
         binding.recyclerViewNotes.setAdapter(noteAdapter);
 
-        noteViewModel.getAllNotes().observe(NoteFragment.this.requireActivity(), listNotes -> {
-            noteAdapter.setNotes(listNotes);
-            noteList = listNotes;
-            try {
-                if (listNotes.size() == 0) {
-                    binding.emptyView.setVisibility(View.VISIBLE);
-                } else {
-                    binding.emptyView.setVisibility(View.INVISIBLE);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        binding.buttonAddNote.setOnClickListener(v -> {
+            Intent intent = new Intent(requireActivity(), AddEditNoteActivity.class);
+            startActivity(intent);
         });
+
+        getNotes();
 
         noteAdapter.setOnClickItemListener((note, position) -> {
             Intent intent = new Intent(NoteFragment.this.getActivity(), AddEditNoteActivity.class);
+            Log.d(TAG, "onCreateView: noteID: " + note.getId());
             intent.putExtra(AddEditNoteActivity.EXTRA_ID, note.getId());
             intent.putExtra(AddEditNoteActivity.EXTRA_TITLE, note.getTitle());
             intent.putExtra(AddEditNoteActivity.EXTRA_DESCRIPTION, note.getDescription());
-            intent.putExtra(AddEditNoteActivity.EXTRA_ADAPTER_POSITION, position);
-            editNoteResultLauncher.launch(intent);
+            startActivity(intent);
+            requireActivity().finish();
         });
-
 
         binding.toolbarNotes.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
@@ -119,42 +102,22 @@ public class NoteFragment extends Fragment {
         return root;
     }
 
-    ActivityResultLauncher<Intent> addNoteResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    Intent intent = result.getData();
-                    assert intent != null;
-                    String title = intent.getStringExtra(AddEditNoteActivity.EXTRA_TITLE);
-                    String description = intent.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION);
-//
-//                    Note note = new Note(title, description);
-//                    noteViewModel.insert(note);
-                }
-            }
-    );
+    private void getNotes() {
+        noteViewModel.getAllNotes().observe(requireActivity(), listNotes -> {
+            noteAdapter.setNotes(listNotes);
+            noteList = listNotes;
 
-    ActivityResultLauncher<Intent> editNoteResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    Intent intent = result.getData();
-                    assert intent != null;
-                    int id = intent.getIntExtra(AddEditNoteActivity.EXTRA_ID, -1);
-                    if (id == -1) {
-                        Toast.makeText(NoteFragment.this.getActivity(), "Note can't be updated", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    String title = intent.getStringExtra(AddEditNoteActivity.EXTRA_TITLE);
-                    String description = intent.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION);
-//
-//                    Note note = new Note(title, description);
-//                    note.setId(id);
-//                    noteViewModel.update(note);
+            try {
+                if (listNotes.size() == 0) {
+                    binding.emptyView.setVisibility(View.VISIBLE);
+                } else {
+                    binding.emptyView.setVisibility(View.INVISIBLE);
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-    );
+        });
+    }
 
     @Override
     public void onDestroyView() {

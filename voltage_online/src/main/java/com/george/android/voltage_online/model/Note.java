@@ -9,13 +9,19 @@ public class Note implements Serializable {
 
     @SerializedName("id")
     @Expose
-    long id;
+    private long id;
 
-    String title;
+    private final String title;
 
-    String description;
+    private final String description;
 
     public Note(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
+
+    public Note(long id, String title, String description) {
+        this.id = id;
         this.title = title;
         this.description = description;
     }

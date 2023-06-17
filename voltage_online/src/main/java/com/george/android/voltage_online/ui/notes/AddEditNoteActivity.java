@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,29 +17,25 @@ import androidx.lifecycle.ViewModelProvider;
 import com.george.android.voltage_online.R;
 import com.george.android.voltage_online.databinding.ActivityAddEditNoteBinding;
 import com.george.android.voltage_online.model.Note;
+import com.george.android.voltage_online.ui.MainActivity;
 import com.george.android.voltage_online.utils.KeyboardUtils;
 import com.george.android.voltage_online.viewmodel.NoteViewModel;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class AddEditNoteActivity extends AppCompatActivity {
 
-    public static final String EXTRA_ID = "com.george.android.tasker.ui.notes.EXTRA_ID";
-    public static final String EXTRA_TITLE = "com.george.android.tasker.ui.notes.EXTRA_TITLE";
-    public static final String EXTRA_DESCRIPTION = "com.george.android.tasker.ui.notes.EXTRA_DESCRIPTION";
-    public static final String EXTRA_ADAPTER_POSITION = "com.george.android.tasker.ui.notes.EXTRA_ADAPTER_POSITION";
-    public static final String EXTRA_POSITION = "com.george.android.tasker.ui.notes.EXTRA_POSITION";
+    public static final String EXTRA_ID = "com.george.android.voltage_online.EXTRA_ID";
+    public static final String EXTRA_TITLE = "com.george.android.voltage_online.EXTRA_TITLE";
+    public static final String EXTRA_DESCRIPTION = "com.george.android.voltage_online.EXTRA_DESCRIPTION";
 
-    ActivityAddEditNoteBinding binding;
+    public static final String TAG = AddEditNoteActivity.class.getSimpleName();
 
-    NoteViewModel noteViewModel;
+    private ActivityAddEditNoteBinding binding;
 
-    int adapterPosition = -1;
-    int noteId;
-    int position;
-    String title, description;
-    List<Note> noteList = new ArrayList<>();
+    private NoteViewModel noteViewModel;
+
+    private int adapterPosition = -1;
+    private long noteId;
+    private String title, description;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,29 +43,43 @@ public class AddEditNoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityAddEditNoteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        KeyboardUtils utils = new KeyboardUtils();
 
+        KeyboardUtils utils = new KeyboardUtils();
         noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
 
         binding.addEditNoteToolbar.setTitle("");
         setSupportActionBar(binding.addEditNoteToolbar);
-        binding.addEditNoteToolbar.setNavigationOnClickListener(v -> saveNote());
 
         Intent intent = getIntent();
         if (intent.hasExtra(EXTRA_ID)) {
-            noteId = intent.getIntExtra(EXTRA_ID, -1);
+            noteId = intent.getLongExtra(EXTRA_ID, -1);
             title = intent.getStringExtra(EXTRA_TITLE);
             description = intent.getStringExtra(EXTRA_DESCRIPTION);
-            position = intent.getIntExtra(EXTRA_POSITION, -1);
+
             binding.editTextNoteTitle.setText(title);
             binding.editTextNoteDescription.setText(description);
-            adapterPosition = intent.getIntExtra(EXTRA_ADAPTER_POSITION, -1);
-        } else {
-            utils.showSoftKeyboard(binding.editTextNoteDescription, AddEditNoteActivity.this);
+
+            binding.addEditNoteToolbar.setNavigationOnClickListener(v -> updateNote());
+
+            return;
         }
 
+        utils.showSoftKeyboard(binding.editTextNoteDescription, AddEditNoteActivity.this);
+        binding.addEditNoteToolbar.setNavigationOnClickListener(v -> saveNote());
 
-        noteViewModel.getAllNotes().observe(this, notes -> noteList = notes);
+
+    }
+
+    private void updateNote() {
+        String title = binding.editTextNoteTitle.getText().toString();
+        String description = binding.editTextNoteDescription.getText().toString();
+        Note updateNote = new Note(title, description);
+
+        noteViewModel.updateNote(noteId, updateNote).observe(this, message -> {
+            Log.d(TAG, "updateNote: " + message.getMessage());
+            startActivity(new Intent(this, MainActivity.class));
+        });
+
     }
 
     private void saveNote() {
@@ -76,28 +87,13 @@ public class AddEditNoteActivity extends AppCompatActivity {
         String description = binding.editTextNoteDescription.getText().toString();
 
         if (title.trim().isEmpty() & description.trim().isEmpty()) {
-            finish();
+            onBackPressed();
             return;
         }
 
-        Intent data = new Intent();
-        data.putExtra(EXTRA_TITLE, title);
-        data.putExtra(EXTRA_DESCRIPTION, description);
-        data.putExtra(EXTRA_POSITION, position);
-
-        int id = getIntent().getIntExtra(EXTRA_ID, -1);
-        int position = getIntent().getIntExtra(EXTRA_POSITION, -1);
-
-        if (position == -1) {
-            data.putExtra(EXTRA_POSITION, noteList.size());
-        }
-
-        if (id != -1) {
-            data.putExtra(EXTRA_ID, id);
-        }
-
-        setResult(RESULT_OK, data);
-        finish();
+        noteViewModel.createNote(new Note(title, description)).observe(this, note -> {
+            startActivity(new Intent(this, MainActivity.class));
+        });
     }
 
     @Override
@@ -112,24 +108,19 @@ public class AddEditNoteActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.delete_note_item:
-                if (adapterPosition != -1) {
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(AddEditNoteActivity.this);
-                    builder.setTitle("Внимание!")
-                            .setMessage("Вы уверены что хотите удалить задачу?")
-                            .setPositiveButton("ок", (dialog, id) -> {
-//                                        binViewModel.insert(new BinNote(title, description));
-//                                        noteViewModel.delete(noteId);
+                AlertDialog.Builder builder = new AlertDialog.Builder(AddEditNoteActivity.this);
+                builder.setTitle("Внимание!")
+                        .setMessage("Вы уверены что хотите удалить заметку?")
+                        .setPositiveButton("ок", (dialog, id) -> {
+                                    noteViewModel.deleteNote(noteId).observe(this, message -> {
                                         Toast.makeText(AddEditNoteActivity.this, "Заметка удалена", Toast.LENGTH_SHORT).show();
-                                        finish();
-                                    }
-                            )
-                            .setNegativeButton("Отмена", (dialog, id) -> dialog.dismiss());
-                    builder.create().show();
+                                        startActivity(new Intent(this, MainActivity.class));
+                                    });
+                                }
+                        )
+                        .setNegativeButton("Отмена", (dialog, id) -> dialog.dismiss());
+                builder.create().show();
 
-                } else {
-                    Toast.makeText(AddEditNoteActivity.this, "Note can't deleted", Toast.LENGTH_SHORT).show();
-                }
                 return true;
             case R.id.share_note_item:
                 if (title == null & description == null) {
