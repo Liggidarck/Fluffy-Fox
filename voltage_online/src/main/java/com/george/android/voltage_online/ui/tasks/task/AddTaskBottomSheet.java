@@ -24,18 +24,16 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
 public class AddTaskBottomSheet extends BottomSheetDialogFragment {
 
-    AddTaskBottomSheetBinding binding;
-    TasksViewModel tasksViewModel;
+    private AddTaskBottomSheetBinding binding;
+    private TasksViewModel tasksViewModel;
 
     public static final String TAG = "AddTaskBottomSheet";
-    int folderID;
-    List<Task> taskList;
+    private int folderId;
 
     @Nullable
     @Override
@@ -46,8 +44,8 @@ public class AddTaskBottomSheet extends BottomSheetDialogFragment {
         showSoftKeyboard(binding.textTaskInput);
 
         assert this.getArguments() != null;
-        folderID = this.getArguments().getInt("folderID");
-        Log.d(TAG, "onCreateView: folderID: " + folderID);
+        folderId = this.getArguments().getInt("folderID");
+        Log.d(TAG, "onCreateView: folderID: " + folderId);
 
         tasksViewModel = new ViewModelProvider(this).get(TasksViewModel.class);
 
@@ -81,30 +79,24 @@ public class AddTaskBottomSheet extends BottomSheetDialogFragment {
         return view;
     }
 
-    void saveTask() {
+    private void saveTask() {
         String taskText = Objects.requireNonNull(binding.textTaskInput.getEditText()).getText().toString();
 
         Date currentDate = new Date();
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         String dateCreate = dateFormat.format(currentDate);
 
-
-//        tasksViewModel.getFoldersTasks(folderID).observe(this, tasks -> {
-//            taskList = tasks;
-//
-//            Log.d(TAG, "saveTask: " + dateCreate);
-//
-//            if (!taskText.isEmpty()) {
-//                Task task = new Task(taskText, false, null, dateCreate, null, folderID);
-//                tasksViewModel.insert(task);
-//                dismiss();
-//            } else {
-//                binding.textTaskInput.setError("Пустая задача не добавляется");
-//            }
-//        });
+        if (!taskText.isEmpty()) {
+            Task task = new Task(taskText, false, null, dateCreate,
+                    null, folderId);
+            tasksViewModel.createTask(task);
+            dismiss();
+        } else {
+            binding.textTaskInput.setError("Пустая задача не добавляется");
+        }
     }
 
-    void showSoftKeyboard(View view) {
+    private void showSoftKeyboard(View view) {
         if (view.requestFocus()) {
             InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);

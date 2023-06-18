@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.george.android.voltage_online.R;
 import com.george.android.voltage_online.databinding.ActivityAddEditTaskBinding;
+import com.george.android.voltage_online.model.Task;
 import com.george.android.voltage_online.viewmodel.TasksViewModel;
 
 import java.text.SimpleDateFormat;
@@ -25,28 +26,20 @@ import java.util.Locale;
 
 public class EditTaskActivity extends AppCompatActivity {
 
-    public static final String EXTRA_ID = "com.george.android.tasker.ui.tasks.EXTRA_ID";
-    public static final String EXTRA_TEXT = "com.george.android.tasker.ui.tasks.EXTRA_TEXT";
-    public static final String EXTRA_STATUS = "com.george.android.tasker.ui.tasks.EXTRA_STATUS";
-    public static final String EXTRA_DATE_COMPLETE = "com.george.android.tasker.ui.tasks.EXTRA_DATE_COMPLETE";
-    public static final String EXTRA_DATE_CREATE = "com.george.android.tasker.ui.tasks.EXTRA_DATE_CREATE";
-    public static final String EXTRA_NOTE_TASK = "com.george.android.tasker.ui.tasks.EXTRA_NOTE_TASK";
-    public static final String EXTRA_ADAPTER_POSITION = "com.george.android.tasker.ui.tasks.EXTRA_ADAPTER_POSITION";
-    public static final String EXTRA_FOLDER_ID = "com.george.android.tasker.ui.tasks.EXTRA_FOLDER_ID";
-    public static final String EXTRA_POSITION = "com.george.android.tasker.ui.tasks.EXTRA_POSITION";
-
-    TasksViewModel tasksViewModel;
-
-    ActivityAddEditTaskBinding binding;
-    Calendar datePickCalendar;
-
-    String dateCreate;
-    int folderId, taskId;
-    int position;
-    int adapterPosition;
-
-    boolean status;
-
+    public static final String EXTRA_ID = "EXTRA_ID";
+    public static final String EXTRA_TEXT = "EXTRA_TEXT";
+    public static final String EXTRA_STATUS = "EXTRA_STATUS";
+    public static final String EXTRA_DATE_COMPLETE = "EXTRA_DATE_COMPLETE";
+    public static final String EXTRA_DATE_CREATE = "EXTRA_DATE_CREATE";
+    public static final String EXTRA_NOTE_TASK = "EXTRA_NOTE_TASK";
+    public static final String EXTRA_ADAPTER_POSITION = "EXTRA_ADAPTER_POSITION";
+    public static final String EXTRA_FOLDER_ID = "EXTRA_FOLDER_ID";
+    private TasksViewModel tasksViewModel;
+    private ActivityAddEditTaskBinding binding;
+    private Calendar datePickCalendar;
+    private String dateCreate;
+    private int folderId, taskId;
+    private boolean status;
     public static final String TAG = EditTaskActivity.class.getSimpleName();
 
     @Override
@@ -65,12 +58,10 @@ public class EditTaskActivity extends AppCompatActivity {
             taskId = intent.getIntExtra(EXTRA_ID, -1);
             String textTask = intent.getStringExtra(EXTRA_TEXT);
             status = intent.getBooleanExtra(EXTRA_STATUS, false);
-            adapterPosition = intent.getIntExtra(EXTRA_ADAPTER_POSITION, -1);
             String dateComplete = intent.getStringExtra(EXTRA_DATE_COMPLETE);
             dateCreate = intent.getStringExtra(EXTRA_DATE_CREATE);
             String noteTask = intent.getStringExtra(EXTRA_NOTE_TASK);
             folderId = intent.getIntExtra(EXTRA_FOLDER_ID, -1);
-            position = intent.getIntExtra(EXTRA_POSITION, -1);
 
             Log.d(TAG, "onCreate: " + dateCreate);
             Log.d(TAG, "onCreate: folderID: " + folderId);
@@ -79,14 +70,12 @@ public class EditTaskActivity extends AppCompatActivity {
                 binding.textEditTaskInput.setPaintFlags(binding.textEditTaskInput.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 binding.taskCompleteBtn.setText("Задача не выполнена");
                 binding.taskCompleteBtn.setOnClickListener(v -> {
-                    saveTask(false);
-                    finish();
+                    updateTask(false);
                 });
             } else {
                 binding.taskCompleteBtn.setText("Задача выполнена");
                 binding.taskCompleteBtn.setOnClickListener(v -> {
-                    saveTask(true);
-                    finish();
+                    updateTask(true);
                 });
             }
 
@@ -100,7 +89,7 @@ public class EditTaskActivity extends AppCompatActivity {
 
         }
 
-        binding.toolbarEditTask.setNavigationOnClickListener(v -> saveTask(status));
+        binding.toolbarEditTask.setNavigationOnClickListener(v -> updateTask(status));
 
         datePickCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
@@ -115,38 +104,22 @@ public class EditTaskActivity extends AppCompatActivity {
                         .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar.get(Calendar.DAY_OF_MONTH)).show());
     }
 
-    void setDate() {
+    private void setDate() {
         String date_text = "dd.MM.yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(date_text, Locale.US);
         binding.calendarTaskText.setText("Дата выполнения: " + sdf.format(datePickCalendar.getTime()));
     }
 
-    void saveTask(boolean status) {
+    private void updateTask(boolean status) {
         String textTask = binding.textEditTaskInput.getText().toString();
-        Intent intent = new Intent();
-        intent.putExtra(EXTRA_TEXT, textTask);
-        intent.putExtra(EXTRA_STATUS, status);
-        intent.putExtra(EXTRA_DATE_COMPLETE, binding.calendarTaskText.getText().toString());
-        intent.putExtra(EXTRA_DATE_CREATE, dateCreate);
-        intent.putExtra(EXTRA_NOTE_TASK, getNoteTask());
-        intent.putExtra(EXTRA_FOLDER_ID, folderId);
-        intent.putExtra(EXTRA_POSITION, position);
 
-        if (textTask.trim().isEmpty()) {
-            finish();
-            return;
-        }
+        Task task = new Task(textTask, status, binding.calendarTaskText.getText().toString(),
+                dateCreate, getNoteTask(), folderId);
 
-        int id = getIntent().getIntExtra(EXTRA_ID, -1);
-        if (id != -1) {
-            intent.putExtra(EXTRA_ID, id);
-        }
-
-        setResult(RESULT_OK, intent);
-        finish();
+        tasksViewModel.updateTask(taskId, task).observe(this, message -> onBackPressed());
     }
 
-    String getNoteTask() {
+    private String getNoteTask() {
         return binding.informationTaskEdit.getText().toString();
     }
 
@@ -160,29 +133,27 @@ public class EditTaskActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.delete_item) {
-            if (adapterPosition != -1) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(EditTaskActivity.this);
-                builder.setTitle("Внимание!")
-                        .setMessage("Вы уверены что хотите удалить задачу?")
-                        .setPositiveButton("ок", (dialog, id) -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(EditTaskActivity.this);
+            builder.setTitle("Внимание!")
+                    .setMessage("Вы уверены что хотите удалить задачу?")
+                    .setPositiveButton("ок", (dialog, id) -> {
 //                                    tasksViewModel.delete(taskId);
-                                    Toast.makeText(EditTaskActivity.this, "Задача удалена", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }
-                        )
-                        .setNegativeButton("Отмена", (dialog, id) -> dialog.dismiss());
-                builder.create().show();
-
-            } else {
-                Toast.makeText(this, "Такую задачу удалить невозможно", Toast.LENGTH_SHORT).show();
-            }
+                                Toast.makeText(EditTaskActivity.this, "Задача удалена", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                    )
+                    .setNegativeButton("Отмена", (dialog, id) -> dialog.dismiss());
+            builder.create().show();
+        } else {
+            Toast.makeText(this, "Такую задачу удалить невозможно", Toast.LENGTH_SHORT).show();
         }
+
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onBackPressed() {
-        saveTask(status);
+        updateTask(status);
         super.onBackPressed();
     }
 }

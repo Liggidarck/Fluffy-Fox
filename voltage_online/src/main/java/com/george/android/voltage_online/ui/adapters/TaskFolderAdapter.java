@@ -12,14 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.george.android.voltage_online.R;
-import com.george.android.voltage_online.model.TaskFolder;
+import com.george.android.voltage_online.model.Folder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TaskFolderAdapter extends RecyclerView.Adapter<TaskFolderAdapter.ViewHolder> {
 
-    private List<TaskFolder> taskFolders = new ArrayList<>();
+    private List<Folder> folders = new ArrayList<>();
     private onItemClickListener listener;
     private onLongClickListener onFolderClickListener;
     public static final String TAG = "TaskFolderAdapter";
@@ -33,18 +33,18 @@ public class TaskFolderAdapter extends RecyclerView.Adapter<TaskFolderAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        TaskFolder taskFolder = taskFolders.get(position);
-        holder.taskFolderName.setText(taskFolder.getNameFolder());
+        Folder folder = folders.get(position);
+        holder.taskFolderName.setText(folder.getNameFolder());
     }
 
     @Override
     public int getItemCount() {
-        return taskFolders.size();
+        return folders.size();
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setTaskFolders(List<TaskFolder> taskFolders) {
-        this.taskFolders = taskFolders;
+    public void setTaskFolders(List<Folder> folders) {
+        this.folders = folders;
         notifyDataSetChanged();
     }
 
@@ -60,25 +60,25 @@ public class TaskFolderAdapter extends RecyclerView.Adapter<TaskFolderAdapter.Vi
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if(listener != null && position != RecyclerView.NO_POSITION) {
-                    listener.onItemClick(taskFolders.get(position), position);
+                    listener.onItemClick(folders.get(position), position);
                 }
             });
 
             folderTaskIcon.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if(onFolderClickListener != null && position != RecyclerView.NO_POSITION) {
-                    onFolderClickListener.onFolderClick(taskFolders.get(position), position);
+                    onFolderClickListener.onFolderClick(folders.get(position), position);
                 }
             });
         }
     }
 
     public interface onItemClickListener {
-        void onItemClick(TaskFolder taskFolder, int position);
+        void onItemClick(Folder folder, int position);
     }
 
     public interface onLongClickListener {
-        void onFolderClick(TaskFolder taskFolder, int position);
+        void onFolderClick(Folder folder, int position);
     }
 
     public void setOnClickListener(onItemClickListener listener) {

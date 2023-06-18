@@ -16,21 +16,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.george.android.voltage_online.R;
 import com.george.android.voltage_online.databinding.FragmentTaskFolderBinding;
-import com.george.android.voltage_online.model.TaskFolder;
 import com.george.android.voltage_online.ui.adapters.TaskFolderAdapter;
-import com.george.android.voltage_online.viewmodel.TasksFolderViewModel;
+import com.george.android.voltage_online.viewmodel.FolderViewModel;
 
-import java.util.ArrayList;
-import java.util.List;
+public class FolderFragment extends Fragment {
 
-public class TaskFolderFragment extends Fragment {
+    private FragmentTaskFolderBinding binding;
 
-    FragmentTaskFolderBinding binding;
-    TasksFolderViewModel tasksFolderViewModel;
+    private final TaskFolderAdapter taskFolderAdapter = new TaskFolderAdapter();
 
-    TaskFolderAdapter taskFolderAdapter = new TaskFolderAdapter();
-
-    List<TaskFolder> folders = new ArrayList<>();
     public static final String TAG = "TaskFolderFragment";
 
     @Nullable
@@ -41,21 +35,20 @@ public class TaskFolderFragment extends Fragment {
 
         binding.toolbarTasksFolder.inflateMenu(R.menu.task_menu);
 
-        tasksFolderViewModel = new ViewModelProvider(this).get(TasksFolderViewModel.class);
-
+        FolderViewModel folderViewModel = new ViewModelProvider(this).get(FolderViewModel.class);
         initRecyclerView();
 
-//        tasksFolderViewModel.getAllFolders().observe(TaskFolderFragment.this.requireActivity(), taskFolders -> {
-//            folders = taskFolders;
-//            taskFolderAdapter.setTaskFolders(taskFolders);
-//        });
+        folderViewModel
+                .getAllFolder()
+                .observe(FolderFragment.this.requireActivity(),
+                        taskFolderAdapter::setTaskFolders);
 
-        taskFolderAdapter.setOnClickListener((taskFolder, position) -> {
-            NavController navController = Navigation.findNavController(TaskFolderFragment.this.requireActivity(),
+        taskFolderAdapter.setOnClickListener((folder, position) -> {
+            NavController navController = Navigation.findNavController(FolderFragment.this.requireActivity(),
                     R.id.nav_host_fragment_activity_main);
 
-            int folderId = taskFolder.getFolderId();
-            String name = taskFolder.getNameFolder();
+            int folderId = folder.getId();
+            String name = folder.getNameFolder();
 
             Bundle bundle = new Bundle();
             bundle.putInt("folderId", folderId);
@@ -64,12 +57,12 @@ public class TaskFolderFragment extends Fragment {
             navController.navigate(R.id.action_navigation_task_to_tasksFragment, bundle);
         });
 
-        taskFolderAdapter.setOnFolderClickListener((taskFolder, position) -> {
-            Log.d(TAG, "id folder: " + taskFolder.getFolderId());
+        taskFolderAdapter.setOnFolderClickListener((folder, position) -> {
+            Log.d(TAG, "id folder: " + folder.getId());
 
             Bundle bundle = new Bundle();
-            bundle.putInt("folderId", taskFolder.getFolderId());
-            bundle.putString("name", taskFolder.getNameFolder());
+            bundle.putInt("folderId", folder.getId());
+            bundle.putString("name", folder.getNameFolder());
 
             EditFolderTaskBottomSheet editFolderTaskBottomSheet = new EditFolderTaskBottomSheet();
             editFolderTaskBottomSheet.setArguments(bundle);
@@ -83,7 +76,7 @@ public class TaskFolderFragment extends Fragment {
 
         binding.toolbarTasksFolder.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.search_task_item) {
-                NavController navController = Navigation.findNavController(TaskFolderFragment.this.requireActivity(),
+                NavController navController = Navigation.findNavController(FolderFragment.this.requireActivity(),
                         R.id.nav_host_fragment_activity_main);
                 navController.navigate(R.id.action_navigation_task_to_navigation_task_search);
             }
@@ -94,7 +87,7 @@ public class TaskFolderFragment extends Fragment {
     }
 
     private void initRecyclerView() {
-        binding.recyclerTasksFolder.setLayoutManager(new LinearLayoutManager(TaskFolderFragment.this.requireActivity()));
+        binding.recyclerTasksFolder.setLayoutManager(new LinearLayoutManager(FolderFragment.this.requireActivity()));
         binding.recyclerTasksFolder.setHasFixedSize(true);
         binding.recyclerTasksFolder.setAdapter(taskFolderAdapter);
     }

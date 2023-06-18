@@ -47,15 +47,9 @@ public class TasksFragment extends Fragment {
         binding.toolbarTasks.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
 
         tasksViewModel = new ViewModelProvider(this).get(TasksViewModel.class);
+        initRecyclerView();
 
-        binding.recyclerTasks.setLayoutManager(new LinearLayoutManager(TasksFragment.this.requireActivity()));
-        binding.recyclerTasks.setHasFixedSize(true);
-        binding.recyclerTasks.setAdapter(taskAdapter);
-
-//        tasksViewModel.getFoldersTasks(folderId).observe(TasksFragment.this.requireActivity(), tasks -> {
-//            this.tasks = tasks;
-//            taskAdapter.setTasks(tasks);
-//        });
+        tasksViewModel.getTasksByFolderId(folderId).observe(this.requireActivity(), tasks -> taskAdapter.setTasks(tasks));
 
         binding.buttonAddTask.setOnClickListener(v -> {
             AddTaskBottomSheet addTaskBottomSheet = new AddTaskBottomSheet();
@@ -68,7 +62,7 @@ public class TasksFragment extends Fragment {
         });
 
         taskAdapter.setOnClickListener((task, position) -> {
-            Intent intent = new Intent(TasksFragment.this.requireActivity(), EditTaskActivity.class);
+            Intent intent = new Intent(this.requireActivity(), EditTaskActivity.class);
             intent.putExtra(EditTaskActivity.EXTRA_ID, task.getId());
             intent.putExtra(EditTaskActivity.EXTRA_TEXT, task.getTitle());
             intent.putExtra(EditTaskActivity.EXTRA_STATUS, task.isStatus());
@@ -77,7 +71,7 @@ public class TasksFragment extends Fragment {
             intent.putExtra(EditTaskActivity.EXTRA_DATE_CREATE, task.getDateCreate());
             intent.putExtra(EditTaskActivity.EXTRA_NOTE_TASK, task.getNoteTask());
             intent.putExtra(EditTaskActivity.EXTRA_FOLDER_ID, task.getFolderId());
-            editTaskResultLauncher.launch(intent);
+            startActivity(intent);
         });
 
         taskAdapter.setOnClickSateListener((task, position) -> {
@@ -95,10 +89,20 @@ public class TasksFragment extends Fragment {
                         dateCreate, noteTask, folderId);
             }
             updateStatus.setId(task.getId());
-//            tasksViewModel.update(updateStatus);
+
+            tasksViewModel.updateTask(task.getId(), updateStatus).observe(this.requireActivity(), message -> {
+                tasksViewModel.getTasksByFolderId(folderId).observe(this.requireActivity(), tasks -> taskAdapter.setTasks(tasks));
+            });
+
         });
 
         return root;
+    }
+
+    private void initRecyclerView() {
+        binding.recyclerTasks.setLayoutManager(new LinearLayoutManager(TasksFragment.this.requireActivity()));
+        binding.recyclerTasks.setHasFixedSize(true);
+        binding.recyclerTasks.setAdapter(taskAdapter);
     }
 
     ActivityResultLauncher<Intent> editTaskResultLauncher = registerForActivityResult(

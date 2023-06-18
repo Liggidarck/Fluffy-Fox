@@ -29,7 +29,7 @@
 
     <fragment
         android:id="@+id/navigation_task"
-        android:name="com.george.android.voltage_online.ui.tasks.folder.TaskFolderFragment"
+        android:name="com.george.android.voltage_online.ui.tasks.folder.FolderFragment"
         android:label="@string/title_tasks"
         tools:layout="@layout/fragment_task_folder" >
         <action
