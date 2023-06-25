@@ -47,6 +47,7 @@ public class AddFolderTaskBottomSheet extends BottomSheetDialogFragment {
             Folder folder = new Folder(nameFolder);
             folderViewModel.createFolder(folder);
             dismiss();
+            requireActivity().recreate();
             return;
         }
 

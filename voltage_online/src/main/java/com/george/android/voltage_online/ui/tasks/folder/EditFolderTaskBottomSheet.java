@@ -59,6 +59,7 @@ public class EditFolderTaskBottomSheet extends BottomSheetDialogFragment {
                     folderViewModel.deleteFolderAndTasks(folderId);
                     dialog.dismiss();
                     dismiss();
+                    requireActivity().recreate();
                 })
                 .setNegativeButton("Отмена", (dialog, which) -> dialog.dismiss())
                 .create()
@@ -70,6 +71,7 @@ public class EditFolderTaskBottomSheet extends BottomSheetDialogFragment {
         Folder folder = new Folder(name);
         folderViewModel.updateFolder(folderId, folder);
         dismiss();
+        requireActivity().recreate();
     }
 
     @Override

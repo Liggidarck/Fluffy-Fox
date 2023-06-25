@@ -22,7 +22,7 @@ import com.george.android.voltage_online.viewmodel.FolderViewModel;
 public class FolderFragment extends Fragment {
 
     private FragmentTaskFolderBinding binding;
-
+    private FolderViewModel folderViewModel;
     private final TaskFolderAdapter taskFolderAdapter = new TaskFolderAdapter();
 
     public static final String TAG = "TaskFolderFragment";
@@ -35,13 +35,13 @@ public class FolderFragment extends Fragment {
 
         binding.toolbarTasksFolder.inflateMenu(R.menu.task_menu);
 
-        FolderViewModel folderViewModel = new ViewModelProvider(this).get(FolderViewModel.class);
+        folderViewModel = new ViewModelProvider(this).get(FolderViewModel.class);
         initRecyclerView();
 
-        folderViewModel
-                .getAllFolder()
-                .observe(FolderFragment.this.requireActivity(),
-                        taskFolderAdapter::setTaskFolders);
+//        folderViewModel
+//                .getAllFolder()
+//                .observe(FolderFragment.this.requireActivity(),
+//                        taskFolderAdapter::setTaskFolders);
 
         taskFolderAdapter.setOnClickListener((folder, position) -> {
             NavController navController = Navigation.findNavController(FolderFragment.this.requireActivity(),
@@ -84,6 +84,17 @@ public class FolderFragment extends Fragment {
         });
 
         return root;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        folderViewModel
+                .getAllFolder()
+                .observe(FolderFragment.this.requireActivity(),
+                        taskFolderAdapter::setTaskFolders);
+
     }
 
     private void initRecyclerView() {

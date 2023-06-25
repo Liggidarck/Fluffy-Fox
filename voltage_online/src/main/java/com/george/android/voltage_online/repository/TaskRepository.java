@@ -18,7 +18,7 @@ import retrofit2.Response;
 
 public class TaskRepository {
 
-    private ITask iTask;
+    private final ITask iTask;
 
     public static final String TAG = TaskRepository.class.getSimpleName();
 
@@ -49,6 +49,9 @@ public class TaskRepository {
 
     public MutableLiveData<Message> updateTask(long id, Task task) {
         MutableLiveData<Message> messageMutableLiveData = new MutableLiveData<>();
+
+
+        Log.d(TAG, "updateTask: " + task.isStatus());
 
         iTask.updateTask(id, task).enqueue(new Callback<Message>() {
             @Override

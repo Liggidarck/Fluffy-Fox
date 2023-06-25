@@ -91,6 +91,7 @@ public class AddTaskBottomSheet extends BottomSheetDialogFragment {
                     null, folderId);
             tasksViewModel.createTask(task);
             dismiss();
+            requireActivity().recreate();
         } else {
             binding.textTaskInput.setError("Пустая задача не добавляется");
         }

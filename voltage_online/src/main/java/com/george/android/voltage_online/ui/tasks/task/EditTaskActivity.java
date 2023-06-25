@@ -67,20 +67,20 @@ public class EditTaskActivity extends AppCompatActivity {
             Log.d(TAG, "onCreate: folderID: " + folderId);
 
             if (status) {
-                binding.textEditTaskInput.setPaintFlags(binding.textEditTaskInput.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                binding.textEditTaskInput.setPaintFlags(binding.textEditTaskInput.getPaintFlags()
+                        | Paint.STRIKE_THRU_TEXT_FLAG);
+
                 binding.taskCompleteBtn.setText("Задача не выполнена");
-                binding.taskCompleteBtn.setOnClickListener(v -> {
-                    updateTask(false);
-                });
+                binding.taskCompleteBtn.setOnClickListener(v -> updateTask(false));
+
             } else {
                 binding.taskCompleteBtn.setText("Задача выполнена");
-                binding.taskCompleteBtn.setOnClickListener(v -> {
-                    updateTask(true);
-                });
+                binding.taskCompleteBtn.setOnClickListener(v -> updateTask(true));
             }
 
             binding.textEditTaskInput.setText(textTask);
-            binding.dateCreateTextView.setText("Создано: " + dateCreate);
+            String textCreate = "Создано: " + dateCreate;
+            binding.dateCreateTextView.setText(textCreate);
             if (dateComplete != null)
                 binding.calendarTaskText.setText(dateComplete);
 
@@ -107,7 +107,8 @@ public class EditTaskActivity extends AppCompatActivity {
     private void setDate() {
         String date_text = "dd.MM.yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(date_text, Locale.US);
-        binding.calendarTaskText.setText("Дата выполнения: " + sdf.format(datePickCalendar.getTime()));
+        String textDateComplete = "Дата выполнения: " + sdf.format(datePickCalendar.getTime());
+        binding.calendarTaskText.setText(textDateComplete);
     }
 
     private void updateTask(boolean status) {
