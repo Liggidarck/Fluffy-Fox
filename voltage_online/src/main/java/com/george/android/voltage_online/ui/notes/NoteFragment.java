@@ -67,13 +67,6 @@ public class NoteFragment extends Fragment {
 
         binding.toolbarNotes.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
-                case R.id.search_note_item:
-                    Log.d(TAG, "onCreateView: search");
-                    NavController searchController =
-                            Navigation.findNavController(NoteFragment.this.requireActivity(),
-                                    R.id.nav_host_fragment_activity_main);
-                    searchController.navigate(R.id.action_navigation_note_to_navigation_note_search);
-                    return true;
                 case R.id.delete_all_note_item:
                     Log.d(TAG, "onCreateView: delete all notes");
                     AlertDialog.Builder builder = new AlertDialog.Builder(NoteFragment.this.requireActivity());

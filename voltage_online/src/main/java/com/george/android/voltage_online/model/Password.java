@@ -9,11 +9,19 @@ public class Password implements Serializable {
 
     @SerializedName("id")
     @Expose
-    private int id;
+    private long id;
 
     private final String url;
     private final String email;
     private final String password;
+
+
+    public Password(int id, String url, String email, String password) {
+        this.id = id;
+        this.url = url;
+        this.email = email;
+        this.password = password;
+    }
 
     public Password(String url, String email, String password) {
         this.url = url;
@@ -21,11 +29,7 @@ public class Password implements Serializable {
         this.password = password;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
+    public long getId() {
         return id;
     }
 

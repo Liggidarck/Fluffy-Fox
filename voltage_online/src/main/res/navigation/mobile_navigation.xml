@@ -9,11 +9,7 @@
         android:id="@+id/navigation_note"
         android:name="com.george.android.voltage_online.ui.notes.NoteFragment"
         android:label="@string/title_notes"
-        tools:layout="@layout/fragment_note" >
-
-        <action
-            android:id="@+id/action_navigation_note_to_navigation_note_search"
-            app:destination="@id/navigation_note_search" />
+        tools:layout="@layout/fragment_note">
 
         <action
             android:id="@+id/action_navigation_note_to_navigation_note_bin"
@@ -22,35 +18,26 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_note_search"
-        android:name="com.george.android.voltage_online.ui.notes.SearchNoteFragment"
-        android:label="Поиск"
-        tools:layout="@layout/fragment_note_search"/>
-
-    <fragment
         android:id="@+id/navigation_task"
         android:name="com.george.android.voltage_online.ui.tasks.folder.FolderFragment"
         android:label="@string/title_tasks"
-        tools:layout="@layout/fragment_task_folder" >
-        <action
-            android:id="@+id/action_navigation_task_to_navigation_task_search"
-            app:destination="@id/navigation_task_search" />
+        tools:layout="@layout/fragment_task_folder">
+
         <action
             android:id="@+id/action_navigation_task_to_tasksFragment"
             app:destination="@id/tasksFragment" />
+
     </fragment>
 
     <fragment
         android:id="@+id/navigation_password"
         android:name="com.george.android.voltage_online.ui.passwords.PasswordsFragment"
         android:label="@string/title_passwords"
-        tools:layout="@layout/fragment_passwords" >
+        tools:layout="@layout/fragment_passwords">
         <action
             android:id="@+id/action_navigation_password_to_navigation_generator_password"
             app:destination="@id/navigation_generator_password" />
-        <action
-            android:id="@+id/action_navigation_password_to_searchPasswordFragment"
-            app:destination="@id/searchPasswordFragment" />
+
     </fragment>
 
     <fragment
@@ -65,17 +52,6 @@
         android:label="Корзина заметок"
         tools:layout="@layout/fragment_bin_note" />
 
-
-    <fragment android:id="@+id/navigation_task_search"
-        android:name="com.george.android.voltage_online.ui.tasks.SearchTaskFragment"
-        tools:layout="@layout/fragment_search_task"
-        android:label="Поиск задач"/>
-
-    <fragment
-        android:id="@+id/searchPasswordFragment"
-        android:name="com.george.android.voltage_online.ui.passwords.SearchPasswordFragment"
-        android:label="SearchPasswordFragment"
-        tools:layout="@layout/fragment_password_search"/>
 
     <fragment
         android:id="@+id/tasksFragment"

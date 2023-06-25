@@ -33,8 +33,6 @@ public class FolderFragment extends Fragment {
         binding = FragmentTaskFolderBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        binding.toolbarTasksFolder.inflateMenu(R.menu.task_menu);
-
         folderViewModel = new ViewModelProvider(this).get(FolderViewModel.class);
         initRecyclerView();
 
@@ -72,15 +70,6 @@ public class FolderFragment extends Fragment {
         binding.buttonAddTaskFolder.setOnClickListener(v -> {
             AddFolderTaskBottomSheet addFolderTaskBottomSheet = new AddFolderTaskBottomSheet();
             addFolderTaskBottomSheet.show(getParentFragmentManager(), "AddFolderTaskBottomSheet");
-        });
-
-        binding.toolbarTasksFolder.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.search_task_item) {
-                NavController navController = Navigation.findNavController(FolderFragment.this.requireActivity(),
-                        R.id.nav_host_fragment_activity_main);
-                navController.navigate(R.id.action_navigation_task_to_navigation_task_search);
-            }
-            return false;
         });
 
         return root;
