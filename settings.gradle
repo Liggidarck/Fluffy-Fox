@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 rootProject.name = "Voltage"
 include ':voltage_offline'
 include ':voltage_online'
+include ':kotlin_voltage_offline'
