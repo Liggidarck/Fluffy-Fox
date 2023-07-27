@@ -1,11 +1,12 @@
 package com.george.android.tasker.data.repository;
 
 import android.app.Application;
+
 import androidx.lifecycle.LiveData;
 
+import com.george.android.tasker.data.database.VoltageDatabase;
+import com.george.android.tasker.data.database.dao.NoteDao;
 import com.george.android.tasker.data.model.Note;
-import com.george.android.tasker.data.database.notes.main_notes.NoteDao;
-import com.george.android.tasker.data.database.notes.main_notes.NoteDatabase;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -16,8 +17,8 @@ public class NoteRepository {
     private final LiveData<List<Note>> allNotes;
     final ExecutorService service = Executors.newSingleThreadExecutor();
 
-    public NoteRepository(Application application){
-        NoteDatabase database = NoteDatabase.getInstance(application);
+    public NoteRepository(Application application) {
+        VoltageDatabase database = VoltageDatabase.getInstance(application);
         noteDao = database.noteDao();
         allNotes = noteDao.getAllNotes();
     }
@@ -46,7 +47,7 @@ public class NoteRepository {
         return allNotes;
     }
 
-    public LiveData<List<Note>> findNotes (String query){
+    public LiveData<List<Note>> findNotes(String query) {
         return noteDao.findNote(query);
     }
 

@@ -16,7 +16,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.george.android.tasker.R;
 import com.george.android.tasker.data.model.BinNote;
 import com.george.android.tasker.data.model.Note;
-import com.george.android.tasker.data.viewmodel.NoteBinViewModel;
 import com.george.android.tasker.data.viewmodel.NoteViewModel;
 import com.george.android.tasker.databinding.ActivityAddEditNoteBinding;
 import com.george.android.tasker.utils.KeyboardUtils;
@@ -34,7 +33,6 @@ public class AddEditNoteActivity extends AppCompatActivity {
 
     ActivityAddEditNoteBinding binding;
 
-    NoteBinViewModel binViewModel;
     NoteViewModel noteViewModel;
 
     int adapterPosition = -1;
@@ -52,7 +50,6 @@ public class AddEditNoteActivity extends AppCompatActivity {
         KeyboardUtils utils = new KeyboardUtils();
 
         noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
-        binViewModel = new ViewModelProvider(this).get(NoteBinViewModel.class);
 
         binding.addEditNoteToolbar.setTitle("");
         setSupportActionBar(binding.addEditNoteToolbar);
@@ -122,7 +119,6 @@ public class AddEditNoteActivity extends AppCompatActivity {
                     builder.setTitle("Внимание!")
                             .setMessage("Вы уверены что хотите удалить задачу?")
                             .setPositiveButton("ок", (dialog, id) -> {
-                                        binViewModel.insert(new BinNote(title, description));
                                         noteViewModel.delete(noteId);
                                         Toast.makeText(AddEditNoteActivity.this, "Заметка удалена", Toast.LENGTH_SHORT).show();
                                         finish();

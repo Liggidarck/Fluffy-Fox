@@ -20,7 +20,6 @@ import com.george.android.tasker.data.model.Note;
 import com.george.android.tasker.data.model.BinNote;
 import com.george.android.tasker.ui.adapters.BinNoteAdapter;
 import com.george.android.tasker.databinding.FragmentBinNoteBinding;
-import com.george.android.tasker.data.viewmodel.NoteBinViewModel;
 import com.george.android.tasker.data.viewmodel.NoteViewModel;
 
 public class BinNoteFragment extends Fragment {
@@ -29,7 +28,6 @@ public class BinNoteFragment extends Fragment {
     FragmentBinNoteBinding binding;
     BinNoteAdapter binNoteAdapter = new BinNoteAdapter();
 
-    NoteBinViewModel binViewModel;
     NoteViewModel noteViewModel;
 
     @Nullable
@@ -38,7 +36,6 @@ public class BinNoteFragment extends Fragment {
         binding = FragmentBinNoteBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        binViewModel = new ViewModelProvider(this).get(NoteBinViewModel.class);
         noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
 
         binding.binNoteToolbar.inflateMenu(R.menu.note_bin_menu);
@@ -50,7 +47,6 @@ public class BinNoteFragment extends Fragment {
                 builder.setTitle("Внимание!")
                         .setMessage("Вы уверены что хотите очистить корзину?")
                         .setPositiveButton("ок", (dialog, id) -> {
-                            binViewModel.clearBin();
                             dialog.cancel();
                         })
                         .setNegativeButton("Отмена", (dialog, id) -> dialog.dismiss());
@@ -64,18 +60,6 @@ public class BinNoteFragment extends Fragment {
         binding.recyclerViewBinNote.setHasFixedSize(true);
         binding.recyclerViewBinNote.setAdapter(binNoteAdapter);
 
-        binViewModel.getAllBinNotes().observe(BinNoteFragment.this.requireActivity(), binNotes -> {
-            binNoteAdapter.setBinNotes(binNotes);
-            try {
-                if (binNotes.size() == 0) {
-                    binding.emptyView.setVisibility(View.VISIBLE);
-                } else {
-                    binding.emptyView.setVisibility(View.INVISIBLE);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -94,7 +78,6 @@ public class BinNoteFragment extends Fragment {
 
                 Note note = new Note(title, description);
                 noteViewModel.insert(note);
-                binViewModel.delete(binNote.getId());
             }
         }).attachToRecyclerView(binding.recyclerViewBinNote);
 

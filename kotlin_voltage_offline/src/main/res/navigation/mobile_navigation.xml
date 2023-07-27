@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_note">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.george.android.kotlin_voltage_offline.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_note"
+        android:name="com.george.android.kotlin_voltage_offline.ui.note.NoteFragment"
+        android:label="Note"
+        tools:layout="@layout/fragment_note" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.george.android.kotlin_voltage_offline.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_task"
+        android:name="com.george.android.kotlin_voltage_offline.ui.task.TaskFragment"
+        android:label="Task"
+        tools:layout="@layout/fragment_task" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.george.android.kotlin_voltage_offline.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_password"
+        android:name="com.george.android.kotlin_voltage_offline.ui.password.PasswordFragment"
+        android:label="Password"
+        tools:layout="@layout/fragment_password" />
 </navigation>

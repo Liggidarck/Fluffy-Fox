@@ -4,9 +4,9 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import com.george.android.tasker.data.database.VoltageDatabase;
+import com.george.android.tasker.data.database.dao.TaskDao;
 import com.george.android.tasker.data.model.Task;
-import com.george.android.tasker.data.database.tasks.task.TaskDao;
-import com.george.android.tasker.data.database.tasks.task.TaskDatabase;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -19,7 +19,7 @@ public class TaskRepository {
     final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public TaskRepository(Application app) {
-        TaskDatabase database = TaskDatabase.getInstance(app);
+        VoltageDatabase database = VoltageDatabase.getInstance(app);
         taskDao = database.taskDao();
         allTasks = taskDao.getAllTasks();
     }

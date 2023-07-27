@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.george.android.tasker.R;
 import com.george.android.tasker.data.model.Note;
-import com.george.android.tasker.data.viewmodel.NoteBinViewModel;
 import com.george.android.tasker.data.viewmodel.NoteViewModel;
 import com.george.android.tasker.databinding.FragmentNoteBinding;
 import com.george.android.tasker.ui.adapters.NoteAdapter;
@@ -36,8 +35,6 @@ public class NoteFragment extends Fragment {
     private FragmentNoteBinding binding;
 
     private NoteViewModel noteViewModel;
-    private NoteBinViewModel noteBinViewModel;
-
     List<Note> noteList = new ArrayList<>();
     NoteAdapter noteAdapter = new NoteAdapter();
 
@@ -49,13 +46,11 @@ public class NoteFragment extends Fragment {
         binding.toolbarNotes.inflateMenu(R.menu.note_menu);
 
         noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
-        noteBinViewModel = new ViewModelProvider(this).get(NoteBinViewModel.class);
 
         binding.buttonAddNote.setOnClickListener(v -> {
             Intent intent = new Intent(NoteFragment.this.getContext(), AddEditNoteActivity.class);
             addNoteResultLauncher.launch(intent);
         });
-
         binding.recyclerViewNotes.setLayoutManager(new LinearLayoutManager(NoteFragment.this.getActivity()));
         binding.recyclerViewNotes.setHasFixedSize(true);
         binding.recyclerViewNotes.setAdapter(noteAdapter);

@@ -4,9 +4,9 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import com.george.android.tasker.data.database.VoltageDatabase;
+import com.george.android.tasker.data.database.dao.PasswordDao;
 import com.george.android.tasker.data.model.Password;
-import com.george.android.tasker.data.database.passwords.PasswordDao;
-import com.george.android.tasker.data.database.passwords.PasswordDatabase;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -19,7 +19,7 @@ public class PasswordRepository {
     final ExecutorService service = Executors.newSingleThreadExecutor();
 
     public PasswordRepository(Application application) {
-        PasswordDatabase database = PasswordDatabase.getInstance(application);
+        VoltageDatabase database = VoltageDatabase.getInstance(application);
         passwordDao = database.passwordDao();
         allPasswords = passwordDao.getAllPasswords();
     }

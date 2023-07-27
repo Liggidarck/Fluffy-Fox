@@ -1,4 +1,4 @@
-package com.george.android.tasker.data.database.notes.main_notes;
+package com.george.android.tasker.data.database.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

@@ -4,9 +4,9 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
-import com.george.android.tasker.data.model.TaskFolder;
-import com.george.android.tasker.data.database.tasks.folder.TaskFolderDao;
-import com.george.android.tasker.data.database.tasks.folder.TaskFolderDatabase;
+import com.george.android.tasker.data.database.VoltageDatabase;
+import com.george.android.tasker.data.database.dao.TaskFolderDao;
+/**/import com.george.android.tasker.data.model.TaskFolder;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -19,7 +19,7 @@ public class TaskFolderRepository {
     final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public TaskFolderRepository(Application application) {
-        TaskFolderDatabase database = TaskFolderDatabase.getInstance(application);
+        VoltageDatabase database = VoltageDatabase.getInstance(application);
         taskFolderDao = database.taskFolderDao();
         allFolderTask = taskFolderDao.getAllTaskFolders();
     }
